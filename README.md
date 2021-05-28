@@ -28,3 +28,12 @@ git status
 (Este comando es muy útil para ver el estado local del proyecto, podemos ver si hay archivos modificados sin agregar, archivos agregados para commit, commits en cola, etc. Se puede usar en cualquier momento y no afecta el flujo de comandos hechos previamente.)
 
 ******************************************
+
+Para comenzar el servidor hay dos formas:
+
+1)Ejecuntando "python server.py" o dandole click
+
+2) "python -m http.server" y se puede detener con "ctrl + c"
+
+
+GIMP, Libre Office Draw, Inkscape

@@ -4,8 +4,8 @@ def initServer():
     serversocket = socket(AF_INET, SOCK_STREAM)
     try:
         serversocket.bind(('localhost', 8080))
-        serversocket.listen(5)
-        while(1):
+        serversocket.listen(4)
+        while(True):
             (clientsocket, address) = serversocket.accept()
 
             rd = clientsocket.recv(4000).decode()
@@ -15,15 +15,13 @@ def initServer():
             data = "HTTP/1.1 200 OK\r\n"
             data += "Content-Type: text/html; charset=utf-8\n"
             data += "\r\n"
-            # data += ('views/index.html')
 
-            f = open('views/index.html', 'r')
+            f = open('views/inde2x.html', 'r')
             l = f.read()
             data += l
-            # print(data)
+
             clientsocket.sendall(data.encode())
             clientsocket.shutdown(SHUT_WR)
-            
     except KeyboardInterrupt:
         print("\nApagando...\n");
     except Exception as exc :
