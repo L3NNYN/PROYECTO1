@@ -19,4 +19,4 @@ def insert_jugador():
     except Exception as e:
         print(e)
     finally:
-        print(_json['usuario'])
+        print(_json['nombre'])

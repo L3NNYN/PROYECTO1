@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cocoa: Inicio</title>
     <script src="js/inicio.js"></script>
+
     <link rel="stylesheet" href="css/style.css">
 
     <link rel="manifest" href="/site.webmanifest">
@@ -29,10 +30,10 @@
                   <b-card-text>
                       <!-- <h2>Cocoa el juego</h2> -->
                     <h4>Ingresa tus datos</h4>
-                    <b-form @submit="save" @reset="reset"> 
+                    <b-form @submit="save" @reset="reset" method="post" action="tablero.html"> 
                       <input type="hidden" id="id" :value="form.id" />
                       <b-form-group id="input-text" label="Nombre de usuario" label-for="nickname">
-                          <b-form-input id="nickname" v-model="form.nombre" type="text" required
+                          <b-form-input id="nickname" name="nombre" v-model="form.nombre" type="text" required
                               placeholder="Ingresa tu nickname"></b-form-input>
                       </b-form-group>
                       <b-form-group>
@@ -43,10 +44,7 @@
                           <b-form-select id="color_picker" v-model="color" :options="colores" value-field="class" text-field="nombre"
                               placeholder="Color"></b-form-select>
                       </b-form-group>
-                      <!-- <template slot="card-footer" slot-scope="{ ok, cancel }"> -->
-                        <!-- <b-button size="md" variant="outline-secondary" >Cancelar</b-button> -->
-                        <b-button size="md" variant="outline-primary" type="submit" >Ingresar</b-button>
-                      <!-- </template> -->
+                        <b-button size="md" variant="outline-primary" name="submit" type="submit">Ingresar</b-button>
                     </b-form>
                   </b-card-text>
                 </b-card-body>

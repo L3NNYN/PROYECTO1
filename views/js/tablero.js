@@ -1,10 +1,13 @@
 var BaseApiUrl = "http://localhost:5000/"; //ruta base a la API 
+
+
 function apiURL(service) { //Función para formar la ruta completa a la API 
     return BaseApiUrl + service;
 } window.onload = function () {
     var vm = new Vue({
         el: '#app',
         data: {
+            jugador:'',
             jugadores:''
         },
         mounted() {
@@ -13,9 +16,13 @@ function apiURL(service) { //Función para formar la ruta completa a la API
 
             getData(){
                 axios.get(apiURL("get_data/"))
-                .then((response) => { 
-                    // this.$refs.modal.hide();
+                .then((response) => {
+
+                    var cat = window.localStorage.getItem('miName');
+
+                    alertify.success(cat);
                     this.jugadores = response.data;
+                    // window.Location.href = '';
                 }).catch((error) => { alertify.error(`Ocurrió un problema al obtener los datos. ${error}`); })
             },
 
@@ -25,7 +32,6 @@ function apiURL(service) { //Función para formar la ruta completa a la API
                     alertify.success(response.data);
                 }).catch((error) => { alertify.error(`Ocurrió un problema al insertar. ${error}`); })
             },
-
 
             save(evt) {
 
