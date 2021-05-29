@@ -7,42 +7,47 @@
     <title>Cocoa: Inicio</title>
     <script src="js/inicio.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <!-- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> -->
+
     <link rel="manifest" href="/site.webmanifest">
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.28/dist/bootstrap-vue.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@0.15.8/dist/bootstrap-vue.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 </head>
 <body>
     <div id="app" class="inicio d-flex align-items-center justify-content-center">
-        <b-card no-body class="overflow-hidden" style="border-radius: 10px;" style="max-width: 800px;">
-            <b-row no-gutters>
-              <b-col md="6" class="p-4">
-                <b-card-img src="img/mask3.jpg" alt="Image" class="rounded-circle"></b-card-img>
-              </b-col>
-              <b-col md="6" class="p-4 d-flex align-items-center justify-content-center">
-                <b-card-body title="Ingresar datos">
+        <b-card no-body class="overflow-hidden" style="border-radius: 10px;" style="max-width: 600px;">
+          <b-row no-gutters>
+            <b-col md="6" class="p-4 align-items-center justify-content-center">
+              <b-card-img src="img/mask3.jpg" alt="Image" class="rounded-circle"></b-card-img>
+            </b-col>
+            <b-col md="6" class="p-4 d-flex align-items-center justify-content-center">
+              <b-card-body>
                   <b-card-text>
+                      <!-- <h2>Cocoa el juego</h2> -->
+                    <h4>Ingresa tus datos</h4>
                     <b-form @submit="save" @reset="reset"> 
                       <input type="hidden" id="id" :value="form.id" />
                       <b-form-group id="input-text" label="Nombre de usuario" label-for="nickname">
                           <b-form-input id="nickname" v-model="form.nombre" type="text" required
                               placeholder="Ingresa tu nickname"></b-form-input>
                       </b-form-group>
-                      <b-form-group id="input-text" label="Color" label-for="Color">
-                          <b-form-select id="color" v-model="color_s" :options="colores" value-field="class" text-field="nombre" required
+                      <b-form-group>
+                          <label for="fechaPicker">Fecha de nacimiento</label>
+                          <b-form-datepicker id="fechaPicker" v-model="fecha" class="mb-2" ></b-form-datepicker>
+                      </b-form-group>
+                      <b-form-group id="input-text" label="Color" label-for="color_picker">
+                          <b-form-select id="color_picker" v-model="color" :options="colores" value-field="class" text-field="nombre"
                               placeholder="Color"></b-form-select>
                       </b-form-group>
-                      <b-button size="md" variant="outline-secondary" @click="cancel()">Cancelar</b-button>
-                      <b-button size="md" variant="outline-primary" @click="ok()">Ingresar</b-button>
-                  </b-form>
-                  <!-- <template slot="modal-footer" slot-scope="{ ok, cancel }"> -->
-                  <!-- </template> -->
+                      <!-- <template slot="card-footer" slot-scope="{ ok, cancel }"> -->
+                        <!-- <b-button size="md" variant="outline-secondary" >Cancelar</b-button> -->
+                        <b-button size="md" variant="outline-primary" type="submit" >Ingresar</b-button>
+                      <!-- </template> -->
+                    </b-form>
                   </b-card-text>
                 </b-card-body>
               </b-col>

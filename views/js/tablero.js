@@ -5,34 +5,33 @@ function apiURL(service) { //Función para formar la ruta completa a la API
     var vm = new Vue({
         el: '#app',
         data: {
-            fecha: '',
-            color: '1',
-            colores: [
-                {class: '1', nombre:'Verde'}
-            ],
-            form:{
-                nombre: ''
-            }
+            jugadores:''
         },
         mounted() {
-            // this.getData(); // Carga los datos desde el inicio (se creará más adelante) 
+            this.getData(); // Carga los datos desde el inicio (se creará más adelante) 
         }, methods: { //Aquí van las funciones VUE 
 
-            insertData() {
-                axios.post(apiURL("insert_jugador"), JSON.stringify(this.form))
+            getData(){
+                axios.get(apiURL("get_data/"))
                 .then((response) => { 
                     // this.$refs.modal.hide();
-                    console.log(responde.data)
+                    this.jugadores = response.data;
+                }).catch((error) => { alertify.error(`Ocurrió un problema al obtener los datos. ${error}`); })
+            },
+
+            insertData() {
+                axios.post(apiURL("insert_usuario"), JSON.stringify(this.form))
+                .then((response) => { 
                     alertify.success(response.data);
                 }).catch((error) => { alertify.error(`Ocurrió un problema al insertar. ${error}`); })
             },
 
 
             save(evt) {
-                this.insertData();  
+
             },
 
-            reset(evt){
+            reset(){
 
             }
 

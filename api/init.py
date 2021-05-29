@@ -5,5 +5,6 @@ app = Flask(__name__)
 CORS(app)
 
 #importamos el archivo productos.py #Aquí se agregarían los demás archivos vía import en caso de tener otras API’s
-
+import inicio
+import tablero
 
