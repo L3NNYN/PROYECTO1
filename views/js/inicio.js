@@ -1,7 +1,5 @@
 var BaseApiUrl = "http://localhost:5000/"; //ruta base a la API 
 
-
-
 function apiURL(service) { //Función para formar la ruta completa a la API 
     return BaseApiUrl + service;
 } window.onload = function () {
@@ -9,8 +7,9 @@ function apiURL(service) { //Función para formar la ruta completa a la API
     var vm = new Vue({
         el: '#app',
         data: {
-            fecha: '',
-            color: '1',
+            nombre: 'perrou',
+            fecha: '2021-29-5',
+            color: '5',
             colores: [
                 {class: '1', nombre:'Verde'},
                 {class: '2', nombre:'Azul'},
@@ -21,7 +20,9 @@ function apiURL(service) { //Función para formar la ruta completa a la API
                 {class: '7', nombre:'Otro'}
             ],
             form:{
-                nombre: ''
+                nombre: 'perrou',
+                fecha: '2021-29-5',
+                color: '5'
             }
         },
         mounted() {
@@ -30,16 +31,23 @@ function apiURL(service) { //Función para formar la ruta completa a la API
 
             insertData() {
                 // localStorage.removeItem("key");
-                window.localStorage.setItem('miName', this.form.nombre);
+
+                //Se guarda el nombre del jugador como una variable global para poder recuperarla en la vista del tablero
+                window.localStorage.setItem('miNombre', this.form.nombre);
+
+                //Se ingresa en el servidor la informacion que haya ingresado, en formato json
                 axios.post(apiURL("insert_jugador"), JSON.stringify(this.form))
                 .then((response) => { 
+
                     alertify.success(response.data);
                 }).catch((error) => { alertify.error(`Ocurrió un problema al insertar. ${error}`); })
             },
 
 
             save(evt) {
-                this.insertData();  
+                if(this.form.nombre != ''){
+                    this.insertData();  
+                }
             },
 
             reset(evt){

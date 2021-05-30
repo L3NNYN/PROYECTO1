@@ -8,10 +8,14 @@ def insert_jugador():
     try:
         _json = request.get_json(force=True)
         json_items = []
-        _jugador = _json['nombre']
-        tableroModel.insertarJugador(_jugador)
+        content = {}
+        _nombre = _json['nombre']
+        _color = _json['color']
+        _fecha = _json['fecha']
+        content = {'nombre': _nombre, 'color': _color, 'fecha': _fecha}
+        
+        tableroModel.insertarJugador(content) #se ingresan los datos al array
         print(tableroModel.getJugadores())
-        content = {'respuesta': 'asd'}
         json_items.append(content)
         content = {}
 

@@ -1,5 +1,13 @@
 var BaseApiUrl = "http://localhost:5000/"; //ruta base a la API 
 
+function getJugador(name, jugadores){
+    for(let i =0; i < jugadores.length; i++){
+        if(name == jugadores[i].nombre) {
+            return jugadores[i];
+        }
+    }
+}
+
 
 function apiURL(service) { //Función para formar la ruta completa a la API 
     return BaseApiUrl + service;
@@ -8,6 +16,8 @@ function apiURL(service) { //Función para formar la ruta completa a la API
         el: '#app',
         data: {
             jugador:'',
+            color: '',
+            fecha: '',
             jugadores:''
         },
         mounted() {
@@ -18,9 +28,15 @@ function apiURL(service) { //Función para formar la ruta completa a la API
                 axios.get(apiURL("get_data/"))
                 .then((response) => {
 
-                    var cat = window.localStorage.getItem('miName');
+                    var name = window.localStorage.getItem('miName');
 
-                    alertify.success(cat);
+                    var aux = {};
+                    aux = getJugador(name, response.data); //Retorna el jugador con el que se ingreso 
+                    this.jugador = aux.nombre;
+                    this.color = aux.color;
+                    this.fecha = aux.fecha;
+
+                    alertify.success('Has ingresado como ' + this.jugador);
                     this.jugadores = response.data;
                     // window.Location.href = '';
                 }).catch((error) => { alertify.error(`Ocurrió un problema al obtener los datos. ${error}`); })

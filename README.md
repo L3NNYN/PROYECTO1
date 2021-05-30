@@ -35,5 +35,16 @@ Para comenzar el servidor hay dos formas:
 
 2) "python -m http.server" y se puede detener con "ctrl + c"
 
+********************************************
+Hacer las imagenes: GIMP, Libre Office Draw, Inkscape
 
-GIMP, Libre Office Draw, Inkscape
+
+******************************************
+
+Ejecutar servidor con Flask:
+
+1) PROYECTO1\api> myenv\Scripts\activate
+
+2) (myenv) PROYECTO1\api> py run.py
+
+
