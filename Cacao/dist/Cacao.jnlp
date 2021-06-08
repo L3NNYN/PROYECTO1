@@ -12,9 +12,6 @@
     <jar href="lib\controlsfx.jar" size="1213306" download="eager" />
     <jar href="lib\jfoenix.jar" size="2708772" download="eager" />
   </resources>
-  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="Cacao" >
-    <param name="requiredFXVersion" value="8.0+"/>
-  </applet-desc>
   <jfx:javafx-desc  width="800" height="600" main-class="cacao.Cacao"  name="Cacao" />
   <update check="always"/>
 </jnlp>

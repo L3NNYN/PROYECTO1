@@ -25,7 +25,7 @@ public class Cacao extends Application {
         FlowController.getInstance().InitializeFlow(stage, null);
         stage.setTitle("Cacao");
         FlowController.getInstance().goViewInWindow("InicioView");
-        System.out.println("lala");
+       
     }
 
     /**
