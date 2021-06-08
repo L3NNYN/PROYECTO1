@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="cacao.controller.MesaJuegoViewController">
+   <children>
+      <JFXTextField fx:id="txtMensaje" layoutX="408.0" layoutY="213.0" prefHeight="25.0" prefWidth="385.0" />
+      <JFXButton fx:id="btnEnviar" layoutX="577.0" layoutY="325.0" onAction="#onActionEnviar" text="Enviar" />
+      <JFXButton fx:id="txtConectar" layoutX="568.0" layoutY="518.0" onAction="#onActiomConectar" text="Conectar" />
+   </children>
+</AnchorPane>
