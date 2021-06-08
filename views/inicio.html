@@ -30,7 +30,7 @@
                   <b-card-text>
                       <!-- <h2>Cocoa el juego</h2> -->
                     <h4>Ingresa tus datos</h4>
-                    <b-form @submit="save" @reset="reset" method="post" > 
+                    <b-form @submit="save" @reset="reset" method="post" >
                       <input type="hidden" id="id" :value="form.id" />
                       <b-form-group id="input-text" label="Nombre de usuario" label-for="nickname">
                           <b-form-input id="nickname" name="nombre" v-model="form.nombre" type="text" required
@@ -40,9 +40,8 @@
                           <label for="fechaPicker">Fecha de nacimiento</label>
                           <b-form-datepicker id="fechaPicker" name="fecha" v-model="form.fecha" class="mb-2" required></b-form-datepicker>
                       </b-form-group>
-                      <b-form-group id="input-text" label="Color" label-for="color_picker">
-                          <b-form-select id="color_picker" name="color" v-model="form.color" :options="colores" value-field="class" text-field="nombre" required
-                              placeholder="Color"></b-form-select>
+                      <b-form-group label="Color" label-for="color_picker">
+                          <b-form-input id="color_picker" name="color" v-model="form.color" type="color"></b-form-input>
                       </b-form-group>
                         <b-button size="md" variant="outline-primary" name="submit" type="submit">Ingresar</b-button>
                     </b-form>
@@ -51,5 +50,6 @@
               </b-col>
             </b-row>
         </b-card>
+
 </body>
 </html>

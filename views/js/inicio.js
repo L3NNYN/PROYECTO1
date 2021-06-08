@@ -1,5 +1,7 @@
 var BaseApiUrl = "http://localhost:5000/"; //ruta base a la API 
 
+// console.log(window.location.href);
+// console.log(window.location.pathname);
 function apiURL(service) { //Función para formar la ruta completa a la API 
     return BaseApiUrl + service;
 } window.onload = function () {
@@ -9,20 +11,20 @@ function apiURL(service) { //Función para formar la ruta completa a la API
         data: {
             nombre: 'perrou',
             fecha: '2021-29-5',
-            color: '5',
-            colores: [
-                {class: '1', nombre:'Verde'},
-                {class: '2', nombre:'Azul'},
-                {class: '3', nombre:'Amarillo'},
-                {class: '4', nombre:'Rojo'},
-                {class: '5', nombre:'Violeta'},
-                {class: '6', nombre:'Cyan'},
-                {class: '7', nombre:'Otro'}
-            ],
+            color: '',
+            // colores: [
+            //     {class: '1', nombre:'Verde'},
+            //     {class: '2', nombre:'Azul'},
+            //     {class: '3', nombre:'Amarillo'},
+            //     {class: '4', nombre:'Rojo'},
+            //     {class: '5', nombre:'Violeta'},
+            //     {class: '6', nombre:'Cyan'},
+            //     {class: '7', nombre:'Otro'}
+            // ],
             form:{
                 nombre: 'perrou',
                 fecha: '2021-29-5',
-                color: '5'
+                color: ''
             }
         },
         mounted() {
@@ -50,8 +52,8 @@ function apiURL(service) { //Función para formar la ruta completa a la API
                 }
             },
 
-            reset(evt){
-
+            reset(){
+                window.location.href = 'tablero.html';
             }
 
         }
