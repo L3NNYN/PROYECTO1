@@ -11,6 +11,7 @@ package cacao.util;
  */
 
 import cacao.functions.Juego;
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -37,7 +38,7 @@ private static Socket sc;
 
 private ArrayList<Socket> clientes;
 
-private DataInputStream dis;
+//private DataInputStream dis;
 
 private Juego j;
 
@@ -57,40 +58,41 @@ public boolean ev = false;
     @Override
     public void run() {
         
-        ObjectInputStream dis;
+        DataInputStream dis;
         DataOutputStream out;
         try {
             
             //Creo el socket para conectarme con el cliente
             sc = new Socket(HOST, 5000);
-            dis = new ObjectInputStream(sc.getInputStream());
+            dis = new DataInputStream(sc.getInputStream());
             out = new DataOutputStream(sc.getOutputStream());
-            String nombre;
+            String mensaje;
             double valor;
-            
+            System.out.print("Receptior");
             while (true) {
 
-                j = (Juego) dis.readObject();
-                //System.out.print(nombre);
-                System.out.print(j.getNombre());
+                mensaje = dis.readUTF();
+                Gson gs = new Gson();
+                Juego obj2 = gs.fromJson(mensaje, Juego.class);
+                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"/n");
+                
+                
                 this.setChanged();
-                this.notifyObservers(j);
+                this.notifyObservers(mensaje);
                 this.clearChanged();
                 
             }
 
         } catch (IOException ex) {
             Logger.getLogger(SocketServices.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-        Logger.getLogger(SocketServices.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        }
 
     }
     
-    public void enviarDatos(String dato) throws IOException{
-        Juego jg = new Juego("Juan",98);
-        ObjectOutputStream dos = new ObjectOutputStream(sc.getOutputStream());
-        dos.writeObject(jg);
+    public void enviarDatos(String mensaje) throws IOException{
+        DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+        //System.out.print(mensaje);
+        dos.writeUTF(mensaje);
     }
 
 }

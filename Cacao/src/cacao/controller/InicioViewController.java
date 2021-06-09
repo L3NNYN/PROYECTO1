@@ -45,9 +45,11 @@ public class InicioViewController extends Controller implements Initializable, O
     @FXML
     private JFXTextField txtNickName;
     
-    Mensajes sms;
+    public static String nombre;
     
-    SocketServices conexion;
+    private Mensajes sms;
+    
+    private static SocketServices conexion;
     
     @FXML
     private JFXComboBox<String> cbColores;
@@ -109,7 +111,11 @@ public class InicioViewController extends Controller implements Initializable, O
             datos = "";
         } else {
 
-          
+            //conexion = new SocketServices(4040,"localhost");
+            //conexion.addObserver(this);
+            //Thread t = new Thread(conexion);
+            //t.start();
+            nombre = txtNickName.getText();
             spSpinner.setVisible(true);  
             FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
         }
@@ -217,4 +223,12 @@ public class InicioViewController extends Controller implements Initializable, O
 
     }
     
+    public String getNombre(){
+        return nombre;
+    }
+    
+    public SocketServices getSocket(){
+        
+        return conexion;     
+    }
 }

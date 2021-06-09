@@ -5,7 +5,9 @@
  */
 package cacao.controller;
 
+import cacao.functions.Juego;
 import cacao.util.SocketServices;
+import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -24,6 +26,8 @@ import javafx.fxml.Initializable;
  */
 public class MesaJuegoViewController extends Controller implements Initializable,Observer {
 
+    InicioViewController ini = new InicioViewController();
+    
     @FXML
     private JFXTextField txtMensaje;
     @FXML
@@ -41,6 +45,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         sk = new SocketServices();
+        c = new SocketServices();
     }    
 
     @Override
@@ -50,14 +55,16 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @FXML
     private void onActionEnviar(ActionEvent event) throws IOException {
+        Juego jg = new Juego(ini.getNombre(),88,txtMensaje.getText());
+        Gson g = new Gson();
+        String r = g.toJson(jg);
         
-        //SocketServices sk = new SocketServices();
-        c.enviarDatos("Hola");
+        c.enviarDatos(r);
     }
 
     @FXML
     private void onActiomConectar(ActionEvent event) {
-        c = new SocketServices(4040,"localhost");
+        c = new SocketServices(5000,"localhost");
         c.addObserver(this);
         Thread t = new Thread(c);
         t.start();
@@ -65,8 +72,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @Override
     public void update(Observable o, Object arg) {
-         String nombre = (String) arg;
-         System.out.print("Main: "+nombre);
+         
     }
     
 }

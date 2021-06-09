@@ -5,19 +5,23 @@
  */
 package cacao.functions;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Pipo
  */
-public class Juego {
+public class Juego implements Serializable{
     
     private String nombre;
     
     private int edad;
     
-    public Juego(String jg, int e){
+    private String mensaje;
+    public Juego(String jg, int e, String sms){
         this.nombre = jg;
         this.edad = e;
+        this.mensaje = sms;
     }
     
     public void setNombre(String jg){
@@ -28,6 +32,10 @@ public class Juego {
         this.edad = e;
     }
     
+    public void setMensaje(String sms){
+        this.mensaje = sms;
+    }
+    
     public String getNombre(){
 
         return nombre;
@@ -36,6 +44,11 @@ public class Juego {
     public int getEdad(){
 
         return edad;
+    }
+    
+    public String getMensaje(){
+
+        return mensaje;
     }
     
     
