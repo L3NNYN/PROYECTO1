@@ -111,10 +111,10 @@ public class InicioViewController extends Controller implements Initializable, O
             datos = "";
         } else {
 
-            //conexion = new SocketServices(4040,"localhost");
-            //conexion.addObserver(this);
-            //Thread t = new Thread(conexion);
-            //t.start();
+            conexion = new SocketServices(5000,txtIppartida.getText());
+            conexion.addObserver(this);
+            Thread t = new Thread(conexion);
+            t.start();
             nombre = txtNickName.getText();
             spSpinner.setVisible(true);  
             FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);

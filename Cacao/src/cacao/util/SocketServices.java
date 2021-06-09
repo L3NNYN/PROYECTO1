@@ -74,7 +74,7 @@ public boolean ev = false;
                 mensaje = dis.readUTF();
                 Gson gs = new Gson();
                 Juego obj2 = gs.fromJson(mensaje, Juego.class);
-                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"/n");
+                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"\n");
                 
                 
                 this.setChanged();
