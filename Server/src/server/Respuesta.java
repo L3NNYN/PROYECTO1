@@ -5,6 +5,7 @@
  */
 package server;
 
+import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -21,64 +22,65 @@ import server.Juego.Juego;
  *
  * @author Pipo
  */
-public class Respuesta extends Observable implements Runnable{
-   
+public class Respuesta extends Observable implements Runnable {
+
     private Socket sc;
+
+    private DataInputStream in;
     
-    private ObjectInputStream in;
+    private Juego resivido;
+
+    private String recivido;
     
-    private Juego jg;
-    
-    public Respuesta(Socket socket) throws IOException{
+    //private Juego jg;
+    public Respuesta(Socket socket) throws IOException {
         this.sc = socket;
         //recibirMensaje();
     }
 
-
     @Override
     public void run() {
- System.out.println("recibir Mensaje");
-        while(true){
-                
-     try {
-         in = new ObjectInputStream(sc.getInputStream());
-         
-         Juego jg = (Juego) in.readObject();
 
-         System.out.println(jg.getNombre());
-           
-         //enviarInfo("dsdfsf");
-         
-                
-     } catch (IOException ex) {
-         Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
-     } catch (ClassNotFoundException ex) {
-         Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
-     }
+        try {
+            System.out.println("recibir Mensaje");
 
-     }
-   }
-    
+            in = new DataInputStream(sc.getInputStream());
+            
+            while (true) {
+
+                String mensaje = in.readUTF();
+                recivido = mensaje;
+                Gson gs = new Gson();
+                Juego obj2 = gs.fromJson(mensaje, Juego.class);
+                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"/n");
+                enviarInfo();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     public void enviarInfo() {
-        
+
         Server sv = new Server();
-        
+
         for (Socket sock : sv.getClientes()) {
 
             try {
-                ObjectOutputStream dos = new ObjectOutputStream(sock.getOutputStream());
-                dos.writeObject(jg);
+                DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
+                dos.writeUTF(recivido);
                 //enviarInfo(mensaje);
-                //this.setChanged();
-                //this.notifyObservers(jg);
-                //this.clearChanged(); 
-               
+                this.setChanged();
+                this.notifyObservers(recivido);
+                this.clearChanged(); 
+
             } catch (IOException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
 
-    } 
-     
+    }
+
 }
