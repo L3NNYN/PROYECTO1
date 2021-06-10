@@ -27,33 +27,45 @@ public class Respuesta extends Observable implements Runnable {
     private Socket sc;
 
     private DataInputStream in;
-    
-    private Juego resivido;
 
     private String recivido;
     
-    //private Juego jg;
+    //Constructor de Respuesta
     public Respuesta(Socket socket) throws IOException {
         this.sc = socket;
-        //recibirMensaje();
     }
 
+    
+    /*Se utiliza el Runnable para recivir peticiones de los clientes, el Runnable
+    estara ejecutanse continuamente reciviendo peticiones.
+    */
+    
     @Override
     public void run() {
 
         try {
-            System.out.println("recibir Mensaje");
+            //System.out.println("recibir Mensaje");
 
+            //Se crea objeto de tipo Data Input para recivir peticiones
             in = new DataInputStream(sc.getInputStream());
             
+            //While para recivir peticiones
             while (true) {
 
                 String mensaje = in.readUTF();
                 recivido = mensaje;
+                //Se utiliza Gson para convertir el String recivido en un objeto
                 Gson gs = new Gson();
                 Juego obj2 = gs.fromJson(mensaje, Juego.class);
-                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"/n");
+                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"\n");
+                
+                //Se envian los cambios a todos los clientes conectados
                 enviarInfo();
+                
+                //Se notofocan a los observadores
+                this.setChanged();
+                this.notifyObservers(recivido);
+                this.clearChanged(); 
             }
         } catch (IOException ex) {
             Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,6 +73,7 @@ public class Respuesta extends Observable implements Runnable {
 
     }
 
+    /*Este metodo notificara todos los clientes conectados*/
     public void enviarInfo() {
 
         Server sv = new Server();
@@ -70,11 +83,7 @@ public class Respuesta extends Observable implements Runnable {
             try {
                 DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
                 dos.writeUTF(recivido);
-                //enviarInfo(mensaje);
-                this.setChanged();
-                this.notifyObservers(recivido);
-                this.clearChanged(); 
-
+                //recivido = null;
             } catch (IOException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
