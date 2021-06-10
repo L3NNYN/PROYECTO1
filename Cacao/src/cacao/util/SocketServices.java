@@ -9,7 +9,6 @@ package cacao.util;
  *
  * @author Pipo
  */
-
 import cacao.functions.Juego;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
@@ -27,69 +26,72 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+public class SocketServices extends Observable implements Runnable {
 
-public class SocketServices extends Observable implements Runnable{
-    
-private int puerto;
+    private int puerto;
 
-private String HOST;
+    private String HOST;
 
-private static Socket sc;
+    private static Socket sc;
 
-private ArrayList<Socket> clientes;
+    private ArrayList<Socket> clientes;
 
-//private DataInputStream dis;
+    private Juego j;
 
-private Juego j;
-
-//private DataOutputStream dos;
-
-public boolean ev = false;
+    public boolean ev = false;
 
     public SocketServices() {
 
     }
 
-    public SocketServices(int puerto, String ip) {
+    public SocketServices(int puerto, String ip) throws IOException {
         this.puerto = puerto;
         this.HOST = ip;
     }
 
+    public void registrar(String host, int puerto) throws IOException {
+        //Creo el socket para conectarme con el cliente
+        sc = new Socket(host, 5000);
+
+    }
+
+    public Juego getRespuesta() {
+
+        return j;
+
+    }
+
     @Override
     public void run() {
-        
+//Juego obj2 = null;
         DataInputStream dis;
         DataOutputStream out;
         try {
-            
-            //Creo el socket para conectarme con el cliente
-            sc = new Socket(HOST, 5000);
+
             dis = new DataInputStream(sc.getInputStream());
             out = new DataOutputStream(sc.getOutputStream());
             String mensaje;
             double valor;
-            System.out.print("Receptior");
             while (true) {
-
+                
+                //System.out.print("Dentro a respuesta");
                 mensaje = dis.readUTF();
+
                 Gson gs = new Gson();
-                Juego obj2 = gs.fromJson(mensaje, Juego.class);
-                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"\n");
-                
-                
+                j = gs.fromJson(mensaje, Juego.class);
+                //System.out.print(j.getNombre()+": "+j.getMensaje()+"\n");
+
                 this.setChanged();
                 this.notifyObservers(mensaje);
                 this.clearChanged();
-                
             }
 
         } catch (IOException ex) {
             Logger.getLogger(SocketServices.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-    
-    public void enviarDatos(String mensaje) throws IOException{
+
+    public void enviarDatos(String mensaje) throws IOException {
         DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
         //System.out.print(mensaje);
         dos.writeUTF(mensaje);

@@ -22,97 +22,104 @@
 .root2{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8),  0, 0, 0, 0);
     -fx-padding: 10;
-     -fx-background-radius: 10;
-      -fx-background-color: firebrick;
+    -fx-background-radius: 10;
+    -fx-background-color: firebrick;
 }
 
 .JFXButton1{
-  -fx-background-color: #61A7FF; /* Green */
-  -fx-border: none;
-  -fx-color: #000000;
-  -fx-padding: 5px;
-  -fx-text-align: center;
-  -fxtext-decoration: none;
-  -fx-display: inline-block;
-  -fx-font-size: 16px;
+    -fx-background-color: #61A7FF; /* Green */
+    -fx-border: none;
+    -fx-color: #000000;
+    -fx-padding: 5px;
+    -fx-text-align: center;
+    -fxtext-decoration: none;
+    -fx-display: inline-block;
+    -fx-font-size: 16px;
+}
+
+.fondoMesa{
+    -fx-background-image:url("../resources/FondoMesa.jpg");
+    -fx-background-size:stretch;
+    -fx-color: #222;
+    -fx-padding: 2px;  
 }
 
 .rojo{
-  -fx-background-color: #FF0000; 
+    -fx-background-color: #FF0000; 
 }
 
 .azul{
-  -fx-background-color: #0017FF; 
+    -fx-background-color: #0017FF; 
 }
 
 .amarillo{
-  -fx-background-color: #FFFB00; 
+    -fx-background-color: #FFFB00; 
 }
 
 .verde{
-  -fx-background-color: #1FFF00; 
+    -fx-background-color: #1FFF00; 
 }
 
 .celeste{
-  -fx-background-color: #00AAE4; 
+    -fx-background-color: #00AAE4; 
 }
 
 .morado{
-  -fx-background-color: #AA00FF; 
+    -fx-background-color: #AA00FF; 
 }
 
 .rosado{
-  -fx-background-color: #ff0080; 
+    -fx-background-color: #ff0080; 
 }
 
 .turqueza{
-  -fx-background-color: #5dc1b9; 
+    -fx-background-color: #5dc1b9; 
 }
 
 .cian{
-  -fx-background-color:  #00ffff; 
+    -fx-background-color:  #00ffff; 
 }
 
 .gris{
-  -fx-background-color:  #9b9b9b; 
+    -fx-background-color:  #9b9b9b; 
 }
 
 .negro{
-  -fx-background-color:  #000000;
+    -fx-background-color:  #000000;
 }
 
 .marron{
-  -fx-background-color:  #804000;
+    -fx-background-color:  #804000;
 }
 
 .naranja{
-  -fx-background-color:  #ff8000;
+    -fx-background-color:  #ff8000;
 }
 
 .magenta{
-  -fx-background-color:  #ff00ff;
+    -fx-background-color:  #ff00ff;
 }
 
 .verdeOscuro{
-  -fx-background-color:  #2d572c;
+    -fx-background-color:  #2d572c;
 }
 
 .violeta{
-  -fx-background-color:  #4c2882;
+    -fx-background-color:  #4c2882;
 }
 
 .aguamarina{
-  -fx-background-color:  #9fd5d1;
+    -fx-background-color:  #9fd5d1;
 }
 
 .dorado{
-  -fx-background-color:  #efb810;
+    -fx-background-color:  #efb810;
 }
 
 .fucsia{
-  -fx-background-color:  #e30052;
+    -fx-background-color:  #e30052;
 }
 
 .lima{
-  -fx-background-color:  #32cd32;
+    -fx-background-color:  #32cd32;
 }

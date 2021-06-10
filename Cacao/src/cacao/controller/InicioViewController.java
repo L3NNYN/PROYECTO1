@@ -34,6 +34,8 @@ import javafx.scene.layout.AnchorPane;
  */
 public class InicioViewController extends Controller implements Initializable, Observer{
 
+    MesaJuegoViewController mj = new MesaJuegoViewController();
+    
     @FXML
     private JFXTextField txtIppartida;
     @FXML
@@ -68,6 +70,7 @@ public class InicioViewController extends Controller implements Initializable, O
        anadirColores();
        spSpinner.setVisible(false);
        sms = new Mensajes();
+       
     }    
 
     @Override
@@ -111,11 +114,13 @@ public class InicioViewController extends Controller implements Initializable, O
             datos = "";
         } else {
 
-            conexion = new SocketServices(5000,txtIppartida.getText());
-            conexion.addObserver(this);
-            Thread t = new Thread(conexion);
+            mj.getSocket().registrar(txtIppartida.getText(), 0);
+
+            Thread t = new Thread(mj.getSocket());
             t.start();
+            
             nombre = txtNickName.getText();
+            mj.setNombre(nombre);
             spSpinner.setVisible(true);  
             FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
         }
@@ -220,7 +225,7 @@ public class InicioViewController extends Controller implements Initializable, O
 
     @Override
     public void update(Observable o, Object arg) {
-
+      System.out.print("Dentro en Inicio");
     }
     
     public String getNombre(){

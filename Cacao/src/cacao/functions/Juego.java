@@ -18,6 +18,7 @@ public class Juego implements Serializable{
     private int edad;
     
     private String mensaje;
+    
     public Juego(String jg, int e, String sms){
         this.nombre = jg;
         this.edad = e;

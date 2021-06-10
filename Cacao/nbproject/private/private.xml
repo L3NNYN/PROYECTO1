@@ -3,11 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Pipo/Desktop/Proyectos/HTML/PROYECTO1/Cacao/src/cacao/controller/InicioViewController.java</file>
-            <file>file:/C:/Users/Pipo/Desktop/Proyectos/HTML/PROYECTO1/Cacao/src/cacao/Cacao.java</file>
-            <file>file:/C:/Users/Pipo/Desktop/Proyectos/HTML/PROYECTO1/Cacao/src/cacao/functions/Juego.java</file>
-            <file>file:/C:/Users/Pipo/Desktop/Proyectos/HTML/PROYECTO1/Cacao/src/cacao/util/SocketServices.java</file>
-            <file>file:/C:/Users/Pipo/Desktop/Proyectos/HTML/PROYECTO1/Cacao/src/cacao/controller/MesaJuegoViewController.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/Cacao.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/controller/InicioViewController.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/nbproject/build-impl.xml</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/util/FlowController.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/functions/Juego.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/view/style.css</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/controller/MesaJuegoViewController.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Cacao/src/cacao/util/SocketServices.java</file>
         </group>
     </open-files>
 </project-private>
