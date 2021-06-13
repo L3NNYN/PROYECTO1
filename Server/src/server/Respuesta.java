@@ -12,11 +12,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import server.Juego.Juego;
+import javafx.fxml.Initializable;
+import server.Juego.Jugador;
+import server.Juego.Partida;
 
 /**
  *
@@ -29,17 +33,18 @@ public class Respuesta extends Observable implements Runnable {
     private DataInputStream in;
 
     private String recivido;
-    
+
+    //Constructor de Server
+    public Server sv = new Server();
+
     //Constructor de Respuesta
     public Respuesta(Socket socket) throws IOException {
         this.sc = socket;
     }
 
-    
     /*Se utiliza el Runnable para recivir peticiones de los clientes, el Runnable
     estara ejecutanse continuamente reciviendo peticiones.
-    */
-    
+     */
     @Override
     public void run() {
 
@@ -48,7 +53,7 @@ public class Respuesta extends Observable implements Runnable {
 
             //Se crea objeto de tipo Data Input para recivir peticiones
             in = new DataInputStream(sc.getInputStream());
-            
+
             //While para recivir peticiones
             while (true) {
 
@@ -56,16 +61,16 @@ public class Respuesta extends Observable implements Runnable {
                 recivido = mensaje;
                 //Se utiliza Gson para convertir el String recivido en un objeto
                 Gson gs = new Gson();
-                Juego obj2 = gs.fromJson(mensaje, Juego.class);
-                System.out.print(obj2.getNombre()+": "+obj2.getMensaje()+"\n");
-                
+                Jugador obj = gs.fromJson(mensaje, Jugador.class);
+
+                //revisarPeticion(obj);
+
                 //Se envian los cambios a todos los clientes conectados
-                enviarInfo();
-                
+                //enviarInfo();
                 //Se notofocan a los observadores
                 this.setChanged();
-                this.notifyObservers(recivido);
-                this.clearChanged(); 
+                this.notifyObservers();
+                this.clearChanged();
             }
         } catch (IOException ex) {
             Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,16 +78,44 @@ public class Respuesta extends Observable implements Runnable {
 
     }
 
-    /*Este metodo notificara todos los clientes conectados*/
-    public void enviarInfo() {
+    private void revisarPeticion(Partida partida) {
 
-        Server sv = new Server();
+        if (partida.getPeticion().equals("registrar jugador")) {
+            System.out.print("Peticion registrar recivida");
+            sv.getPartida().agregarJugador(partida.getParticipantes().get(0));
+            sv.getPartida().setPeticion("Jugadores");
+            Gson g = new Gson();
+            String r = g.toJson(sv.getPartida());
+            enviarInfo(r);
+
+        } else if (partida.getPeticion().equals("pasar turno")) {
+
+        } else if (partida.getPeticion().equals("desconectar")) {
+
+        } else if (partida.getPeticion().equals("colocar jugador")) {
+
+        } else if (partida.getPeticion().equals("colocar selva")) {
+
+        } else if (partida.getPeticion().equals("salir")) {
+
+        } else if (partida.getPeticion().equals("ganador")) {
+
+        } else if (partida.getPeticion().equals("actualizar")) {
+
+        }
+
+    }
+
+    /*Este metodo notificara todos los clientes conectados*/
+    public void enviarInfo(String peticion) {
+
+        //Server sv = new Server();
 
         for (Socket sock : sv.getClientes()) {
 
             try {
                 DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
-                dos.writeUTF(recivido);
+                dos.writeUTF(peticion);
                 //recivido = null;
             } catch (IOException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

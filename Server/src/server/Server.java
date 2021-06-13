@@ -11,30 +11,41 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.Initializable;
+import server.Juego.Partida;
 /**
  *
  * @author Pipo
  */
-public class Server extends Observable implements Runnable{
+public class Server extends Observable implements Runnable, Initializable{
 
-    private static ArrayList<Socket> clientes;
+    private static ObservableList<Socket> clientes;
 
     private int puerto;
+    
+    public static Partida partida;
     
     private Socket sc = null;
    
     public Server(int puerto) throws IOException {
         this.puerto = puerto;
-        this.clientes = new ArrayList();
+        this.clientes = FXCollections.observableArrayList();
     }
 
     public Server() {
 
     }
 
+     @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        partida.crearCartasJungla();
+    }
     
     @Override
     public void run() {
@@ -67,9 +78,14 @@ public class Server extends Observable implements Runnable{
 
     } 
     
-    public ArrayList<Socket> getClientes(){
+    public ObservableList<Socket> getClientes(){
    
         return clientes; 
     }
-    
-}
+ 
+    public Partida getPartida()
+    {
+      return partida;   
+    }
+         
+    }
