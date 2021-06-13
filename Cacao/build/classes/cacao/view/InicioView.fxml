@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.image.Image?>
@@ -25,6 +26,7 @@
                               <JFXTextField fx:id="txtIppartida" alignment="CENTER" labelFloat="true" prefHeight="25.0" prefWidth="223.0" promptText="Ingrese el IP de la partida" />
                               <JFXTextField fx:id="txtPuerto" alignment="CENTER" labelFloat="true" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="223.0" promptText="Puerto del Servidor" />
                               <JFXTextField fx:id="txtNickName" alignment="CENTER" labelFloat="true" layoutX="10.0" layoutY="50.0" prefHeight="25.0" prefWidth="223.0" promptText="Ingrese su NicName" />
+                              <JFXDatePicker fx:id="dtEdadJugador" onAction="#onActionEdadJugador" prefHeight="25.0" prefWidth="233.0" />
                               <JFXComboBox fx:id="cbColores" onAction="#onActionColores" prefHeight="25.0" prefWidth="227.0" promptText="Seleccione un color" />
                            </children>
                         </VBox>

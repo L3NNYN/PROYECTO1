@@ -9,7 +9,7 @@ package cacao.util;
  *
  * @author Pipo
  */
-import cacao.functions.Juego;
+import cacao.functions.Jugador;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -36,7 +36,7 @@ public class SocketServices extends Observable implements Runnable {
 
     private ArrayList<Socket> clientes;
 
-    private Juego j;
+    private Jugador j;
 
     public boolean ev = false;
 
@@ -55,7 +55,7 @@ public class SocketServices extends Observable implements Runnable {
 
     }
 
-    public Juego getRespuesta() {
+    public Jugador getRespuesta() {
 
         return j;
 
@@ -78,7 +78,7 @@ public class SocketServices extends Observable implements Runnable {
                 mensaje = dis.readUTF();
 
                 Gson gs = new Gson();
-                j = gs.fromJson(mensaje, Juego.class);
+                j = gs.fromJson(mensaje, Jugador.class);
                 //System.out.print(j.getNombre()+": "+j.getMensaje()+"\n");
 
                 this.setChanged();

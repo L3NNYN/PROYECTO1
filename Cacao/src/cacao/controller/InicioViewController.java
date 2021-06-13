@@ -10,6 +10,7 @@ import cacao.util.Mensajes;
 import cacao.util.SocketServices;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import java.net.*;
+import java.time.LocalDate;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -58,6 +60,8 @@ public class InicioViewController extends Controller implements Initializable, O
 
     @FXML
     private AnchorPane apColorSeleccionado;
+    @FXML
+    private JFXDatePicker dtEdadJugador;
 
     /**
      * Initializes the controller class.
@@ -114,13 +118,15 @@ public class InicioViewController extends Controller implements Initializable, O
             datos = "";
         } else {
 
+            LocalDate edad = dtEdadJugador.getValue();
+            
+            //txtNickName.getText(),edad, cbColores.getSelectionModel().getSelectedItem()
             mj.getSocket().registrar(txtIppartida.getText(), 0);
 
             Thread t = new Thread(mj.getSocket());
             t.start();
             
-            nombre = txtNickName.getText();
-            mj.setNombre(nombre);
+            mj.setDatos(txtNickName.getText(),edad,cbColores.getSelectionModel().getSelectedItem());
             spSpinner.setVisible(true);  
             FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
         }
@@ -235,5 +241,10 @@ public class InicioViewController extends Controller implements Initializable, O
     public SocketServices getSocket(){
         
         return conexion;     
+    }
+
+    @FXML
+    private void onActionEdadJugador(ActionEvent event) {
+        
     }
 }
