@@ -5,23 +5,19 @@
  */
 package cacao.functions;
 
-import java.net.Socket;
-import java.util.ArrayList;
-import static java.util.Collections.list;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 /**
  *
  * @author Pipo
  */
-public class Partida {
+public class Partida{
 
-    private ObservableList<Jugador> participantes = FXCollections.observableArrayList();
+    
+    
+    private Jugador jugadores[] = new Jugador[4];
 
     private Cartas matrizLogica[][] = new Cartas[32][32];
     
-    private ObservableList<Cartas> cartasJungla = FXCollections.observableArrayList();
+    private Cartas cartasJungla[] = new Cartas[28];
 
     private Cartas cartaJugada;
 
@@ -34,56 +30,97 @@ public class Partida {
     private int y;
 
     public Partida() {
-
+      for (int i = 0; i < 28; i++) {
+           cartasJungla[i] = null; 
+        }
+      
+      for (int i = 0; i < 4; i++) {
+           jugadores[i] = null; 
+        }
     }
 
     public void crearCartasJungla() {
 
+        //
+        for (int i = 0; i < 28; i++) {
+           cartasJungla[i] = null; 
+        }
+        
         //Plantaciones simples
         for (int i = 0; i < 6; i++) {
             Cartas c1 = new Cartas("Pla", "Reyner", 1, 0);
-            cartasJungla.add(c1);
+            anadirCarta(c1);
         }
 
         for (int i = 0; i < 2; i++) {
             Cartas c1 = new Cartas("Plb", "Reyner", 2, 0);
-            cartasJungla.add(c1);
+            anadirCarta(c1);
         }
 
         //Mercados
         for (int i = 0; i < 4; i++) {
             Cartas c1 = new Cartas("Mcb", "Reyner", 3, 0);
-            cartasJungla.add(c1);
+            anadirCarta(c1);
 
             if (i < 2) {
                 Cartas c2 = new Cartas("Mca", "Reyner", 3, 0);
-                cartasJungla.add(c2);
+                anadirCarta(c2);
             }
         }
 
         Cartas c1 = new Cartas("Mcc", "Reyner", 4, 0);
-        cartasJungla.add(c1);
+        anadirCarta(c1);
 
     }
     
-     public void agregarJugador(Jugador jg){
-        participantes.add(jg);   
+    private void anadirCarta(Cartas carta){
+        
+        for (int i = 0; i < 28; i++) {
+            if(cartasJungla[i] == null){
+              cartasJungla[i] = carta;
+              break;
+            }
+        }
+        
     }
-     
-     public ObservableList<Jugador> getParticipantes() {
-        return participantes;
+    
+    public void agregarJugador(Jugador jugador){
+        for(int i = 0; i < 4; i++){
+            if(jugadores[i] == null){
+              jugadores[i] = jugador;
+              break;
+            }
+        }
+    }
+    
+    public void iniciarArrays(){
+        for (int i = 0; i < 28; i++) {
+           cartasJungla[i] = null; 
+        }
+      
+      for (int i = 0; i < 4; i++) {
+           jugadores[i] = null; 
+        }
+    }
+    
+    public Cartas[] getCartasJungla() {
+        return cartasJungla;
     }
 
-    public void setParticipantes(ObservableList<Jugador> participantes) {
-        this.participantes = participantes;
+    public void setCartasJungla(Cartas[] cartasJungla) {
+        this.cartasJungla = cartasJungla;
+    }
+    
+    public Jugador[] getJugadores() {
+        return jugadores;
+    }
+
+    public void setJugadores(Jugador[] jugadores) {
+        this.jugadores = jugadores;
     }
     
     public Cartas[][] getMatrizLogica() {
         return matrizLogica;
-    }
-
-    public ObservableList<Cartas> getCartasJungla() {
-        return cartasJungla;
     }
 
     public Cartas getCartaJugada() {
@@ -108,10 +145,6 @@ public class Partida {
 
     public void setMatrizLogica(Cartas[][] matrizLogica) {
         this.matrizLogica = matrizLogica;
-    }
-
-    public void setCartasJungla(ObservableList<Cartas> cartasJungla) {
-        this.cartasJungla = cartasJungla;
     }
 
     public void setCartaJugada(Cartas cartaJugada) {

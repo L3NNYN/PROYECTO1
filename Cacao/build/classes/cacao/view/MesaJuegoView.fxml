@@ -18,7 +18,7 @@
       <JFXButton fx:id="btnEnviar" layoutX="1410.0" layoutY="916.0" onAction="#onActionEnviar" text="Enviar" />
       <ScrollPane fx:id="scScroll" layoutX="193.0" layoutY="65.0" prefHeight="891.0" prefWidth="1170.0" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="193.0" AnchorPane.rightAnchor="337.0" AnchorPane.topAnchor="65.0">
          <content>
-          <AnchorPane fx:id="paneMesaJuego" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="2800.0" prefWidth="3150.0" styleClass="fondoMesa" stylesheets="@style.css" visible="false">
+          <AnchorPane fx:id="paneMesaJuego" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="2800.0" prefWidth="3150.0" styleClass="fondoMesa" stylesheets="@style.css">
                <children>
                   <GridPane fx:id="gpMatrizJuego" layoutX="28.0" layoutY="2.0" prefHeight="2872.0" prefWidth="2872.0">
                     <columnConstraints>

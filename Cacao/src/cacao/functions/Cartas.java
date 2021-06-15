@@ -5,11 +5,13 @@
  */
 package cacao.functions;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Pipo
  */
-public class Cartas {
+public class Cartas{
 
    private String tipo;
    

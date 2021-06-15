@@ -5,6 +5,7 @@
  */
 package cacao.controller;
 
+import cacao.functions.Cartas;
 import cacao.functions.Jugador;
 import cacao.functions.Partida;
 import cacao.util.SocketServices;
@@ -16,6 +17,7 @@ import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -86,7 +88,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private int rot = 0;
 
     //Jugador pricipal
-    private Partida p;
+    private Partida p = new Partida();
+    ;
 
     //Componentes del jugador 1
     @FXML
@@ -126,6 +129,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
     @FXML
     private GridPane vbJugador4;
 
+    private static Jugador array[] = new Jugador[5];
+
     //Componentes losetas disponibles
     /**
      * Initializes the controller class.
@@ -143,8 +148,18 @@ public class MesaJuegoViewController extends Controller implements Initializable
         vbContenedorJ2.setVisible(false);
         vbContenedorJ3.setVisible(false);
         vbContenedorJ4.setVisible(false);
-        p = new Partida();
 
+        try {
+            Jugador g = new Jugador(nombre, edad, color);
+            p.iniciarArrays();
+            p.agregarJugador(g);
+            p.setPeticion("registrar jugador");
+            Gson gson = new Gson();
+            String json = gson.toJson(p);
+            c.enviarDatos(json);
+        } catch (IOException ex) {
+            Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -155,24 +170,18 @@ public class MesaJuegoViewController extends Controller implements Initializable
     @FXML
     private void onActionEnviar(ActionEvent event) throws IOException {
 
-        /*
-        Jugador jg = new Jugador(nombreJ, 88, txtMensaje.getText());
-        Gson g = new Gson();
-        String r = g.toJson(jg);
+        Jugador g = new Jugador(nombre, edad, color);
+        p.iniciarArrays();
+        p.agregarJugador(g);
+        Gson gson = new Gson();
+        String json = gson.toJson(p);
+        c.enviarDatos(json);
 
-        c.enviarDatos(r); 
-         */
-        Jugador jg = new Jugador(nombre, edad, color);
-        p.agregarJugador(jg);
-        //System.out.print(p.getJugadores().get(0).getColor());
-        Gson g = new Gson();
-        String r = g.toJson(jg);
-        c.enviarDatos(r);
     }
 
     @FXML
     private void onActiomConectar(ActionEvent event) {
-        agregarImg();
+
     }
 
     private void agregarImg() {
@@ -183,36 +192,55 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @Override
     public void update(Observable o, Object arg) {
-        String llegada = (String) arg;
-        Gson gs = new Gson();
-        Partida obj2 = gs.fromJson(llegada, Partida.class);
 
-        if ("Jugadores".equals(obj2.getPeticion())) {
+        String cadena = (String) arg;
+        Gson gs = new Gson();
+        Partida llegada = gs.fromJson(cadena, Partida.class);
+        System.out.print(llegada.getJugadores()[0].getNombre());
+        
+ 
+
+        if ("Jugadores".equals(llegada.getPeticion())) {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-
-                    int tm = obj2.getParticipantes().size();
+                    int tm = 0; 
+                    for(int i = 0; i < 4; i++){
+                        if(llegada.getJugadores()[i] != null){
+                           tm++; 
+                        }
+                    }
 
                     if (tm == 1) {
                         vbContenedorJ1.setVisible(true);
+                        txtNombreJ1.setText(llegada.getJugadores()[0].getNombre());
                     } else if (tm == 2) {
                         vbContenedorJ1.setVisible(true);
                         vbContenedorJ2.setVisible(true);
+                        txtNombreJ1.setText(llegada.getJugadores()[0].getNombre());
+                        txtNombreJ2.setText(llegada.getJugadores()[1].getNombre());
                     } else if (tm == 3) {
                         vbContenedorJ1.setVisible(true);
                         vbContenedorJ2.setVisible(true);
                         vbContenedorJ3.setVisible(true);
+                        txtNombreJ1.setText(llegada.getJugadores()[0].getNombre());
+                        txtNombreJ2.setText(llegada.getJugadores()[1].getNombre());
+                        txtNombreJ3.setText(llegada.getJugadores()[2].getNombre());
                     } else if (tm == 4) {
                         vbContenedorJ1.setVisible(true);
                         vbContenedorJ2.setVisible(true);
                         vbContenedorJ3.setVisible(true);
                         vbContenedorJ4.setVisible(true);
+                        txtNombreJ1.setText(llegada.getJugadores()[0].getNombre());
+                        txtNombreJ2.setText(llegada.getJugadores()[1].getNombre());
+                        txtNombreJ3.setText(llegada.getJugadores()[2].getNombre());
+                        txtNombreJ4.setText(llegada.getJugadores()[3].getNombre());
                     }
 
                 }
             });
         }
+         
     }
 
     private void onPress() {

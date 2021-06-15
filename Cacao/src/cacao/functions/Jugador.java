@@ -26,8 +26,8 @@ public class Jugador{
     private String mensaje;
     
     private String color;
-    
-    private final ObservableList<Cartas> cartasJugador = FXCollections.observableArrayList();
+
+    private Cartas cartasJugador[] = new Cartas[11];
     
     private int frutos;
     
@@ -46,9 +46,7 @@ public class Jugador{
     }
     
     public void crearCartas(){
-        
       
-        
     }
 
     public String getNombre() {
@@ -108,4 +106,11 @@ public class Jugador{
         this.monedas = monedas;
     }  
   
+    public Cartas[] getCartasJugador() {
+        return cartasJugador;
+    }
+
+    public void setCartasJugador(Cartas[] cartasJugador) {
+        this.cartasJugador = cartasJugador;
+    }
 }

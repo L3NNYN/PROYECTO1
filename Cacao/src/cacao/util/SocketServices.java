@@ -10,6 +10,7 @@ package cacao.util;
  * @author Pipo
  */
 import cacao.functions.Jugador;
+import cacao.functions.Partida;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -70,19 +71,19 @@ public class SocketServices extends Observable implements Runnable {
 
             dis = new DataInputStream(sc.getInputStream());
             out = new DataOutputStream(sc.getOutputStream());
-            String mensaje;
+            Partida mensaje;
             double valor;
             while (true) {
                 
                 //System.out.print("Dentro a respuesta");
-                mensaje = dis.readUTF();
+                String sms = dis.readUTF();
 
-                Gson gs = new Gson();
-                j = gs.fromJson(mensaje, Jugador.class);
+                //Gson gs = new Gson();
+                //j = gs.fromJson(mensaje, Jugador.class);
                 //System.out.print(j.getNombre()+": "+j.getMensaje()+"\n");
 
                 this.setChanged();
-                this.notifyObservers(mensaje);
+                this.notifyObservers(sms);
                 this.clearChanged();
             }
 
@@ -91,10 +92,10 @@ public class SocketServices extends Observable implements Runnable {
         }
     }
 
-    public void enviarDatos(String mensaje) throws IOException {
+    public void enviarDatos(String enviar) throws IOException {
         DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
         //System.out.print(mensaje);
-        dos.writeUTF(mensaje);
+        dos.writeUTF(enviar);
     }
 
 }
