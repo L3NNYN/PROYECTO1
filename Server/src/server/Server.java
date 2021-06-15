@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import server.Juego.Partida;
+import server.util.FlowController;
 /**
  *
  * @author Pipo
@@ -29,7 +30,7 @@ public class Server extends Observable implements Runnable, Initializable{
 
     private int puerto;
     
-    public static Partida partida;
+    public Partida pr;
     
     private Socket sc = null;
    
@@ -44,7 +45,7 @@ public class Server extends Observable implements Runnable, Initializable{
 
      @Override
     public void initialize(URL location, ResourceBundle resources) {
-        partida.crearCartasJungla();
+        FlowController.getInstance().partida.crearCartasJungla();
     }
     
     @Override
@@ -85,7 +86,7 @@ public class Server extends Observable implements Runnable, Initializable{
  
     public Partida getPartida()
     {
-      return partida;   
+      return pr;   
     }
          
     }

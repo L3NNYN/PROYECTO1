@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -26,8 +26,8 @@ public class Jugador{
     private String mensaje;
     
     private String color;
-    
-    private final ObservableList<Cartas> cartasJugador = FXCollections.observableArrayList();
+
+    private static Cartas cartasJugador[] = new Cartas[11];
     
     private int frutos;
     
@@ -46,9 +46,7 @@ public class Jugador{
     }
     
     public void crearCartas(){
-        
       
-        
     }
 
     public String getNombre() {
@@ -108,4 +106,11 @@ public class Jugador{
         this.monedas = monedas;
     }  
   
+    public static Cartas[] getCartasJugador() {
+        return cartasJugador;
+    }
+
+    public static void setCartasJugador(Cartas[] cartasJugador) {
+        Jugador.cartasJugador = cartasJugador;
+    }
 }

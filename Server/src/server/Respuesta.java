@@ -14,13 +14,16 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import server.Juego.Jugador;
 import server.Juego.Partida;
+import server.util.FlowController;
 
 /**
  *
@@ -57,14 +60,14 @@ public class Respuesta extends Observable implements Runnable {
             //While para recivir peticiones
             while (true) {
 
-                String mensaje = in.readUTF();
-                recivido = mensaje;
-                //Se utiliza Gson para convertir el String recivido en un objeto
+                String me = in.readUTF();
+                
                 Gson gs = new Gson();
-                Jugador obj = gs.fromJson(mensaje, Jugador.class);
+                Partida jg = gs.fromJson(me, Partida.class);
 
-                //revisarPeticion(obj);
-
+                revisarPeticion(jg);
+                 
+                
                 //Se envian los cambios a todos los clientes conectados
                 //enviarInfo();
                 //Se notofocan a los observadores
@@ -79,15 +82,16 @@ public class Respuesta extends Observable implements Runnable {
     }
 
     private void revisarPeticion(Partida partida) {
-
-        if (partida.getPeticion().equals("registrar jugador")) {
-            System.out.print("Peticion registrar recivida");
-            sv.getPartida().agregarJugador(partida.getParticipantes().get(0));
-            sv.getPartida().setPeticion("Jugadores");
+        
+        if(partida.getPeticion().equals("registrar jugador")) {
+            
+            FlowController.getInstance().partida.agregarJugador(partida.getJugadores()[0]);
+            FlowController.getInstance().partida.setPeticion("Jugadores");
             Gson g = new Gson();
-            String r = g.toJson(sv.getPartida());
-            enviarInfo(r);
+            String r = g.toJson(FlowController.getInstance().partida);
 
+            enviarInfo(r);
+            
         } else if (partida.getPeticion().equals("pasar turno")) {
 
         } else if (partida.getPeticion().equals("desconectar")) {
@@ -103,14 +107,13 @@ public class Respuesta extends Observable implements Runnable {
         } else if (partida.getPeticion().equals("actualizar")) {
 
         }
-
+         
     }
 
     /*Este metodo notificara todos los clientes conectados*/
     public void enviarInfo(String peticion) {
 
         //Server sv = new Server();
-
         for (Socket sock : sv.getClientes()) {
 
             try {
