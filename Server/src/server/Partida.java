@@ -3,14 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server.Juego;
+package server;
 
-import java.io.Serializable;
-import java.net.Socket;
-import java.util.ArrayList;
-import static java.util.Collections.list;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.Random;
+import server.Juego.Cartas;
+import server.Jugador;
 
 /**
  *
@@ -24,7 +21,7 @@ public class Partida{
 
     private Cartas matrizLogica[][] = new Cartas[32][32];
     
-    private static Cartas cartasJungla[] = new Cartas[28];
+    private Cartas cartasJungla[] = new Cartas[28];
 
     private Cartas cartaJugada;
 
@@ -37,47 +34,50 @@ public class Partida{
     private int y;
 
     public Partida() {
-      for (int i = 0; i < 28; i++) {
-           cartasJungla[i] = null; 
-        }
-      
-      for (int i = 0; i < 4; i++) {
-           jugadores[i] = null; 
-        }
+     
     }
 
     public void crearCartasJungla() {
 
-        //
+        
         for (int i = 0; i < 28; i++) {
            cartasJungla[i] = null; 
         }
         
         //Plantaciones simples
         for (int i = 0; i < 6; i++) {
-            Cartas c1 = new Cartas("Pla", "Reyner", 1, 0);
+            Cartas c1 = new Cartas("Pla", "Jungla", 1, 0);
             anadirCarta(c1);
         }
 
         for (int i = 0; i < 2; i++) {
-            Cartas c1 = new Cartas("Plb", "Reyner", 2, 0);
+            Cartas c1 = new Cartas("Plb", "Jungla", 2, 0);
             anadirCarta(c1);
         }
 
         //Mercados
         for (int i = 0; i < 4; i++) {
-            Cartas c1 = new Cartas("Mcb", "Reyner", 3, 0);
+            Cartas c1 = new Cartas("Mcb", "Jungla", 3, 0);
             anadirCarta(c1);
 
             if (i < 2) {
-                Cartas c2 = new Cartas("Mca", "Reyner", 3, 0);
+                Cartas c2 = new Cartas("Mca", "Jungla", 3, 0);
                 anadirCarta(c2);
             }
         }
 
-        Cartas c1 = new Cartas("Mcc", "Reyner", 4, 0);
+        Cartas c1 = new Cartas("Mcc", "Jungla", 4, 0);
         anadirCarta(c1);
 
+        Random r = new Random();
+
+        for (int i = 0; i < cartasJungla.length; i++) {
+            int posAleatoria = r.nextInt(cartasJungla.length);
+            Cartas temp = cartasJungla[i];
+            cartasJungla[i] = cartasJungla[posAleatoria];
+            cartasJungla[posAleatoria] = temp;
+        }
+        
     }
     
     private void anadirCarta(Cartas carta){
@@ -110,12 +110,12 @@ public class Partida{
         }
     }
     
-    public static Cartas[] getCartasJungla() {
+    public Cartas[] getCartasJungla() {
         return cartasJungla;
     }
 
-    public static void setCartasJungla(Cartas[] cartasJungla) {
-        Partida.cartasJungla = cartasJungla;
+    public void setCartasJungla(Cartas[] cartasJungla) {
+        this.cartasJungla = cartasJungla;
     }
     
     public Jugador[] getJugadores() {

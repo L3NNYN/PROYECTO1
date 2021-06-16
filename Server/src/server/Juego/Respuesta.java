@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.Juego;
 
 import com.google.gson.Gson;
 import java.io.DataInputStream;
@@ -21,8 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
-import server.Juego.Jugador;
-import server.Juego.Partida;
+import server.Partida;
 import server.util.FlowController;
 
 /**
@@ -94,7 +93,23 @@ public class Respuesta extends Observable implements Runnable {
             
         } else if (partida.getPeticion().equals("pasar turno")) {
 
-        } else if (partida.getPeticion().equals("desconectar")) {
+        } else if (partida.getPeticion().equals("actualizar cartas jugadores")) {
+            
+            for(int i = 0; i < 4; i++){
+               if(FlowController.getInstance().partida.getJugadores()[i] != null){
+                  FlowController.getInstance().partida.getJugadores()[i].setCartasJugador(partida.getJugadores()[i].getCartasJugador());                 
+               }
+            }
+            int tm = 0;
+            for(int i = 0; i < 11; i++){
+               if(FlowController.getInstance().partida.getJugadores()[0].getCartasJugador()[i] != null){   
+                   tm++;
+               }
+            }
+            FlowController.getInstance().partida.setPeticion("actualizar cartas jugadores");
+            Gson g = new Gson();
+            String r = g.toJson(FlowController.getInstance().partida);
+            enviarInfo(r);
 
         } else if (partida.getPeticion().equals("colocar jugador")) {
 

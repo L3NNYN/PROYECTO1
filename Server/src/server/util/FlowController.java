@@ -9,23 +9,8 @@ package server.util;
  *
  * @author Pipo
  */
-import server.util.FlowController;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import server.Client;
-import server.Juego.Partida;
+
+import server.Partida;
 
 
 
@@ -50,5 +35,7 @@ public class FlowController {
         }
         return INSTANCE;
     }
+    
+    
 
 }
