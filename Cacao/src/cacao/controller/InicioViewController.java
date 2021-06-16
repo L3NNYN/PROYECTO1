@@ -140,64 +140,64 @@ public class InicioViewController extends Controller implements Initializable, O
                       
         if(null != cbColores.getSelectionModel().getSelectedItem())switch (cbColores.getSelectionModel().getSelectedItem()) {
             case "Rojo":
-              apColorSeleccionado.getStyleClass().add("rojo");
+              apColorSeleccionado.getStyleClass().add("Rojo");
                 break;
             case "Azul":
-              apColorSeleccionado.getStyleClass().add("azul");
+              apColorSeleccionado.getStyleClass().add("Azul");
                 break;
             case "Amarillo":
-              apColorSeleccionado.getStyleClass().add("amarillo");
+              apColorSeleccionado.getStyleClass().add("Amarillo");
                 break;
             case "Verde":
-              apColorSeleccionado.getStyleClass().add("verde");
+              apColorSeleccionado.getStyleClass().add("Verde");
                 break;
             case "Celeste":
-              apColorSeleccionado.getStyleClass().add("celeste");
+              apColorSeleccionado.getStyleClass().add("Celeste");
                 break;
             case "Morado":
-              apColorSeleccionado.getStyleClass().add("morado");
+              apColorSeleccionado.getStyleClass().add("Morado");
                 break;
             case "Rosado":
-              apColorSeleccionado.getStyleClass().add("rosado");
+              apColorSeleccionado.getStyleClass().add("Rosado");
                 break;
             case "Turqueza":
-              apColorSeleccionado.getStyleClass().add("turqueza");
+              apColorSeleccionado.getStyleClass().add("Turqueza");
                 break;
             case "Cian":
-              apColorSeleccionado.getStyleClass().add("cian");
+              apColorSeleccionado.getStyleClass().add("Cian");
                 break;
             case "Gris":
-              apColorSeleccionado.getStyleClass().add("gris");
+              apColorSeleccionado.getStyleClass().add("Gris");
                 break;
             case "Negro":
-              apColorSeleccionado.getStyleClass().add("negro");
+              apColorSeleccionado.getStyleClass().add("Negro");
                 break;
             case "Marron":
-              apColorSeleccionado.getStyleClass().add("marron");
+              apColorSeleccionado.getStyleClass().add("Marron");
                 break;
             case "Anaranjado":
-              apColorSeleccionado.getStyleClass().add("naranja");
+              apColorSeleccionado.getStyleClass().add("Naranja");
                 break;
             case "Magenta":
-              apColorSeleccionado.getStyleClass().add("magenta");
+              apColorSeleccionado.getStyleClass().add("Magenta");
                 break;
             case "Verde Oscuro":
-              apColorSeleccionado.getStyleClass().add("verdeOscuro");
+              apColorSeleccionado.getStyleClass().add("VerdeOscuro");
                 break;
             case "Violeta":
-              apColorSeleccionado.getStyleClass().add("violeta");
+              apColorSeleccionado.getStyleClass().add("Violeta");
                 break;
             case "Aguamarina":
-              apColorSeleccionado.getStyleClass().add("aguamarina");
+              apColorSeleccionado.getStyleClass().add("Aguamarina");
                 break;
             case "Dorado":
-              apColorSeleccionado.getStyleClass().add("dorado");
+              apColorSeleccionado.getStyleClass().add("Dorado");
                 break;
             case "Fucsia":
-              apColorSeleccionado.getStyleClass().add("fucsia");
+              apColorSeleccionado.getStyleClass().add("Fucsia");
                 break;
             case "Lima":
-              apColorSeleccionado.getStyleClass().add("lima");
+              apColorSeleccionado.getStyleClass().add("Lima");
                 break;
             default:
                 break;

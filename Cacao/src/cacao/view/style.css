@@ -44,82 +44,106 @@
     -fx-padding: 2px;  
 }
 
-.rojo{
+#opacity{
+    -fx-background-color:rgb(255,255,255);
+    -fx-opacity:0.7; /* Opacidad 60% */
+    -fx-width:73px;
+    -fx-height:73px;
+    -fx-effect: dropshadow(three-pass-box, rgba(60, 172, 255,0.8), 9, 1, 0, 0);
+    -fx-padding: 1;
+    -fx-background-radius: 1;
+}
+
+.Rojo{
     -fx-background-color: #FF0000; 
 }
 
-.azul{
+#Rojo{
+    -fx-background-color: #FF0000; 
+}
+
+.Azul{
     -fx-background-color: #0017FF; 
 }
 
-.amarillo{
+#Azul{
+    -fx-background-color: #0017FF; 
+}
+
+.Amarillo{
     -fx-background-color: #FFFB00; 
 }
 
-.verde{
+#Amarillo{
+    -fx-background-color: #FFFB00; 
+}
+
+.Verde{
     -fx-background-color: #1FFF00; 
 }
 
-.celeste{
+.Celeste{
     -fx-background-color: #00AAE4; 
 }
 
-.morado{
+.Morado{
     -fx-background-color: #AA00FF; 
 }
 
-.rosado{
+.Rosado{
     -fx-background-color: #ff0080; 
 }
 
-.turqueza{
+.Turqueza{
     -fx-background-color: #5dc1b9; 
 }
 
-.cian{
+.Cian{
     -fx-background-color:  #00ffff; 
 }
 
-.gris{
+.Gris{
     -fx-background-color:  #9b9b9b; 
 }
 
-.negro{
+.Negro{
     -fx-background-color:  #000000;
 }
 
-.marron{
+.Marron{
     -fx-background-color:  #804000;
 }
 
-.naranja{
+.Naranja{
     -fx-background-color:  #ff8000;
 }
 
-.magenta{
+.Magenta{
     -fx-background-color:  #ff00ff;
 }
 
-.verdeOscuro{
+.VerdeOscuro{
     -fx-background-color:  #2d572c;
 }
 
-.violeta{
+.Violeta{
     -fx-background-color:  #4c2882;
 }
 
-.aguamarina{
+.Aguamarina{
     -fx-background-color:  #9fd5d1;
 }
 
-.dorado{
+.Dorado{
     -fx-background-color:  #efb810;
 }
 
-.fucsia{
+.Fucsia{
     -fx-background-color:  #e30052;
 }
 
-.lima{
+.Lima{
     -fx-background-color:  #32cd32;
 }
+
+

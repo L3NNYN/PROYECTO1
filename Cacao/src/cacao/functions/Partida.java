@@ -5,6 +5,8 @@
  */
 package cacao.functions;
 
+import java.util.Random;
+
 /**
  *
  * @author Pipo
@@ -30,47 +32,50 @@ public class Partida{
     private int y;
 
     public Partida() {
-      for (int i = 0; i < 28; i++) {
-           cartasJungla[i] = null; 
-        }
-      
-      for (int i = 0; i < 4; i++) {
-           jugadores[i] = null; 
-        }
+     
     }
 
     public void crearCartasJungla() {
 
-        //
+        
         for (int i = 0; i < 28; i++) {
            cartasJungla[i] = null; 
         }
         
         //Plantaciones simples
         for (int i = 0; i < 6; i++) {
-            Cartas c1 = new Cartas("Pla", "Reyner", 1, 0);
+            Cartas c1 = new Cartas("Pla", "Jungla", 1, 0);
             anadirCarta(c1);
         }
 
         for (int i = 0; i < 2; i++) {
-            Cartas c1 = new Cartas("Plb", "Reyner", 2, 0);
+            Cartas c1 = new Cartas("Plb", "Jungla", 2, 0);
             anadirCarta(c1);
         }
 
         //Mercados
         for (int i = 0; i < 4; i++) {
-            Cartas c1 = new Cartas("Mcb", "Reyner", 3, 0);
+            Cartas c1 = new Cartas("Mcb", "Jungla", 3, 0);
             anadirCarta(c1);
 
             if (i < 2) {
-                Cartas c2 = new Cartas("Mca", "Reyner", 3, 0);
+                Cartas c2 = new Cartas("Mca", "Jungla", 3, 0);
                 anadirCarta(c2);
             }
         }
 
-        Cartas c1 = new Cartas("Mcc", "Reyner", 4, 0);
+        Cartas c1 = new Cartas("Mcc", "Jungla", 4, 0);
         anadirCarta(c1);
 
+        Random r = new Random();
+
+        for (int i = 0; i < cartasJungla.length; i++) {
+            int posAleatoria = r.nextInt(cartasJungla.length);
+            Cartas temp = cartasJungla[i];
+            cartasJungla[i] = cartasJungla[posAleatoria];
+            cartasJungla[posAleatoria] = temp;
+        }
+        
     }
     
     private void anadirCarta(Cartas carta){
