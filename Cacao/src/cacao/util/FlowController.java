@@ -26,11 +26,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-
-
 public class FlowController {
 
-   private static FlowController INSTANCE = null;
+    private static FlowController INSTANCE = null;
     private static Stage mainStage;
     private static ResourceBundle idioma;
     private static HashMap<String, FXMLLoader> loaders = new HashMap<>();
@@ -187,7 +185,7 @@ public class FlowController {
     public static void setIdioma(ResourceBundle idioma) {
         FlowController.idioma = idioma;
     }
-    
+
     public void initialize() {
         this.loaders.clear();
     }
@@ -195,8 +193,8 @@ public class FlowController {
     public void salir() {
         this.mainStage.close();
     }
-    
-     public void goViewInNewStage(String viewName, Stage stage) {
+
+    public void goViewInNewStage(String viewName, Stage stage) {
         initialize();
         createInstance();
         FXMLLoader loader = getLoader(viewName);

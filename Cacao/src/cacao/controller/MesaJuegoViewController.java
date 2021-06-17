@@ -9,6 +9,7 @@ import cacao.functions.Cartas;
 import cacao.functions.Jugador;
 import cacao.functions.Partida;
 import cacao.util.SocketServices;
+import cacao.util.Variables;
 import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -51,8 +52,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
     @FXML
     private JFXButton btnEnviar;
     @FXML
-    private JFXButton txtConectar;
-    @FXML
     private VBox vbImagen;
 
     public static String nombreJ;
@@ -60,6 +59,11 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private ScrollPane scScroll;
     @FXML
     private AnchorPane paneMesaJuego;
+    @FXML
+    private JFXButton btnPasarTurno;
+
+    @FXML
+    private Text txtTurnoJugador;
 
     //Componentes Socket Service
     private SocketServices sk = new SocketServices();
@@ -88,7 +92,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private int cSeleccionada = 0;
 
     private boolean init = false;
-    
+
     //Jugador pricipal
     private Partida p = new Partida();
 
@@ -136,6 +140,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     private static Jugador array[] = new Jugador[4];
 
+    private Variables variables = new Variables();
+
     //Componentes losetas disponibles
     /**
      * Initializes the controller class.
@@ -150,6 +156,11 @@ public class MesaJuegoViewController extends Controller implements Initializable
         c.addObserver(this);
         agregarVbox();
         cartasJugador();
+        btnIzquierda.setDisable(true);
+        btnDerecha.setDisable(true);
+        btnCentrar.setDisable(true);
+        variables.setCartaTrabajador(true);
+        variables.setCartaTablero(false);
         vbContenedorJ1.setVisible(false);
         vbContenedorJ2.setVisible(false);
         vbContenedorJ3.setVisible(false);
@@ -176,6 +187,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             if (logicas[2] != null) {
                 agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[2], 0, 2);
             }
+
         } catch (IOException ex) {
             Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -190,8 +202,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
         int num = 0;
 
-        for (int i = 0; i < p.getJugadores()[jugadorActual()].getCartasJugador().length; i++) {
-            if (p.getJugadores()[jugadorActual()].getCartasJugador()[i] != null) {
+        for (int i = 0; i < p.getJugadores().length; i++) {
+            if (p.getJugadores()[i] != null) {
                 num++;
             }
         }
@@ -200,11 +212,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @FXML
     private void onActionEnviar(ActionEvent event) throws IOException {
-
-    }
-
-    @FXML
-    private void onActiomConectar(ActionEvent event) {
 
     }
 
@@ -227,23 +234,23 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                 if ("Jugadores".equals(llegada.getPeticion())) {
                     p.setJugadores(llegada.getJugadores());
+                    p.setTurnoJugador(llegada.getTurnoJugador());
+                    txtTurnoJugador.setText(p.getTurnoJugador());
+                    System.out.print(cantidad());
                     int contador = 1;
-                    for (int i = 0; i < p.getJugadores().length; i++) {
-
+                    for (int i = 0; i < p.getJugadores().length; i++) {    
                         if (p.getJugadores()[i] != null) {
                             if (p.getJugadores()[i].getNombre().equals(nombre)) {
                                 vbContenedorJ1.setVisible(true);
                                 txtNombreJ1.setText(p.getJugadores()[i].getNombre());
-
                             } else {
-
                                 if (contador == 1) {
                                     vbContenedorJ2.setVisible(true);
                                     txtNombreJ2.setText(p.getJugadores()[i].getNombre());
-                                } else if (i == 2) {
+                                } else if (contador == 2) {
                                     vbContenedorJ3.setVisible(true);
                                     txtNombreJ3.setText(p.getJugadores()[i].getNombre());
-                                } else if (i == 3) {
+                                } else if (contador == 3) {
                                     vbContenedorJ4.setVisible(true);
                                     txtNombreJ4.setText(p.getJugadores()[i].getNombre());
                                 }
@@ -251,6 +258,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             }
                         }
                     }
+                    System.out.print("Cantidad Jugador: "+contador);
 
                 } else if ("actualizar cartas jugadores".equals(llegada.getPeticion())) {
                     System.out.print("actualizar cartas jugadores");
@@ -259,13 +267,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             p.getJugadores()[i].setCartasJugador(llegada.getJugadores()[i].getCartasJugador());
                         }
                     }
+                } else if ("pasar turno".equals(llegada.getPeticion())) {
+                    p.setTurnoJugador(llegada.getTurnoJugador());
+                    txtTurnoJugador.setText(p.getTurnoJugador());
+                    if(p.getTurnoJugador().equals(nombre)){
+                        variables.setCartaTrabajador(true);
+                    }
                 }
-
             }
         });
     }
 
     private void agregarVbox() {
+
         for (int i = 0; i <= 31; i++) {
             for (int j = 0; j <= 31; j++) {
 
@@ -279,19 +293,25 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 matrizVbox[i][j].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        fla = fl;
-                        clm = cl;
-                        borrarImagen(fl, cl, gpMatrizJuego);
-                        matrizVbox[fl][cl].setId("opacity");
-                        matrizVbox[fl][cl].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
-                        agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicas[cSeleccionada], fl, cl);
-                        logicas[cSeleccionada] = null;
-                        borrarImagen(0, cSeleccionada, vbJugador1);
+                        if (variables.getCartaTablero()) {
+                            fla = fl;
+                            clm = cl;
+                            btnIzquierda.setDisable(false);
+                            btnDerecha.setDisable(false);
+                            btnCentrar.setDisable(false);
+                            variables.setCartaTrabajador(false);
+                            variables.setCartaTablero(false);
+                            borrarImagen(fl, cl, gpMatrizJuego);
+                            matrizVbox[fl][cl].setId("opacity");
+                            matrizVbox[fl][cl].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+                            agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicas[cSeleccionada], fl, cl);
+                            logicas[cSeleccionada] = null;
+                            borrarImagen(0, cSeleccionada, vbJugador1);
+                        }
                     }
                 });
             }
         }
-
     }
 
     private void cartasJugador() {
@@ -308,12 +328,15 @@ public class MesaJuegoViewController extends Controller implements Initializable
             botonesJ[i].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    cSeleccionada = cs;
-                    borrarImagen(0, cs, vbJugador1);
-                    botonesJ[cs].setId("opacity");
-                    botonesJ[cs].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
-                    agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[cs], 0, cs);
-                    System.out.print(cs);
+                    if (variables.getCartaTrabajador()) {
+                        variables.setCartaTablero(true);
+                        cSeleccionada = cs;
+                        borrarImagen(0, cs, vbJugador1);
+                        botonesJ[cs].setId("opacity");
+                        botonesJ[cs].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+                        agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[cs], 0, cs);
+                        System.out.print(cs);
+                    }
                 }
 
             });
@@ -370,16 +393,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
     }
 
     @FXML
-    private void onActionCentrar(ActionEvent event) throws IOException {
-
-        botonesJ[cSeleccionada].setId(color);
-        botonesJ[cSeleccionada].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
-
-        borrarImagen(fla, clm, gpMatrizJuego);
-        matrizVbox[fla][clm].setId(color);
-        matrizVbox[fla][clm].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
-        gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
-
+    private void onActiomPasarTurno(ActionEvent event) throws IOException {
+        //Cartas trabajador
         cartasUsables();
 
         if (logicas[0] != null) {
@@ -391,6 +406,27 @@ public class MesaJuegoViewController extends Controller implements Initializable
         if (logicas[2] != null) {
             agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[2], 0, 2);
         }
+
+        p.setPeticion("pasar turno");
+        Gson gson = new Gson();
+        String json = gson.toJson(p);
+        c.enviarDatos(json);
+    }
+
+    @FXML
+    private void onActionCentrar(ActionEvent event) throws IOException {
+
+        botonesJ[cSeleccionada].setId(color);
+        botonesJ[cSeleccionada].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+
+        borrarImagen(fla, clm, gpMatrizJuego);
+        matrizVbox[fla][clm].setId(color);
+        matrizVbox[fla][clm].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+        gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
+
+        btnIzquierda.setDisable(true);
+        btnDerecha.setDisable(true);
+        btnCentrar.setDisable(true);
     }
 
     @FXML

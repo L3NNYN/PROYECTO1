@@ -15,7 +15,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="1700.0" styleClass="Inicio" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacao.controller.MesaJuegoViewController">
    <children>
-      <JFXButton fx:id="btnEnviar" cache="true" layoutX="1410.0" layoutY="916.0" onAction="#onActionEnviar" text="Enviar" />
+      <JFXButton fx:id="btnEnviar" cache="true" layoutX="1579.0" layoutY="916.0" onAction="#onActionEnviar" text="Enviar" />
       <ScrollPane fx:id="scScroll" hvalue="0.5" layoutX="193.0" layoutY="65.0" pannable="true" prefHeight="891.0" prefWidth="1170.0" vvalue="0.5" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="193.0" AnchorPane.rightAnchor="337.0" AnchorPane.topAnchor="65.0">
          <content>
           <AnchorPane fx:id="paneMesaJuego" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="2800.0" prefWidth="3150.0" styleClass="fondoMesa" stylesheets="@style.css">
@@ -94,10 +94,10 @@
             </AnchorPane>
          </content>
       </ScrollPane>
-      <JFXButton fx:id="btnCentrar" layoutX="737.0" layoutY="916.0" onAction="#onActionCentrar" text="Colocar" />
-      <JFXButton fx:id="btnDerecha" layoutX="906.0" layoutY="916.0" onAction="#onActionDerecha" text="Derecha" />
-      <JFXButton fx:id="txtConectar" layoutX="1274.0" layoutY="916.0" onAction="#onActiomConectar" text="Agregar" />
-      <JFXButton fx:id="btnIzquierda" layoutX="555.0" layoutY="916.0" onAction="#onActionIzquierda" text="Izquierda" />
+      <JFXButton fx:id="btnCentrar" layoutX="800.0" layoutY="916.0" onAction="#onActionCentrar" style="-fx-background-color: blue;" text="Colocar" />
+      <JFXButton fx:id="btnDerecha" layoutX="935.0" layoutY="916.0" onAction="#onActionDerecha" style="-fx-background-color: blue;" text="Derecha" />
+      <JFXButton fx:id="btnPasarTurno" layoutX="1276.0" layoutY="916.0" onAction="#onActiomPasarTurno" style="-fx-background-color: blue;" text="Pasar Turno" />
+      <JFXButton fx:id="btnIzquierda" layoutX="647.0" layoutY="916.0" onAction="#onActionIzquierda" style="-fx-background-color: Blue;" text="Izquierda" />
       <JFXTextField fx:id="txtMensaje" layoutX="1044.0" layoutY="916.0" prefHeight="25.0" prefWidth="168.0" />
       <VBox fx:id="vbImagen" layoutX="1370.0" layoutY="75.0" prefHeight="744.0" prefWidth="312.0">
          <children>
@@ -250,5 +250,15 @@
             </VBox>
          </children>
       </VBox>
+      <Text fill="WHITE" layoutX="203.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Turno de:" wrappingWidth="106.13671875">
+         <font>
+            <Font name="Bodoni MT" size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="txtTurnoJugador" fill="WHITE" layoutX="309.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="218.13671875">
+         <font>
+            <Font name="Bodoni MT" size="24.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
