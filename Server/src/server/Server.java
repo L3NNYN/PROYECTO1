@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server.Juego;
+package server;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import server.Partida;
+import server.Juego.Partida;
 import server.util.FlowController;
 /**
  *

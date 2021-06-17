@@ -5,8 +5,6 @@
  */
 package server.Juego;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Pipo

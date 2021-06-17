@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.Juego;
 
-import server.Juego.Cartas;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;

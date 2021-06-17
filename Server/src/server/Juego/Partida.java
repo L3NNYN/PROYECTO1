@@ -3,19 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.Juego;
 
 import java.util.Random;
-import server.Juego.Cartas;
-import server.Jugador;
 
 /**
  *
  * @author Pipo
  */
 public class Partida{
-
-    
     
     private Jugador jugadores[] = new Jugador[4];
 

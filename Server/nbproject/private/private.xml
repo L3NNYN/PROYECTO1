@@ -5,12 +5,12 @@
         <group>
             <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Client.java</file>
             <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/util/FlowController.java</file>
-            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Partida.java</file>
             <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Juego/Cartas.java</file>
-            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Jugador.java</file>
-            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Juego/Server.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Juego/Partida.java</file>
             <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/util/Controller.java</file>
-            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Juego/Respuesta.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Server.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Respuesta.java</file>
+            <file>file:/C:/Users/Pipo/Documents/GitHub/PROYECTO1/Server/src/server/Juego/Jugador.java</file>
         </group>
     </open-files>
 </project-private>

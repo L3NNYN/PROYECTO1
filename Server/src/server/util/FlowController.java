@@ -10,7 +10,7 @@ package server.util;
  * @author Pipo
  */
 
-import server.Partida;
+import server.Juego.Partida;
 
 
 
