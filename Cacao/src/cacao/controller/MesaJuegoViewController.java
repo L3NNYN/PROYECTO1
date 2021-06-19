@@ -61,9 +61,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private AnchorPane paneMesaJuego;
     @FXML
     private JFXButton btnPasarTurno;
-
     @FXML
     private Text txtTurnoJugador;
+    @FXML
+    private GridPane vbJungla;
+
+    private VBox matrizJungla[] = new VBox[2];
+
+    private Cartas logicasSelva[] = new Cartas[2];
 
     //Componentes Socket Service
     private SocketServices sk = new SocketServices();
@@ -90,6 +95,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private int rot = 0;
 
     private int cSeleccionada = 0;
+
+    private int jSeleccionada = 0;
 
     private boolean init = false;
 
@@ -156,11 +163,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
         c.addObserver(this);
         agregarVbox();
         cartasJugador();
+        cartasJungla();
         btnIzquierda.setDisable(true);
         btnDerecha.setDisable(true);
         btnCentrar.setDisable(true);
+        btnPasarTurno.setDisable(true);
         variables.setCartaTrabajador(true);
         variables.setCartaTablero(false);
+        variables.setCartaJungla(false);
         vbContenedorJ1.setVisible(false);
         vbContenedorJ2.setVisible(false);
         vbContenedorJ3.setVisible(false);
@@ -173,19 +183,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
             p.agregarJugador(g);
             p.crearCartasJungla();
             cartasUsables();
-            p.setPeticion("registrar jugador");
-            Gson gson = new Gson();
-            String json = gson.toJson(p);
-            c.enviarDatos(json);
+            llenarCartasJungla();
+            enviarPeticion("registrar jugador");
             init = true;
-            if (logicas[0] != null) {
-                agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[0], 0, 0);
-            }
-            if (logicas[1] != null) {
-                agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[1], 0, 1);
-            }
-            if (logicas[2] != null) {
-                agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[2], 0, 2);
+            for (int i = 0; i < 3; i++) {
+                if (logicas[i] != null) {
+                    agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[0], 0, i);
+                    if (i < 2) {
+                        //agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[0], i, 0);
+                        agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
+                    }
+                }
             }
 
         } catch (IOException ex) {
@@ -236,9 +244,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     p.setJugadores(llegada.getJugadores());
                     p.setTurnoJugador(llegada.getTurnoJugador());
                     txtTurnoJugador.setText(p.getTurnoJugador());
-                    System.out.print(cantidad());
+                    p.setCartasJungla(llegada.getCartasJungla());
                     int contador = 1;
-                    for (int i = 0; i < p.getJugadores().length; i++) {    
+                    for (int i = 0; i < p.getJugadores().length; i++) {
                         if (p.getJugadores()[i] != null) {
                             if (p.getJugadores()[i].getNombre().equals(nombre)) {
                                 vbContenedorJ1.setVisible(true);
@@ -258,10 +266,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             }
                         }
                     }
-                    System.out.print("Cantidad Jugador: "+contador);
 
                 } else if ("actualizar cartas jugadores".equals(llegada.getPeticion())) {
-                    System.out.print("actualizar cartas jugadores");
                     for (int i = 0; i < 4; i++) {
                         if (p.getJugadores()[i] != null) {
                             p.getJugadores()[i].setCartasJugador(llegada.getJugadores()[i].getCartasJugador());
@@ -270,9 +276,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 } else if ("pasar turno".equals(llegada.getPeticion())) {
                     p.setTurnoJugador(llegada.getTurnoJugador());
                     txtTurnoJugador.setText(p.getTurnoJugador());
-                    if(p.getTurnoJugador().equals(nombre)){
+                    if (p.getTurnoJugador().equals(nombre)) {
                         variables.setCartaTrabajador(true);
                     }
+                } else if ("colocar carta jugador".equals(llegada.getPeticion())) {
+                    p.setMatrizLogica(llegada.getMatrizLogica());
+                    p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY());
+                    if (!p.getTurnoJugador().equals(nombre)) {
+                        borrarImagen(llegada.getX(), llegada.getY(), gpMatrizJuego);
+                        agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
+                    }
+                    //nueces
+                } else if ("colocar carta jungla".equals(llegada.getPeticion())) {
+
                 }
             }
         });
@@ -301,16 +317,32 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             btnCentrar.setDisable(false);
                             variables.setCartaTrabajador(false);
                             variables.setCartaTablero(false);
+                            variables.setCartaJungla(true);
                             borrarImagen(fl, cl, gpMatrizJuego);
+                            //If else para difereciar si es carta de trabajor o jungla
                             matrizVbox[fl][cl].setId("opacity");
                             matrizVbox[fl][cl].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                             agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicas[cSeleccionada], fl, cl);
+                            p.agregarCarta(fl, cl, logicas[cSeleccionada]);
+                            p.setCartaJugada(logicas[cSeleccionada], fl, cl);
                             logicas[cSeleccionada] = null;
                             borrarImagen(0, cSeleccionada, vbJugador1);
+                            enviarPeticion("colocar carta jugador");
                         }
                     }
                 });
             }
+        }
+    }
+
+    private void enviarPeticion(String peticion) {
+        p.setPeticion(peticion);
+        Gson gson = new Gson();
+        String json = gson.toJson(p);
+        try {
+            c.enviarDatos(json);
+        } catch (IOException ex) {
+            Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -335,12 +367,38 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         botonesJ[cs].setId("opacity");
                         botonesJ[cs].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                         agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[cs], 0, cs);
-                        System.out.print(cs);
                     }
                 }
 
             });
         }
+    }
+
+    private void cartasJungla() {
+
+        for (int i = 0; i < 2; i++) {
+
+            matrizJungla[i] = new VBox();
+            matrizJungla[i].setAlignment(Pos.CENTER);
+            matrizJungla[i].setPrefHeight(98);
+            matrizJungla[i].setPrefWidth(98);
+            final int cs = i;
+            vbJungla.add(matrizJungla[i], 0, i);
+            matrizJungla[i].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (variables.getCartaJungla()) {
+                        variables.setCartaTablero(true);
+                        jSeleccionada = cs;
+                        System.out.print(jSeleccionada);
+                        matrizJungla[cs].setId("opacity");
+                        matrizJungla[cs].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+                        agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[cs], cs, 0);
+                    }
+                }
+            });
+        }
+
     }
 
     public void borrarImagen(final int row, final int column, GridPane gridPane) {
@@ -375,8 +433,28 @@ public class MesaJuegoViewController extends Controller implements Initializable
             }
             Image im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getDerecha() + carta.getAbajo() + carta.getIzquierda() + carta.getArriba() + ".png", 89, 89, false, true);
             ImageView im2 = new ImageView(im);
+            im2.setRotate(carta.getGrados());
             mVBox[f][c].getChildren().add(im2);
             gridpane.add(mVBox[f][c], c, f);
+        }
+
+        if (tipo == 3) {
+
+            if (vbox[f].getChildren().size() > 0) {
+                vbox[f].getChildren().remove(0);
+            }
+            borrarImagen(f, c, gridpane);
+            
+            Image im;
+
+            if (carta.getTipo().equals("Tmp")) {
+                im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getValor1Templo() + carta.getValor2Templo() + ".png", 89, 89, false, true);
+            } else {
+                im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getValor() + ".png", 89, 89, false, true);
+            }
+            ImageView im2 = new ImageView(im);
+            vbox[f].getChildren().add(im2);
+            gridpane.add(vbox[f], c, f);
         }
     }
 
@@ -407,10 +485,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[2], 0, 2);
         }
 
-        p.setPeticion("pasar turno");
-        Gson gson = new Gson();
-        String json = gson.toJson(p);
-        c.enviarDatos(json);
+        enviarPeticion("pasar turno");
     }
 
     @FXML
@@ -427,6 +502,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         btnIzquierda.setDisable(true);
         btnDerecha.setDisable(true);
         btnCentrar.setDisable(true);
+        btnPasarTurno.setDisable(false);
     }
 
     @FXML
@@ -434,20 +510,27 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
         borrarImagen(fla, clm, gpMatrizJuego);
 
-        if (rot == 0) {
+        if (p.getMatrizLogica()[fla][clm].getGrados() == 0) {
             rot = 90;
-        } else if (rot == 90) {
+            p.getMatrizLogica()[fla][clm].setGrados(90);
+        } else if (p.getMatrizLogica()[fla][clm].getGrados() == 90) {
             rot = 180;
-        } else if (rot == 180) {
+            p.getMatrizLogica()[fla][clm].setGrados(180);
+        } else if (p.getMatrizLogica()[fla][clm].getGrados() == 180) {
             rot = 270;
-        } else if (rot == 270) {
+            p.getMatrizLogica()[fla][clm].setGrados(270);
+        } else if (p.getMatrizLogica()[fla][clm].getGrados() == 270) {
             rot = 0;
+            p.getMatrizLogica()[fla][clm].setGrados(0);
         }
 
         matrizVbox[fla][clm].getChildren().get(0).setRotate(rot);
 
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
 
+        p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm);
+
+        enviarPeticion("colocar carta jugador");
     }
 
     @FXML
@@ -455,20 +538,27 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
         borrarImagen(fla, clm, gpMatrizJuego);
 
-        if (rot == 0) {
+        if (p.getMatrizLogica()[fla][clm].getGrados() == 0) {
             rot = 270;
-        } else if (rot == 90) {
+            p.getMatrizLogica()[fla][clm].setGrados(270);
+        } else if (p.getMatrizLogica()[fla][clm].getGrados() == 90) {
             rot = 0;
-        } else if (rot == 180) {
+            p.getMatrizLogica()[fla][clm].setGrados(0);
+        } else if (p.getMatrizLogica()[fla][clm].getGrados() == 180) {
             rot = 90;
-        } else if (rot == 270) {
+            p.getMatrizLogica()[fla][clm].setGrados(90);
+        } else if (p.getMatrizLogica()[fla][clm].getGrados() == 270) {
             rot = 180;
+            p.getMatrizLogica()[fla][clm].setGrados(180);
         }
 
         matrizVbox[fla][clm].getChildren().get(0).setRotate(rot);
 
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
 
+        p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm);
+
+        enviarPeticion("colocar carta jugador");
     }
 
     private void cartasUsables() throws IOException {
@@ -500,10 +590,41 @@ public class MesaJuegoViewController extends Controller implements Initializable
             }
         }
         if (init) {
-            p.setPeticion("actualizar cartas jugadores");
-            Gson gs = new Gson();
-            String js = gs.toJson(p);
-            c.enviarDatos(js);
+            enviarPeticion("actualizar cartas jugadores");
+        }
+
+    }
+
+    private void llenarCartasJungla() throws IOException {
+        int j = 0;
+        boolean b = false;
+        for (int i = 0; i < p.getCartasJungla().length; i++) {
+            b = false;
+            while (b == false) {
+                if (j < 2) {
+                    if (logicasSelva[j] == null) {
+                        if (i < 28) {
+                            if (p.getCartasJungla()[i] != null) {
+                                logicasSelva[j] = p.getCartasJungla()[i];
+                                p.borrarCarta(i);
+                                b = true;
+                                j++;
+                            } else {
+                                b = true;
+                            }
+                        } else {
+                            break;
+                        }
+                    } else {
+                        j++;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        if (init) {
+            //enviarPeticion("actualizar cartas jugadores");
         }
 
     }

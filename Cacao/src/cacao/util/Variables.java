@@ -14,6 +14,10 @@ public class Variables {
     public static boolean cartaTrabajador;
 
     public static boolean cartaTablero;
+    
+    public static boolean cartaJungla;
+    
+    public static boolean num;
 
     public Variables() {
 
@@ -33,5 +37,21 @@ public class Variables {
 
     public void setCartaTablero(boolean cartaTablero) {
         Variables.cartaTablero = cartaTablero;
+    }
+    
+    public boolean getCartaJungla() {
+        return cartaJungla;
+    }
+
+    public void setCartaJungla(boolean cartaJungla) {
+        Variables.cartaJungla = cartaJungla;
+    }
+    
+    public boolean getNum() {
+        return num;
+    }
+
+    public void setNum(boolean num) {
+        Variables.num = num;
     }
 }

@@ -11,14 +11,12 @@ import java.util.Random;
  *
  * @author Pipo
  */
-public class Partida{
+public class Partida {
 
-    
-    
     private Jugador jugadores[] = new Jugador[4];
 
     private Cartas matrizLogica[][] = new Cartas[32][32];
-    
+
     private Cartas cartasJungla[] = new Cartas[28];
 
     private Cartas cartaJugada;
@@ -32,40 +30,60 @@ public class Partida{
     private int y;
 
     public Partida() {
-     
+
     }
 
     public void crearCartasJungla() {
 
-        
         for (int i = 0; i < 28; i++) {
-           cartasJungla[i] = null; 
+            cartasJungla[i] = null;
         }
-        
+
         //Plantaciones simples
         for (int i = 0; i < 6; i++) {
-            Cartas c1 = new Cartas("Pla", "Jungla", 1, 0);
-            anadirCarta(c1);
+            Cartas p1 = new Cartas("Pla", "Jungla", 1, 0);
+            anadirCarta(p1);
         }
 
         for (int i = 0; i < 2; i++) {
-            Cartas c1 = new Cartas("Plb", "Jungla", 2, 0);
-            anadirCarta(c1);
+            Cartas p2 = new Cartas("Pla", "Jungla", 2, 0);
+            anadirCarta(p2);
         }
 
         //Mercados
         for (int i = 0; i < 4; i++) {
-            Cartas c1 = new Cartas("Mcb", "Jungla", 3, 0);
-            anadirCarta(c1);
+            Cartas m1 = new Cartas("Mca", "Jungla", 3, 0);
+            anadirCarta(m1);
 
             if (i < 2) {
-                Cartas c2 = new Cartas("Mca", "Jungla", 3, 0);
-                anadirCarta(c2);
+                Cartas m2 = new Cartas("Mca", "Jungla", 2, 0);
+                anadirCarta(m2);
+            }
+            if (i < 1) {
+                Cartas c1 = new Cartas("Mca", "Jungla", 4, 0);
+                anadirCarta(c1);
             }
         }
 
-        Cartas c1 = new Cartas("Mcc", "Jungla", 4, 0);
-        anadirCarta(c1);
+        //Minas de oro, adoracion al sol, agua y templos
+        for (int i = 0; i < 5; i++) {
+            Cartas t1 = new Cartas("Tmp", "Jungla", 3, 6, 0);
+            anadirCarta(t1);
+            if (i < 3) {
+                Cartas a1 = new Cartas("Ag", "Jungla", 0, 0);
+                anadirCarta(a1);
+            }
+            if (i < 2) {
+                Cartas m1 = new Cartas("Mns", "Jungla", 1, 0);
+                anadirCarta(m1);
+                Cartas ad1 = new Cartas("Ads", "Jungla", 0, 0);
+                anadirCarta(ad1);
+            }
+            if (i < 1) {
+                Cartas m2 = new Cartas("Mns", "Jungla", 2, 0);
+                anadirCarta(m2);
+            }
+        }
 
         Random r = new Random();
 
@@ -75,39 +93,54 @@ public class Partida{
             cartasJungla[i] = cartasJungla[posAleatoria];
             cartasJungla[posAleatoria] = temp;
         }
-        
+
     }
-    
-    private void anadirCarta(Cartas carta){
-        
+
+    public void borrarCarta(int carta) {
+
         for (int i = 0; i < 28; i++) {
-            if(cartasJungla[i] == null){
-              cartasJungla[i] = carta;
-              break;
-            }
-        }
-        
-    }
-    
-    public void agregarJugador(Jugador jugador){
-        for(int i = 0; i < 4; i++){
-            if(jugadores[i] == null){
-              jugadores[i] = jugador;
-              break;
+            if (i == carta) {
+                cartasJungla[i] = null;
+                break;
             }
         }
     }
-    
-    public void iniciarArrays(){
+
+    private void anadirCarta(Cartas carta) {
+
         for (int i = 0; i < 28; i++) {
-           cartasJungla[i] = null; 
+            if (cartasJungla[i] == null) {
+                cartasJungla[i] = carta;
+                break;
+            }
         }
-      
-      for (int i = 0; i < 4; i++) {
-           jugadores[i] = null; 
+
+    }
+
+    public void agregarJugador(Jugador jugador) {
+        for (int i = 0; i < 4; i++) {
+            if (jugadores[i] == null) {
+                jugadores[i] = jugador;
+                break;
+            }
         }
     }
-    
+
+    public void iniciarArrays() {
+        for (int i = 0; i < 28; i++) {
+            cartasJungla[i] = null;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            jugadores[i] = null;
+        }
+    }
+
+    public void agregarCarta(int x, int y, Cartas carta) {
+        carta.setGrados(0);
+        matrizLogica[x][y] = carta;
+    }
+
     public Cartas[] getCartasJungla() {
         return cartasJungla;
     }
@@ -115,7 +148,7 @@ public class Partida{
     public void setCartasJungla(Cartas[] cartasJungla) {
         this.cartasJungla = cartasJungla;
     }
-    
+
     public Jugador[] getJugadores() {
         return jugadores;
     }
@@ -123,7 +156,7 @@ public class Partida{
     public void setJugadores(Jugador[] jugadores) {
         this.jugadores = jugadores;
     }
-    
+
     public Cartas[][] getMatrizLogica() {
         return matrizLogica;
     }
@@ -152,8 +185,10 @@ public class Partida{
         this.matrizLogica = matrizLogica;
     }
 
-    public void setCartaJugada(Cartas cartaJugada) {
+    public void setCartaJugada(Cartas cartaJugada, int x, int y) {
         this.cartaJugada = cartaJugada;
+        this.x = x;
+        this.y = y;
     }
 
     public void setTurnoJugador(String turnoJugador) {

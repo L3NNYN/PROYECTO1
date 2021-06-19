@@ -34,7 +34,7 @@ public class Cartas{
    private int valor2Templo;
    
    private int grados;
-   
+
    //Losetas jungla
    public Cartas(String tipo, String nombre, int derecha, int abajo, int izquierda,
    int arriba,String color,int grados){
@@ -60,6 +60,7 @@ public class Cartas{
        this.tipo = tipo;
        this.nombre = nombre;
        this.valor1Templo = valorT1;
+       this.valor2Templo = valorT2;
        this.grados = grados;
    }
    
@@ -69,7 +70,7 @@ public class Cartas{
      this.nombre = nombre;
      this.grados = grados;
    }
-
+   
     public String getTipo() {
         return tipo;
     }
@@ -150,6 +151,13 @@ public class Cartas{
         this.valor2Templo = valor2Templo;
     }
    
+    public int getGrados() {
+        return grados;
+    }
+
+    public void setGrados(int grados) {
+        this.grados = grados;
+    }
    
                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 }
