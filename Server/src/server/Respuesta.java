@@ -61,15 +61,9 @@ public class Respuesta extends Observable implements Runnable {
             while (true) {
 
                 String me = in.readUTF();
-
                 Gson gs = new Gson();
                 Partida jg = gs.fromJson(me, Partida.class);
-
                 revisarPeticion(jg);
-
-                //Se envian los cambios a todos los clientes conectados
-                //enviarInfo();
-                //Se notofocan a los observadores
                 this.setChanged();
                 this.notifyObservers();
                 this.clearChanged();
@@ -87,9 +81,6 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.agregarJugador(partida.getJugadores()[0]);
             FlowController.getInstance().partida.setPeticion("Jugadores");
             FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[0].getNombre());
-            Gson g = new Gson();
-            String r = g.toJson(FlowController.getInstance().partida);
-            enviarInfo(r);
 
         } else if (partida.getPeticion().equals("pasar turno")) {
             boolean escogido = false;
@@ -97,7 +88,7 @@ public class Respuesta extends Observable implements Runnable {
                 if (!escogido) {
                     if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(FlowController.getInstance().partida.getTurnoJugador())) {
                         if (i < cantidad() - 1) {
-                            FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[i+1].getNombre());
+                            FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[i + 1].getNombre());
                             System.out.print("Turno nuevo: " + FlowController.getInstance().partida.getTurnoJugador());
                             escogido = true;
                         } else {
@@ -106,11 +97,7 @@ public class Respuesta extends Observable implements Runnable {
                     }
                 }
             }
-            System.out.print("Turno actual: " + FlowController.getInstance().partida.getTurnoJugador());
             FlowController.getInstance().partida.setPeticion("pasar turno");
-            Gson g = new Gson();
-            String r = g.toJson(FlowController.getInstance().partida);
-            enviarInfo(r);
 
         } else if (partida.getPeticion().equals("actualizar cartas jugadores")) {
 
@@ -126,14 +113,18 @@ public class Respuesta extends Observable implements Runnable {
                 }
             }
             FlowController.getInstance().partida.setPeticion("actualizar cartas jugadores");
-            Gson g = new Gson();
-            String r = g.toJson(FlowController.getInstance().partida);
-            enviarInfo(r);
 
-        } else if (partida.getPeticion().equals("colocar jugador")) {
+        } else if (partida.getPeticion().equals("colocar carta jugador")) {
 
-        } else if (partida.getPeticion().equals("colocar selva")) {
+            FlowController.getInstance().partida.setMatrizLogica(partida.getMatrizLogica());
+            FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(),partida.getX(),partida.getY());
+            FlowController.getInstance().partida.setPeticion("colocar carta jugador");
 
+        } else if (partida.getPeticion().equals("colocar carta jungla")) {
+
+            FlowController.getInstance().partida.setCartasJungla(partida.getCartasJungla());
+            FlowController.getInstance().partida.setPeticion("colocar carta jungla");
+            
         } else if (partida.getPeticion().equals("salir")) {
 
         } else if (partida.getPeticion().equals("ganador")) {
@@ -142,6 +133,9 @@ public class Respuesta extends Observable implements Runnable {
 
         }
 
+        Gson g = new Gson();
+        String r = g.toJson(FlowController.getInstance().partida);
+        enviarInfo(r);
     }
 
     /*Este metodo notificara todos los clientes conectados*/
