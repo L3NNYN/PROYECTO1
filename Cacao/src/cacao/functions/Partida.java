@@ -28,6 +28,8 @@ public class Partida {
     private int x;
 
     private int y;
+    
+    private int mazo;
 
     public Partida() {
 
@@ -97,13 +99,7 @@ public class Partida {
     }
 
     public void borrarCarta(int carta) {
-
-        for (int i = 0; i < 28; i++) {
-            if (i == carta) {
-                cartasJungla[i] = null;
-                break;
-            }
-        }
+       this.cartasJungla[carta] = null;
     }
 
     private void anadirCarta(Cartas carta) {
@@ -185,10 +181,11 @@ public class Partida {
         this.matrizLogica = matrizLogica;
     }
 
-    public void setCartaJugada(Cartas cartaJugada, int x, int y) {
+    public void setCartaJugada(Cartas cartaJugada, int x, int y, int mazo) {
         this.cartaJugada = cartaJugada;
         this.x = x;
         this.y = y;
+        this.mazo = mazo;
     }
 
     public void setTurnoJugador(String turnoJugador) {
@@ -205,6 +202,14 @@ public class Partida {
 
     public void setY(int y) {
         this.y = y;
+    }
+    
+    public int getMazo() {
+        return mazo;
+    }
+
+    public void setMazo(int mazo) {
+        this.mazo = mazo;
     }
 
 }

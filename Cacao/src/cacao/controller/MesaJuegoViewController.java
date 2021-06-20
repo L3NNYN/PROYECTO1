@@ -5,11 +5,13 @@
  */
 package cacao.controller;
 
+import cacao.functions.AgregarImagen;
 import cacao.functions.Cartas;
 import cacao.functions.Jugador;
 import cacao.functions.Partida;
+import cacao.functions.Validaciones;
 import cacao.util.SocketServices;
-import cacao.util.Variables;
+import cacao.functions.Variables;
 import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -171,6 +173,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         variables.setCartaTrabajador(true);
         variables.setCartaTablero(false);
         variables.setCartaJungla(false);
+        variables.setNum(false);
+        variables.setLlenarJungla(false);
         vbContenedorJ1.setVisible(false);
         vbContenedorJ2.setVisible(false);
         vbContenedorJ3.setVisible(false);
@@ -181,18 +185,13 @@ public class MesaJuegoViewController extends Controller implements Initializable
             g.crearCartas(nombre, color);
             p.iniciarArrays();
             p.agregarJugador(g);
-            p.crearCartasJungla();
             cartasUsables();
-            llenarCartasJungla();
             enviarPeticion("registrar jugador");
             init = true;
+            //llenarCartasJungla();
             for (int i = 0; i < 3; i++) {
                 if (logicas[i] != null) {
-                    agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[0], 0, i);
-                    if (i < 2) {
-                        //agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[0], i, 0);
-                        agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
-                    }
+                    agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[i], 0, i);
                 }
             }
 
@@ -220,7 +219,13 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @FXML
     private void onActionEnviar(ActionEvent event) throws IOException {
-
+        int nm = 0;
+        for (int i = 0; i < p.getCartasJungla().length; i++) {
+            if (p.getCartasJungla()[i] != null) {
+                nm++;
+            }
+        }
+        System.out.print("Cant cartas: " + nm);
     }
 
     @Override
@@ -244,7 +249,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     p.setJugadores(llegada.getJugadores());
                     p.setTurnoJugador(llegada.getTurnoJugador());
                     txtTurnoJugador.setText(p.getTurnoJugador());
-                    p.setCartasJungla(llegada.getCartasJungla());
+                    if (!variables.getLlenarJungla()) {
+                        variables.setLlenarJungla(true);
+                        p.setCartasJungla(llegada.getCartasJungla());
+                        try {
+                            llenarCartasJungla();
+                            for (int i = 0; i < 2; i++) {
+                                agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
                     int contador = 1;
                     for (int i = 0; i < p.getJugadores().length; i++) {
                         if (p.getJugadores()[i] != null) {
@@ -275,20 +292,39 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     }
                 } else if ("pasar turno".equals(llegada.getPeticion())) {
                     p.setTurnoJugador(llegada.getTurnoJugador());
+                    String turno = llegada.getTurnoJugador();
                     txtTurnoJugador.setText(p.getTurnoJugador());
                     if (p.getTurnoJugador().equals(nombre)) {
                         variables.setCartaTrabajador(true);
                     }
+
                 } else if ("colocar carta jugador".equals(llegada.getPeticion())) {
                     p.setMatrizLogica(llegada.getMatrizLogica());
-                    p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY());
+                    p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), 0);
                     if (!p.getTurnoJugador().equals(nombre)) {
                         borrarImagen(llegada.getX(), llegada.getY(), gpMatrizJuego);
                         agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
                     }
                     //nueces
                 } else if ("colocar carta jungla".equals(llegada.getPeticion())) {
+                    if (!p.getTurnoJugador().equals(nombre)) {
+                        p.setCartasJungla(llegada.getCartasJungla());
+                        p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), llegada.getMazo());
+                        p.setMatrizLogica(llegada.getMatrizLogica());
+                        logicasSelva[llegada.getMazo()] = null;
+                        borrarImagen(p.getX(), p.getY(), gpMatrizJuego);
+                        agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
+                        borrarImagen(p.getMazo(), 0, vbJungla);
 
+                    }
+                } else if ("actualizar jungla".equals(llegada.getPeticion())) {
+                    
+                    try {
+                        llenarCartasJungla();
+                    } catch (IOException ex) {
+                        Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    pasarTurno();
                 }
             }
         });
@@ -312,22 +348,36 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         if (variables.getCartaTablero()) {
                             fla = fl;
                             clm = cl;
-                            btnIzquierda.setDisable(false);
-                            btnDerecha.setDisable(false);
-                            btnCentrar.setDisable(false);
+
                             variables.setCartaTrabajador(false);
-                            variables.setCartaTablero(false);
                             variables.setCartaJungla(true);
                             borrarImagen(fl, cl, gpMatrizJuego);
                             //If else para difereciar si es carta de trabajor o jungla
-                            matrizVbox[fl][cl].setId("opacity");
-                            matrizVbox[fl][cl].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
-                            agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicas[cSeleccionada], fl, cl);
-                            p.agregarCarta(fl, cl, logicas[cSeleccionada]);
-                            p.setCartaJugada(logicas[cSeleccionada], fl, cl);
-                            logicas[cSeleccionada] = null;
-                            borrarImagen(0, cSeleccionada, vbJugador1);
-                            enviarPeticion("colocar carta jugador");
+                            if (variables.getNum()) {
+                                btnIzquierda.setDisable(true);
+                                btnDerecha.setDisable(true);
+                                btnCentrar.setDisable(true);
+                                agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicasSelva[jSeleccionada], fl, cl);
+                                p.agregarCarta(fl, cl, logicasSelva[jSeleccionada]);
+                                p.setCartaJugada(logicasSelva[jSeleccionada], fl, cl, jSeleccionada);
+                                logicasSelva[jSeleccionada] = null;
+                                variables.setNum(false);
+                                borrarImagen(jSeleccionada, 0, vbJungla);
+                                enviarPeticion("colocar carta jungla");
+                            } else {
+                                btnIzquierda.setDisable(false);
+                                btnDerecha.setDisable(false);
+                                btnCentrar.setDisable(false);
+                                matrizVbox[fl][cl].setId("opacity");
+                                matrizVbox[fl][cl].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+                                agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicas[cSeleccionada], fl, cl);
+                                p.agregarCarta(fl, cl, logicas[cSeleccionada]);
+                                p.setCartaJugada(logicas[cSeleccionada], fl, cl, 0);
+                                logicas[cSeleccionada] = null;
+                                borrarImagen(0, cSeleccionada, vbJugador1);
+                                enviarPeticion("colocar carta jugador");
+                            }
+
                         }
                     }
                 });
@@ -362,6 +412,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 public void handle(MouseEvent event) {
                     if (variables.getCartaTrabajador()) {
                         variables.setCartaTablero(true);
+                        variables.setCartaJungla(true);
                         cSeleccionada = cs;
                         borrarImagen(0, cs, vbJugador1);
                         botonesJ[cs].setId("opacity");
@@ -383,14 +434,15 @@ public class MesaJuegoViewController extends Controller implements Initializable
             matrizJungla[i].setPrefHeight(98);
             matrizJungla[i].setPrefWidth(98);
             final int cs = i;
-            vbJungla.add(matrizJungla[i], 0, i);
+            //vbJungla.add(matrizJungla[i], 0, i);
             matrizJungla[i].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     if (variables.getCartaJungla()) {
                         variables.setCartaTablero(true);
+                        variables.setNum(true);
+                        variables.setCartaJungla(false);
                         jSeleccionada = cs;
-                        System.out.print(jSeleccionada);
                         matrizJungla[cs].setId("opacity");
                         matrizJungla[cs].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                         agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[cs], cs, 0);
@@ -413,49 +465,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
     }
 
     public void agregarImagen(int tipo, GridPane gridpane, Cartas[] cartas, VBox[] vbox, VBox[][] mVBox, Cartas[][] cartasM, Cartas carta, int f, int c) {
-
-        if (tipo == 1) {
-
-            if (vbox[c].getChildren().size() > 0) {
-                vbox[c].getChildren().remove(0);
-                borrarImagen(f, c, gridpane);
-            }
-            Image im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getDerecha() + carta.getAbajo() + carta.getIzquierda() + carta.getArriba() + ".png", 73, 73, false, true);
-            ImageView im2 = new ImageView(im);
-            vbox[c].getChildren().add(im2);
-            gridpane.add(vbox[c], c, f);
-        }
-
-        if (tipo == 2) {
-            if (mVBox[f][c].getChildren().size() > 0) {
-                mVBox[f][c].getChildren().remove(0);
-                borrarImagen(f, c, gridpane);
-            }
-            Image im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getDerecha() + carta.getAbajo() + carta.getIzquierda() + carta.getArriba() + ".png", 89, 89, false, true);
-            ImageView im2 = new ImageView(im);
-            im2.setRotate(carta.getGrados());
-            mVBox[f][c].getChildren().add(im2);
-            gridpane.add(mVBox[f][c], c, f);
-        }
-
-        if (tipo == 3) {
-
-            if (vbox[f].getChildren().size() > 0) {
-                vbox[f].getChildren().remove(0);
-            }
-            borrarImagen(f, c, gridpane);
-            
-            Image im;
-
-            if (carta.getTipo().equals("Tmp")) {
-                im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getValor1Templo() + carta.getValor2Templo() + ".png", 89, 89, false, true);
-            } else {
-                im = new Image("/cacao/resources/Cartas/" + carta.getTipo() + carta.getValor() + ".png", 89, 89, false, true);
-            }
-            ImageView im2 = new ImageView(im);
-            vbox[f].getChildren().add(im2);
-            gridpane.add(vbox[f], c, f);
-        }
+        AgregarImagen add = new AgregarImagen();
+        add.agregarImagen(tipo, gridpane, cartas, vbox, mVBox, cartasM, carta, f, c);
     }
 
     public SocketServices getSocket() {
@@ -473,19 +484,28 @@ public class MesaJuegoViewController extends Controller implements Initializable
     @FXML
     private void onActiomPasarTurno(ActionEvent event) throws IOException {
         //Cartas trabajador
+        llenarCartasJungla();
         cartasUsables();
-
-        if (logicas[0] != null) {
-            agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[0], 0, 0);
-        }
-        if (logicas[1] != null) {
-            agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[1], 0, 1);
-        }
-        if (logicas[2] != null) {
-            agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[2], 0, 2);
-        }
-
+        pasarTurno();
+        enviarPeticion("actualizar jungla");
         enviarPeticion("pasar turno");
+    }
+
+    private void pasarTurno() {
+        for (int i = 0; i < 3; i++) {
+            if (logicas[i] != null) {
+                agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[i], 0, i);
+            }
+            if (i < 2) {
+                if (logicasSelva[i] != null) {
+                    matrizJungla[i].setId("color");
+                    matrizJungla[i].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+                    agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
+                    matrizJungla[i].getStyleClass().clear();
+                    agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
+                }
+            }
+        }
     }
 
     @FXML
@@ -528,7 +548,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
 
-        p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm);
+        p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm, 0);
 
         enviarPeticion("colocar carta jugador");
     }
@@ -556,39 +576,22 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
 
-        p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm);
+        p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm, 0);
 
         enviarPeticion("colocar carta jugador");
     }
 
     private void cartasUsables() throws IOException {
-        int j = 0;
-        boolean b = false;
-        for (int i = 0; i < p.getCartasJungla().length; i++) {
-            b = false;
-            while (b == false) {
-                if (j < 3) {
-                    if (logicas[j] == null) {
-                        if (i < 11) {
-                            if (p.getJugadores()[jugadorActual()].getCartasJugador()[i] != null) {
-                                logicas[j] = p.getJugadores()[jugadorActual()].getCartasJugador()[i];
-                                p.getJugadores()[jugadorActual()].borrarCarta(i);
-                                b = true;
-                                j++;
-                            } else {
-                                b = true;
-                            }
-                        } else {
-                            break;
-                        }
-                    } else {
-                        j++;
-                    }
-                } else {
-                    break;
-                }
+        Validaciones vl = new Validaciones();
+        vl.cartasUsables(p.getCartasJungla(), logicas, p, jugadorActual());
+
+        int sm = 0;
+        for (int i = 0; i < 11; i++) {
+            if (p.getJugadores()[jugadorActual()].getCartasJugador()[i] != null) {
+                sm++;
             }
         }
+        System.out.print("Cantidad: " + sm);
         if (init) {
             enviarPeticion("actualizar cartas jugadores");
         }
@@ -596,33 +599,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
     }
 
     private void llenarCartasJungla() throws IOException {
-        int j = 0;
-        boolean b = false;
-        for (int i = 0; i < p.getCartasJungla().length; i++) {
-            b = false;
-            while (b == false) {
-                if (j < 2) {
-                    if (logicasSelva[j] == null) {
-                        if (i < 28) {
-                            if (p.getCartasJungla()[i] != null) {
-                                logicasSelva[j] = p.getCartasJungla()[i];
-                                p.borrarCarta(i);
-                                b = true;
-                                j++;
-                            } else {
-                                b = true;
-                            }
-                        } else {
-                            break;
-                        }
-                    } else {
-                        j++;
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
+        Validaciones vl = new Validaciones();
+        vl.llenarCartasJungla(p.getCartasJungla(), logicasSelva, p);
+
         if (init) {
             //enviarPeticion("actualizar cartas jugadores");
         }
