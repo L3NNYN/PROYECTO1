@@ -57,7 +57,6 @@ public class Validaciones {
                         if (i < 28) {
 
                             if (cartasJungla[i] != null) {
-                                System.out.print("Vacio: " + i);
                                 logicasSelva[j] = cartasJungla[i];
                                 partida.borrarCarta(i);
                                 b = true;

@@ -75,12 +75,8 @@ public class SocketServices extends Observable implements Runnable {
             double valor;
             while (true) {
                 
-                //System.out.print("Dentro a respuesta");
-                String sms = dis.readUTF();
 
-                //Gson gs = new Gson();
-                //j = gs.fromJson(mensaje, Jugador.class);
-                //System.out.print(j.getNombre()+": "+j.getMensaje()+"\n");
+                String sms = dis.readUTF();
 
                 this.setChanged();
                 this.notifyObservers(sms);

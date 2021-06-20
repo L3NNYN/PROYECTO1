@@ -303,6 +303,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), 0);
                     if (!p.getTurnoJugador().equals(nombre)) {
                         borrarImagen(llegada.getX(), llegada.getY(), gpMatrizJuego);
+                        System.out.print("COlor: "+p.getCartaJugada().getColor());
+                        matrizVbox[p.getX()][p.getY()].setId(p.getCartaJugada().getColor());
+                        matrizVbox[p.getX()][p.getY()].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                         agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
                     }
                     //nueces
@@ -345,6 +348,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 matrizVbox[i][j].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+                        
+                        
                         if (variables.getCartaTablero()) {
                             fla = fl;
                             clm = cl;
@@ -414,6 +419,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         variables.setCartaTablero(true);
                         variables.setCartaJungla(true);
                         cSeleccionada = cs;
+                        logicas[cs].setColor(color);
                         borrarImagen(0, cs, vbJugador1);
                         botonesJ[cs].setId("opacity");
                         botonesJ[cs].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
