@@ -70,7 +70,7 @@ public class Server extends Observable implements Runnable, Initializable{
                 Respuesta rp = new Respuesta(sc);
                 Thread t = new Thread(rp);
                 t.start();
-                System.out.println("Seguir");
+                
             }
 
         } catch (IOException ex) {
