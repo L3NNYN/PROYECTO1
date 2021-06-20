@@ -60,6 +60,7 @@ public class Cartas{
        this.tipo = tipo;
        this.nombre = nombre;
        this.valor1Templo = valorT1;
+       this.valor2Templo = valorT2;
        this.grados = grados;
    }
    
@@ -70,8 +71,6 @@ public class Cartas{
      this.grados = grados;
    }
    
-   
-
     public String getTipo() {
         return tipo;
     }

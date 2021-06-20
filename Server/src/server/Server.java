@@ -56,7 +56,7 @@ public class Server extends Observable implements Runnable, Initializable{
             //Creamos el socket del servidor
             servidor = new ServerSocket(puerto);
             System.out.println("Servidor iniciado");
-
+            FlowController.getInstance().partida.crearCartasJungla();
             //Siempre estara escuchando peticiones
             while (true) {
 

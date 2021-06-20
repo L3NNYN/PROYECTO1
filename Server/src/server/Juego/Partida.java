@@ -28,6 +28,8 @@ public class Partida {
     private int x;
 
     private int y;
+    
+    private int mazo;
 
     public Partida() {
 
@@ -70,13 +72,13 @@ public class Partida {
             Cartas t1 = new Cartas("Tmp", "Jungla", 3, 6, 0);
             anadirCarta(t1);
             if (i < 3) {
-                Cartas a1 = new Cartas("Ag", "Jungla", 0);
+                Cartas a1 = new Cartas("Ag", "Jungla", 0, 0);
                 anadirCarta(a1);
             }
             if (i < 2) {
                 Cartas m1 = new Cartas("Mns", "Jungla", 1, 0);
                 anadirCarta(m1);
-                Cartas ad1 = new Cartas("Ads", "Jungla", 0);
+                Cartas ad1 = new Cartas("Ads", "Jungla", 0, 0);
                 anadirCarta(ad1);
             }
             if (i < 1) {
@@ -94,6 +96,10 @@ public class Partida {
             cartasJungla[posAleatoria] = temp;
         }
 
+    }
+
+    public void borrarCarta(int carta) {
+       this.cartasJungla[carta] = null;
     }
 
     private void anadirCarta(Cartas carta) {
@@ -175,10 +181,11 @@ public class Partida {
         this.matrizLogica = matrizLogica;
     }
 
-    public void setCartaJugada(Cartas cartaJugada, int x, int y) {
+    public void setCartaJugada(Cartas cartaJugada, int x, int y, int mazo) {
         this.cartaJugada = cartaJugada;
         this.x = x;
         this.y = y;
+        this.mazo = mazo;
     }
 
     public void setTurnoJugador(String turnoJugador) {
@@ -195,6 +202,14 @@ public class Partida {
 
     public void setY(int y) {
         this.y = y;
+    }
+    
+    public int getMazo() {
+        return mazo;
+    }
+
+    public void setMazo(int mazo) {
+        this.mazo = mazo;
     }
 
 }

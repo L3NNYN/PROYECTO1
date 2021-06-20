@@ -117,20 +117,21 @@ public class Respuesta extends Observable implements Runnable {
         } else if (partida.getPeticion().equals("colocar carta jugador")) {
 
             FlowController.getInstance().partida.setMatrizLogica(partida.getMatrizLogica());
-            FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(),partida.getX(),partida.getY());
+            FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(), partida.getX(), partida.getY(), partida.getMazo());
             FlowController.getInstance().partida.setPeticion("colocar carta jugador");
 
         } else if (partida.getPeticion().equals("colocar carta jungla")) {
 
             FlowController.getInstance().partida.setCartasJungla(partida.getCartasJungla());
+            FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(), partida.getX(), partida.getY(), partida.getMazo());
             FlowController.getInstance().partida.setPeticion("colocar carta jungla");
-            
+
         } else if (partida.getPeticion().equals("salir")) {
 
         } else if (partida.getPeticion().equals("ganador")) {
 
-        } else if (partida.getPeticion().equals("actualizar")) {
-
+        } else if (partida.getPeticion().equals("actualizar jungla")) {
+            FlowController.getInstance().partida.setPeticion("actualizar jungla");
         }
 
         Gson g = new Gson();
