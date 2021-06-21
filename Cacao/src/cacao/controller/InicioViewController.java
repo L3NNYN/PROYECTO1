@@ -34,10 +34,10 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Pipo
  */
-public class InicioViewController extends Controller implements Initializable, Observer{
+public class InicioViewController extends Controller implements Initializable, Observer {
 
     MesaJuegoViewController mj = new MesaJuegoViewController();
-    
+
     @FXML
     private JFXTextField txtIppartida;
     @FXML
@@ -48,13 +48,13 @@ public class InicioViewController extends Controller implements Initializable, O
     private JFXTextField txtPuerto;
     @FXML
     private JFXTextField txtNickName;
-    
+
     public static String nombre;
-    
+
     private Mensajes sms;
-    
+
     private static SocketServices conexion;
-    
+
     @FXML
     private JFXComboBox<String> cbColores;
 
@@ -66,146 +66,143 @@ public class InicioViewController extends Controller implements Initializable, O
     /**
      * Initializes the controller class.
      */
-    
-
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       anadirColores();
-       spSpinner.setVisible(false);
-       sms = new Mensajes();
-       
-    }    
+        anadirColores();
+        spSpinner.setVisible(false);
+        sms = new Mensajes();
+
+    }
 
     @Override
     public void initialize() {
 
     }
-    
-    
-    
+
     @FXML
     private void onActionComenzar(ActionEvent event) throws IOException, ClassNotFoundException {
         String datos = "";
-        if(("".equals(txtIppartida.getText()) || ("".equals(txtPuerto.getText())) || ("".equals(txtNickName.getText())))){
+        if (("".equals(txtIppartida.getText()) || ("".equals(txtPuerto.getText())) || ("".equals(txtNickName.getText())))) {
             boolean primero = false;
-            if(txtIppartida.getText().equals("")){
-                if(primero == false){
+            if (txtIppartida.getText().equals("")) {
+                if (primero == false) {
                     datos += "Ip partida";
                     primero = true;
-                }else{
+                } else {
                     datos += "," + "Ip partida";
                 }
             }
-            if(txtPuerto.getText().equals("")){
-                if(primero == false){
+            if (txtPuerto.getText().equals("")) {
+                if (primero == false) {
                     datos += "Puerto";
                     primero = true;
-                }else{
+                } else {
                     datos += "," + "Puerto";
                 }
             }
-            
-            if(txtNickName.getText().equals("")){
-                if(primero == false){
+
+            if (txtNickName.getText().equals("")) {
+                if (primero == false) {
                     datos += "NickName";
                     primero = true;
-                }else{
+                } else {
                     datos += "," + "NickName";
                 }
             }
-            sms.show(Alert.AlertType.ERROR, "Error", "Faltan datos de ingresar: "+datos);
+            sms.show(Alert.AlertType.ERROR, "Error", "Faltan datos de ingresar: " + datos);
             datos = "";
         } else {
 
             LocalDate edad = dtEdadJugador.getValue();
-            
+
             //txtNickName.getText(),edad, cbColores.getSelectionModel().getSelectedItem()
             mj.getSocket().registrar(txtIppartida.getText(), 0);
 
             Thread t = new Thread(mj.getSocket());
             t.start();
-            
-            mj.setDatos(txtNickName.getText(),edad,cbColores.getSelectionModel().getSelectedItem());
-            spSpinner.setVisible(true);  
+
+            mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
+            spSpinner.setVisible(true);
             FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
         }
-       
+
     }
 
     @FXML
     private void onActionColores(ActionEvent event) {
-        
-              apColorSeleccionado.getStyleClass().clear();
-                      
-        if(null != cbColores.getSelectionModel().getSelectedItem())switch (cbColores.getSelectionModel().getSelectedItem()) {
-            case "Rojo":
-              apColorSeleccionado.getStyleClass().add("Rojo");
-                break;
-            case "Azul":
-              apColorSeleccionado.getStyleClass().add("Azul");
-                break;
-            case "Amarillo":
-              apColorSeleccionado.getStyleClass().add("Amarillo");
-                break;
-            case "Verde":
-              apColorSeleccionado.getStyleClass().add("Verde");
-                break;
-            case "Celeste":
-              apColorSeleccionado.getStyleClass().add("Celeste");
-                break;
-            case "Morado":
-              apColorSeleccionado.getStyleClass().add("Morado");
-                break;
-            case "Rosado":
-              apColorSeleccionado.getStyleClass().add("Rosado");
-                break;
-            case "Turqueza":
-              apColorSeleccionado.getStyleClass().add("Turqueza");
-                break;
-            case "Cian":
-              apColorSeleccionado.getStyleClass().add("Cian");
-                break;
-            case "Gris":
-              apColorSeleccionado.getStyleClass().add("Gris");
-                break;
-            case "Negro":
-              apColorSeleccionado.getStyleClass().add("Negro");
-                break;
-            case "Marron":
-              apColorSeleccionado.getStyleClass().add("Marron");
-                break;
-            case "Anaranjado":
-              apColorSeleccionado.getStyleClass().add("Naranja");
-                break;
-            case "Magenta":
-              apColorSeleccionado.getStyleClass().add("Magenta");
-                break;
-            case "Verde Oscuro":
-              apColorSeleccionado.getStyleClass().add("VerdeOscuro");
-                break;
-            case "Violeta":
-              apColorSeleccionado.getStyleClass().add("Violeta");
-                break;
-            case "Aguamarina":
-              apColorSeleccionado.getStyleClass().add("Aguamarina");
-                break;
-            case "Dorado":
-              apColorSeleccionado.getStyleClass().add("Dorado");
-                break;
-            case "Fucsia":
-              apColorSeleccionado.getStyleClass().add("Fucsia");
-                break;
-            case "Lima":
-              apColorSeleccionado.getStyleClass().add("Lima");
-                break;
-            default:
-                break;
+
+        apColorSeleccionado.getStyleClass().clear();
+
+        if (null != cbColores.getSelectionModel().getSelectedItem()) {
+            switch (cbColores.getSelectionModel().getSelectedItem()) {
+                case "Rojo":
+                    apColorSeleccionado.getStyleClass().add("Rojo");
+                    break;
+                case "Azul":
+                    apColorSeleccionado.getStyleClass().add("Azul");
+                    break;
+                case "Amarillo":
+                    apColorSeleccionado.getStyleClass().add("Amarillo");
+                    break;
+                case "Verde":
+                    apColorSeleccionado.getStyleClass().add("Verde");
+                    break;
+                case "Celeste":
+                    apColorSeleccionado.getStyleClass().add("Celeste");
+                    break;
+                case "Morado":
+                    apColorSeleccionado.getStyleClass().add("Morado");
+                    break;
+                case "Rosado":
+                    apColorSeleccionado.getStyleClass().add("Rosado");
+                    break;
+                case "Turqueza":
+                    apColorSeleccionado.getStyleClass().add("Turqueza");
+                    break;
+                case "Cian":
+                    apColorSeleccionado.getStyleClass().add("Cian");
+                    break;
+                case "Gris":
+                    apColorSeleccionado.getStyleClass().add("Gris");
+                    break;
+                case "Negro":
+                    apColorSeleccionado.getStyleClass().add("Negro");
+                    break;
+                case "Marron":
+                    apColorSeleccionado.getStyleClass().add("Marron");
+                    break;
+                case "Anaranjado":
+                    apColorSeleccionado.getStyleClass().add("Naranja");
+                    break;
+                case "Magenta":
+                    apColorSeleccionado.getStyleClass().add("Magenta");
+                    break;
+                case "Verde Oscuro":
+                    apColorSeleccionado.getStyleClass().add("VerdeOscuro");
+                    break;
+                case "Violeta":
+                    apColorSeleccionado.getStyleClass().add("Violeta");
+                    break;
+                case "Aguamarina":
+                    apColorSeleccionado.getStyleClass().add("Aguamarina");
+                    break;
+                case "Dorado":
+                    apColorSeleccionado.getStyleClass().add("Dorado");
+                    break;
+                case "Fucsia":
+                    apColorSeleccionado.getStyleClass().add("Fucsia");
+                    break;
+                case "Lima":
+                    apColorSeleccionado.getStyleClass().add("Lima");
+                    break;
+                default:
+                    break;
+            }
         }
-        
+
     }
-    
-    private void anadirColores(){
+
+    private void anadirColores() {
         cbColores.getItems().add("Rojo");
         cbColores.getItems().add("Azul");
         cbColores.getItems().add("Amarillo");
@@ -228,23 +225,22 @@ public class InicioViewController extends Controller implements Initializable, O
         cbColores.getItems().add("Lima");
     }
 
-
     @Override
     public void update(Observable o, Object arg) {
-      System.out.print("Dentro en Inicio");
+        System.out.print("Dentro en Inicio");
     }
-    
-    public String getNombre(){
+
+    public String getNombre() {
         return nombre;
     }
-    
-    public SocketServices getSocket(){
-        
-        return conexion;     
+
+    public SocketServices getSocket() {
+
+        return conexion;
     }
 
     @FXML
     private void onActionEdadJugador(ActionEvent event) {
-        
+
     }
 }

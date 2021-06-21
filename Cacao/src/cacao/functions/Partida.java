@@ -18,6 +18,8 @@ public class Partida {
     private Cartas matrizLogica[][] = new Cartas[32][32];
 
     private Cartas cartasJungla[] = new Cartas[28];
+    
+    private Cartas cartasIniciales[] = new Cartas[2];
 
     private Cartas cartaJugada;
 
@@ -87,6 +89,7 @@ public class Partida {
             }
         }
 
+        
         Random r = new Random();
 
         for (int i = 0; i < cartasJungla.length; i++) {
@@ -96,6 +99,10 @@ public class Partida {
             cartasJungla[posAleatoria] = temp;
         }
 
+        cartasIniciales[0] = cartasJungla[0];
+        cartasJungla[0] = null;
+        cartasIniciales[1] = cartasJungla[1];
+        cartasJungla[1] = null;
     }
 
     public void borrarCarta(int carta) {
@@ -212,4 +219,11 @@ public class Partida {
         this.mazo = mazo;
     }
 
+     public Cartas[] getCartasIniciales() {
+        return cartasIniciales;
+    }
+
+    public void setCartasIniciales(Cartas[] cartasIniciales) {
+        this.cartasIniciales = cartasIniciales;
+    }
 }

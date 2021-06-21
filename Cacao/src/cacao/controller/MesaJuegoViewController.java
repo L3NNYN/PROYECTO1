@@ -187,6 +187,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             p.agregarJugador(g);
             cartasUsables();
             enviarPeticion("registrar jugador");
+
             init = true;
             //llenarCartasJungla();
             for (int i = 0; i < 3; i++) {
@@ -246,6 +247,15 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 }
 
                 if ("Jugadores".equals(llegada.getPeticion())) {
+
+                    borrarImagen(15, 14, gpMatrizJuego);
+                    p.agregarCarta(15, 14, llegada.getCartasIniciales()[0]);
+                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 15, 14);
+
+                    borrarImagen(16, 15, gpMatrizJuego);
+                    p.agregarCarta(16, 15, llegada.getCartasIniciales()[1]);
+                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[1], 16, 15);
+
                     p.setJugadores(llegada.getJugadores());
                     p.setTurnoJugador(llegada.getTurnoJugador());
                     txtTurnoJugador.setText(p.getTurnoJugador());
@@ -303,7 +313,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), 0);
                     if (!p.getTurnoJugador().equals(nombre)) {
                         borrarImagen(llegada.getX(), llegada.getY(), gpMatrizJuego);
-                        System.out.print("COlor: "+p.getCartaJugada().getColor());
                         matrizVbox[p.getX()][p.getY()].setId(p.getCartaJugada().getColor());
                         matrizVbox[p.getX()][p.getY()].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                         agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
@@ -321,7 +330,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                     }
                 } else if ("actualizar jungla".equals(llegada.getPeticion())) {
-                    
+
                     try {
                         llenarCartasJungla();
                     } catch (IOException ex) {
@@ -348,17 +357,15 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 matrizVbox[i][j].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        
-                        
+
                         if (variables.getCartaTablero()) {
                             fla = fl;
                             clm = cl;
 
-                            variables.setCartaTrabajador(false);
-                            variables.setCartaJungla(true);
-                            borrarImagen(fl, cl, gpMatrizJuego);
                             //If else para difereciar si es carta de trabajor o jungla
                             if (variables.getNum()) {
+                                
+                                borrarImagen(fl, cl, gpMatrizJuego);
                                 btnIzquierda.setDisable(true);
                                 btnDerecha.setDisable(true);
                                 btnCentrar.setDisable(true);
@@ -370,6 +377,10 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                 borrarImagen(jSeleccionada, 0, vbJungla);
                                 enviarPeticion("colocar carta jungla");
                             } else {
+                                
+                                variables.setCartaTrabajador(false);
+                                variables.setCartaJungla(true);
+                                borrarImagen(fl, cl, gpMatrizJuego);
                                 btnIzquierda.setDisable(false);
                                 btnDerecha.setDisable(false);
                                 btnCentrar.setDisable(false);
