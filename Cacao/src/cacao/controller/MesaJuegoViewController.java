@@ -220,13 +220,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @FXML
     private void onActionEnviar(ActionEvent event) throws IOException {
-        int nm = 0;
-        for (int i = 0; i < p.getCartasJungla().length; i++) {
-            if (p.getCartasJungla()[i] != null) {
-                nm++;
-            }
-        }
-        System.out.print("Cant cartas: " + nm);
+        Validaciones vl = new Validaciones();
+        int num = 0;
+       for(int i = 0; i < 32; i++){
+           for(int j = 0; j < 32; j++){
+             if(p.getMatrizLogica()[i][j] != null){
+                num++;
+             }  
+           }   
+       }
+       
+       System.out.print(num);
     }
 
     @Override
@@ -248,13 +252,13 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                 if ("Jugadores".equals(llegada.getPeticion())) {
 
-                    borrarImagen(15, 14, gpMatrizJuego);
-                    p.agregarCarta(15, 14, llegada.getCartasIniciales()[0]);
-                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 15, 14);
+                    borrarImagen(14, 15, gpMatrizJuego);
+                    p.agregarCarta(14, 15, llegada.getCartasIniciales()[0]);
+                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 14, 15);
 
-                    borrarImagen(16, 15, gpMatrizJuego);
-                    p.agregarCarta(16, 15, llegada.getCartasIniciales()[1]);
-                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[1], 16, 15);
+                    borrarImagen(15, 16, gpMatrizJuego);
+                    p.agregarCarta(15, 16, llegada.getCartasIniciales()[1]);
+                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[1], 15, 16);
 
                     p.setJugadores(llegada.getJugadores());
                     p.setTurnoJugador(llegada.getTurnoJugador());
@@ -322,7 +326,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     if (!p.getTurnoJugador().equals(nombre)) {
                         p.setCartasJungla(llegada.getCartasJungla());
                         p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), llegada.getMazo());
-                        p.setMatrizLogica(llegada.getMatrizLogica());
+                        p.agregarCarta(p.getX(), p.getY(), p.getCartaJugada());
                         logicasSelva[llegada.getMazo()] = null;
                         borrarImagen(p.getX(), p.getY(), gpMatrizJuego);
                         agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
@@ -608,7 +612,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 sm++;
             }
         }
-        System.out.print("Cantidad: " + sm);
         if (init) {
             enviarPeticion("actualizar cartas jugadores");
         }

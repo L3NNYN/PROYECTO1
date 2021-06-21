@@ -78,4 +78,8 @@ public class Validaciones {
 
     }
     
+    public void validarCartaJugador(Cartas[][] matrizLogica){
+        
+    }
+    
 }
