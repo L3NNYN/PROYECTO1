@@ -5,14 +5,19 @@
  */
 package cacao.controller;
 
+import cacao.functions.Partida;
+import cacao.functions.Variables;
+import cacao.util.ClassController;
 import cacao.util.FlowController;
 import cacao.util.Mensajes;
 import cacao.util.SocketServices;
+import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,8 +31,12 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -80,7 +89,7 @@ public class InicioViewController extends Controller implements Initializable, O
     }
 
     @FXML
-    private void onActionComenzar(ActionEvent event) throws IOException, ClassNotFoundException {
+    private void onActionComenzar(ActionEvent event) throws IOException, ClassNotFoundException, InterruptedException {
         String datos = "";
         if (("".equals(txtIppartida.getText()) || ("".equals(txtPuerto.getText())) || ("".equals(txtNickName.getText())))) {
             boolean primero = false;
@@ -121,9 +130,41 @@ public class InicioViewController extends Controller implements Initializable, O
             Thread t = new Thread(mj.getSocket());
             t.start();
 
-            mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
-            spSpinner.setVisible(true);
-            FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
+            mj.enviarPeticion("actualizar jugadores");
+
+            TranslateTransition carta1 = new TranslateTransition();
+            carta1.setNode((Node) apColorSeleccionado);
+            carta1.setDelay(Duration.seconds(1));
+            carta1.play();
+            carta1.setOnFinished((ActionEvent e) -> {
+
+                int mn = 0;
+                boolean pasar = true;
+                for (int i = 0; i < ClassController.getInstance().partida.getJugadores().length; i++) {
+                    if (ClassController.getInstance().partida.getJugadores()[i] != null) {
+                        if (ClassController.getInstance().partida.getJugadores()[i].getNombre().equals(txtNickName.getText())
+                                || ClassController.getInstance().partida.getJugadores()[i].getColor().equals(cbColores.getSelectionModel().getSelectedItem())) {
+                            pasar = false;
+                        }
+                    }
+                }
+
+                if (pasar) {
+                    mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
+                    spSpinner.setVisible(true);
+                    FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
+                } else {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "Usuario o color ya seleccionados");
+                        }
+                        
+                    });
+                    
+                }
+
+            });
         }
 
     }

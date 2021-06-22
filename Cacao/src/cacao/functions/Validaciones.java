@@ -6,15 +6,15 @@
 package cacao.functions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
  * @author Pipo
  */
 public class Validaciones {
-    
-    
-    public void cartasUsables(Cartas[] cartasJungla,Cartas[] logicas, Partida partida, int jugadorActual) throws IOException {
+
+    public void cartasUsables(Cartas[] cartasJungla, Cartas[] logicas, Partida partida, int jugadorActual) throws IOException {
         int j = 0;
         boolean b = false;
         for (int i = 0; i < cartasJungla.length; i++) {
@@ -44,7 +44,7 @@ public class Validaciones {
         }
 
     }
-    
+
     public void llenarCartasJungla(Cartas[] cartasJungla, Cartas[] logicasSelva, Partida partida) throws IOException {
         int j = 0;
         boolean b = false;
@@ -77,9 +77,53 @@ public class Validaciones {
         }
 
     }
-    
-    public void validarCartaJugador(Cartas[][] matrizLogica){
+
+   public Boolean validarCartaJugador(Cartas[][] m, String tipo, int x, int y){
+        boolean permitir = true;
         
+        ArrayList<Cartas> ady = new ArrayList<Cartas>();
+        ady = getAdyacentes(m, x, y);
+        
+        int i = 0;
+        while(permitir && i < 9){
+            if(i == 0 || i == 2 || i == 6 || i == 8){ //Si la carta es diagonal
+                if(ady.get(i) != null){
+                    if(tipo == "Tbr"){
+                        if(ady.get(i).getTipo() != tipo){ //Si existe, valida que no sea diferente del tipo
+                            permitir = false;
+                        }
+                    } if(ady.get(i).getNombre() != tipo){ //Si existe, valida que no sea diferente del tipo
+                        permitir = false;
+                    }
+                }
+            } else if(ady.get(i) != null){ //Carta en vertical/horizontal
+                    if(tipo == "Tbr"){
+                        if(ady.get(i).getTipo() == tipo){ //Si existe, valida que no sea diferente del tipo
+                            permitir = false;
+                        }
+                    }if(ady.get(i).getNombre() == tipo){ //Si existe, valida que no sea igual del tipo 
+                    permitir = false;
+                }
+            }
+            i++;
+        }
+        return permitir;
     }
     
+    public ArrayList<Cartas> getAdyacentes(Cartas[][] m, int x, int y){
+        //Se obtienen las cartas adyacentes
+        ArrayList<Cartas> ady = new ArrayList<Cartas>();
+        ady.add(m[x-1][y-1]);
+        ady.add(m[x][y-1]);
+        ady.add(m[x+1][y-1]);
+        ady.add(m[x-1][y]);
+        ady.add(null); //Posicion del centro
+        ady.add(m[x+1][y]);
+        ady.add(m[x-1][y+1]);
+        ady.add(m[x][y+1]);
+        ady.add(m[x+1][y+1]);
+        
+        return ady;
+    }
+
 }

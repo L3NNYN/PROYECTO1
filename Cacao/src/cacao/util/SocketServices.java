@@ -37,9 +37,11 @@ public class SocketServices extends Observable implements Runnable {
 
     private ArrayList<Socket> clientes;
 
-    private Jugador j;
+    private Partida j = new Partida();
 
     public boolean ev = false;
+
+    public Boolean permitir = false;
 
     public SocketServices() {
 
@@ -53,13 +55,10 @@ public class SocketServices extends Observable implements Runnable {
     public void registrar(String host, int puerto) throws IOException {
         //Creo el socket para conectarme con el cliente
         sc = new Socket(host, 5000);
-
     }
 
-    public Jugador getRespuesta() {
-
+    public Partida getRespuesta() {
         return j;
-
     }
 
     @Override
@@ -74,9 +73,13 @@ public class SocketServices extends Observable implements Runnable {
             Partida mensaje;
             double valor;
             while (true) {
-                
 
                 String sms = dis.readUTF();
+
+                Gson gs = new Gson();
+                Partida jg = gs.fromJson(sms, Partida.class);
+
+                ClassController.getInstance().partida.setJugadores(jg.getJugadores());
 
                 this.setChanged();
                 this.notifyObservers(sms);
@@ -92,6 +95,22 @@ public class SocketServices extends Observable implements Runnable {
         DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
         //System.out.print(mensaje);
         dos.writeUTF(enviar);
+    }
+
+    public Boolean getPermitir() {
+        return permitir;
+    }
+
+    public void setPermitir(Boolean permitir) {
+        this.permitir = permitir;
+    }
+
+    public Socket getSc() {
+        return sc;
+    }
+
+    public void setSc(Socket sc) {
+        SocketServices.sc = sc;
     }
 
 }
