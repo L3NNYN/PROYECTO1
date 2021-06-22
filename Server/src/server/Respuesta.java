@@ -131,7 +131,12 @@ public class Respuesta extends Observable implements Runnable {
         } else if (partida.getPeticion().equals("ganador")) {
 
         } else if (partida.getPeticion().equals("actualizar jungla")) {
+            
             FlowController.getInstance().partida.setPeticion("actualizar jungla");
+            
+        } else if (partida.getPeticion().equals("actualizar jugadores")) {
+            
+            FlowController.getInstance().partida.setPeticion("actualizar jugadores");
         }
 
         Gson g = new Gson();

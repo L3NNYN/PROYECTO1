@@ -48,7 +48,8 @@ public class Jugador {
     }
 
     public void crearCartas(String nombre, String Color) {
-
+ 
+        //Tbr = trabajador
         for (int i = 0; i < 5; i++) {
             Cartas c1 = new Cartas("Tbr", nombre, 2, 1, 0, 1, color, 0);
             anadirCarta(c1);
