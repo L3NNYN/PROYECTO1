@@ -30,8 +30,9 @@ import server.util.FlowController;
 public class Server extends Observable implements Runnable, Initializable {
 
     private static ObservableList<Socket> clientes;
-    
-    private static ObservableList<Thread> sockets = FXCollections.observableArrayList();;
+
+    private static ObservableList<Thread> sockets = FXCollections.observableArrayList();
+    ;
 
     private int contador;
 
@@ -69,18 +70,19 @@ public class Server extends Observable implements Runnable, Initializable {
                 //Espero a que un cliente se conecte
                 Socket sc = new Socket();
                 sc = servidor.accept();
-
+                
                 clientes.add(sc);
 
                 System.out.println("Cliente conectado");
 
-                Respuesta rp = new Respuesta(clientes.get(clientes.size()-1),i);
+                Respuesta rp = new Respuesta(clientes.get(clientes.size() - 1), i);
 
-                boolean enc = false;
+                boolean enc = false; 
+                
                 Thread t = new Thread(rp);
                 sockets.add(t);
-                sockets.get(sockets.size()-1).start();
-    
+                sockets.get(sockets.size() - 1).start();
+
             }
 
         } catch (IOException ex) {

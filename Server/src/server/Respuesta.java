@@ -59,7 +59,6 @@ public class Respuesta extends Observable implements Runnable {
     @Override
     public void run() {
 
-        System.out.print("Vuelve");
         try {
             //System.out.println("recibir Mensaje");
 
@@ -110,6 +109,7 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.agregarJugador(partida.getJugadores()[0]);
             FlowController.getInstance().partida.setPeticion("Jugadores");
             FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[0].getNombre());
+            
 
         } else if (partida.getPeticion().equals("pasar turno")) {
             boolean escogido = false;
