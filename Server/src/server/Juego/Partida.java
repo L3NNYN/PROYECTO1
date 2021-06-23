@@ -124,8 +124,28 @@ public class Partida {
 
     public void agregarJugador(Jugador jugador) {
         for (int i = 0; i < 4; i++) {
+            //Inserta al final
             if (jugadores[i] == null) {
                 jugadores[i] = jugador;
+                break;
+            }else if(jugador.getEdad().compareTo(jugadores[i].getEdad()) < 0 ){
+                Jugador aux = null;
+                Jugador aux2 = null; 
+                aux = jugadores[i];
+                jugadores[i] = jugador;
+                //Mover todos los demás un campo
+                int pos = i+1;
+                while(pos < 4){
+                    if(jugadores[pos] == null){
+                        jugadores[pos] = aux;
+                        pos = 4;
+                    }else{
+                        aux2 = jugadores[pos];
+                        jugadores[pos] = aux;
+                        aux = aux2;
+                        pos++;
+                    }
+                }
                 break;
             }
         }
