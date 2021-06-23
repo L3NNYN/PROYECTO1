@@ -19,9 +19,9 @@
          <children>
             <AnchorPane layoutX="50.0" layoutY="50.0" prefHeight="512.0" prefWidth="620.0" styleClass="root" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <AnchorPane layoutX="171.0" layoutY="108.0" prefHeight="309.0" prefWidth="351.0" styleClass="root" AnchorPane.bottomAnchor="169.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="88.0">
+                  <AnchorPane layoutX="211.0" layoutY="128.0" prefHeight="329.0" prefWidth="303.0" styleClass="root" AnchorPane.bottomAnchor="143.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="118.0">
                      <children>
-                        <VBox layoutX="52.0" layoutY="24.0" prefHeight="151.0" prefWidth="227.0" spacing="25.0">
+                        <VBox layoutX="28.0" layoutY="14.0" prefHeight="151.0" prefWidth="227.0" spacing="25.0">
                            <children>
                               <JFXTextField fx:id="txtIppartida" alignment="CENTER" labelFloat="true" prefHeight="25.0" prefWidth="223.0" promptText="Ingrese el IP de la partida" />
                               <JFXTextField fx:id="txtPuerto" alignment="CENTER" labelFloat="true" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="223.0" promptText="Puerto del Servidor" />
@@ -30,7 +30,7 @@
                               <JFXComboBox fx:id="cbColores" onAction="#onActionColores" prefHeight="25.0" prefWidth="227.0" promptText="Seleccione un color" />
                            </children>
                         </VBox>
-                        <AnchorPane fx:id="apColorSeleccionado" layoutX="137.0" layoutY="220.0" prefHeight="50.0" prefWidth="57.0" />
+                        <AnchorPane fx:id="apColorSeleccionado" layoutX="122.0" layoutY="255.0" prefHeight="31.0" prefWidth="40.0" />
                      </children>
                   </AnchorPane>
                   <HBox alignment="CENTER" layoutX="111.0" layoutY="30.0" prefHeight="31.0" prefWidth="471.0" AnchorPane.leftAnchor="111.0" AnchorPane.rightAnchor="90.0">
@@ -42,8 +42,8 @@
                         </Text>
                      </children>
                   </HBox>
-                  <JFXButton fx:id="btnComenzar" layoutX="251.0" layoutY="494.0" onAction="#onActionComenzar" prefHeight="44.0" prefWidth="172.0" styleClass="JFXButton1" text="COMENZAR" />
-                  <JFXSpinner fx:id="spSpinner" layoutX="308.0" layoutY="424.0" prefHeight="50.0" prefWidth="57.0" />
+                  <JFXButton fx:id="btnComenzar" layoutX="254.0" layoutY="509.0" onAction="#onActionComenzar" prefHeight="44.0" prefWidth="172.0" styleClass="JFXButton1" text="COMENZAR" />
+                  <JFXSpinner fx:id="spSpinner" layoutX="311.0" layoutY="449.0" prefHeight="50.0" prefWidth="57.0" />
                </children>
             </AnchorPane>
          </children>

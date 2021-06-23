@@ -78,49 +78,55 @@ public class Validaciones {
 
     }
 
-   public Boolean validarCartaJugador(Cartas[][] m, String tipo, int x, int y){
+  public Boolean validarCartaJugador(Cartas[][] m, String tipo, int x, int y){
         boolean permitir = true;
         
         ArrayList<Cartas> ady = new ArrayList<Cartas>();
         ady = getAdyacentes(m, x, y);
         
         int i = 0;
+        boolean s = false;
         while(permitir && i < 9){
             if(i == 0 || i == 2 || i == 6 || i == 8){ //Si la carta es diagonal
                 if(ady.get(i) != null){
+                    s = true;
                     if(tipo == "Tbr"){
                         if(ady.get(i).getTipo() != tipo){ //Si existe, valida que no sea diferente del tipo
                             permitir = false;
                         }
-                    } if(ady.get(i).getNombre() != tipo){ //Si existe, valida que no sea diferente del tipo
+                    } if(!ady.get(i).getNombre().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
                         permitir = false;
                     }
                 }
             } else if(ady.get(i) != null){ //Carta en vertical/horizontal
+                    s = true;
                     if(tipo == "Tbr"){
                         if(ady.get(i).getTipo() == tipo){ //Si existe, valida que no sea diferente del tipo
                             permitir = false;
                         }
-                    }if(ady.get(i).getNombre() == tipo){ //Si existe, valida que no sea igual del tipo 
+                    }if( ady.get(i).getNombre().equals(tipo) ){ //Si existe, valida que no sea igual del tipo 
                     permitir = false;
                 }
             }
             i++;
         }
-        return permitir;
+        if(s && permitir ){
+            return true;
+        }
+        return false;
     }
     
     public ArrayList<Cartas> getAdyacentes(Cartas[][] m, int x, int y){
         //Se obtienen las cartas adyacentes
         ArrayList<Cartas> ady = new ArrayList<Cartas>();
         ady.add(m[x-1][y-1]);
-        ady.add(m[x][y-1]);
-        ady.add(m[x+1][y-1]);
         ady.add(m[x-1][y]);
-        ady.add(null); //Posicion del centro
-        ady.add(m[x+1][y]);
         ady.add(m[x-1][y+1]);
+        ady.add(m[x][y-1]);
+        ady.add(null); //Posicion del centro
         ady.add(m[x][y+1]);
+        ady.add(m[x+1][y-1]);
+        ady.add(m[x+1][y]);
         ady.add(m[x+1][y+1]);
         
         return ady;

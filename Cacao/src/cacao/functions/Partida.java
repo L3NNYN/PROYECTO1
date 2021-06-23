@@ -26,6 +26,8 @@ public class Partida {
     private String turnoJugador;
 
     private String peticion;
+    
+    private String salir;
 
     private int x;
 
@@ -225,5 +227,13 @@ public class Partida {
 
     public void setCartasIniciales(Cartas[] cartasIniciales) {
         this.cartasIniciales = cartasIniciales;
+    }
+    
+    public String getSalir() {
+        return salir;
+    }
+
+    public void setSalir(String salir) {
+        this.salir = salir;
     }
 }

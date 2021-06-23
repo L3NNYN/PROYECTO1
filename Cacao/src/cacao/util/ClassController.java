@@ -11,6 +11,7 @@ package cacao.util;
  */
 
 import cacao.functions.Partida;
+import java.net.Socket;
 
 
 
@@ -18,6 +19,7 @@ public class ClassController {
 
    private static ClassController INSTANCE = null;
     public Partida partida = new Partida();
+    public Socket sc = null;
 
     private static void createInstance() {
         if (INSTANCE == null) {

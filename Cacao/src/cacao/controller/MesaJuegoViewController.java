@@ -12,6 +12,7 @@ import cacao.functions.Partida;
 import cacao.functions.Validaciones;
 import cacao.util.SocketServices;
 import cacao.functions.Variables;
+import cacao.util.FlowController;
 import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -51,8 +52,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
     //Componentes interfaz principal
     @FXML
     private JFXTextField txtMensaje;
-    @FXML
-    private JFXButton btnEnviar;
     @FXML
     private VBox vbImagen;
 
@@ -123,6 +122,15 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     public static String color;
 
+    @FXML
+    private Text txtNuecesJ1;
+    @FXML
+    private Text txtAguaJ1;
+    @FXML
+    private Text txtSolJ1;
+    @FXML
+    private Text txtOroJ1;
+
     //Componentes del jugador 2
     @FXML
     private VBox vbContenedorJ2;
@@ -130,6 +138,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Text txtNombreJ2;
     @FXML
     private GridPane vbJugador2;
+    @FXML
+    private Text txtNuecesJ2;
+    @FXML
+    private Text txtAguaJ2;
+    @FXML
+    private Text txtSolJ2;
+    @FXML
+    private Text txtOroJ2;
 
     //Componenetes del jugador 3
     @FXML
@@ -138,7 +154,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Text txtNombreJ3;
     @FXML
     private GridPane vbJugador3;
-
+    @FXML
+    private Text txtNuecesJ3;
+    @FXML
+    private Text txtAguaJ3;
+    @FXML
+    private Text txtSolJ3;
+    @FXML
+    private Text txtOroJ3;
     //Componetes del jugador 4
     @FXML
     private VBox vbContenedorJ4;
@@ -154,6 +177,18 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Validaciones vl = new Validaciones();
 
     public boolean recivido = false;
+    @FXML
+    private JFXButton btnSalir;
+
+    @FXML
+    private Text txtNuecesJ4;
+    @FXML
+    private Text txtAguaJ4;
+    @FXML
+    private Text txtSolJ4;
+    @FXML
+    private Text txtOroJ4;
+
     //Componentes losetas disponibles
     /**
      * Initializes the controller class.
@@ -221,7 +256,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
         return num;
     }
 
-    @FXML
     private void onActionEnviar(ActionEvent event) throws IOException {
         Validaciones vl = new Validaciones();
         int num = 0;
@@ -284,16 +318,24 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         if (p.getJugadores()[i] != null) {
                             if (p.getJugadores()[i].getNombre().equals(nombre)) {
                                 vbContenedorJ1.setVisible(true);
+                                vbContenedorJ1.setId(p.getJugadores()[i].getColor());
+                                vbContenedorJ1.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                 txtNombreJ1.setText(p.getJugadores()[i].getNombre());
                             } else {
                                 if (contador == 1) {
                                     vbContenedorJ2.setVisible(true);
+                                    vbContenedorJ2.setId(p.getJugadores()[i].getColor());
+                                    vbContenedorJ2.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                     txtNombreJ2.setText(p.getJugadores()[i].getNombre());
                                 } else if (contador == 2) {
                                     vbContenedorJ3.setVisible(true);
+                                    vbContenedorJ3.setId(p.getJugadores()[i].getColor());
+                                    vbContenedorJ3.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                     txtNombreJ3.setText(p.getJugadores()[i].getNombre());
                                 } else if (contador == 3) {
                                     vbContenedorJ4.setVisible(true);
+                                    vbContenedorJ4.setId(p.getJugadores()[i].getNombre());
+                                    vbContenedorJ4.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                     txtNombreJ4.setText(p.getJugadores()[i].getNombre());
                                 }
                                 contador++;
@@ -338,7 +380,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     }
                 } else if ("actualizar jugadores".equals(llegada.getPeticion())) {
 
-                    p.setJugadores(llegada.getJugadores()); 
+                    p.setJugadores(llegada.getJugadores());
                     int ct = 0;
                     variables.setNum(true);
                     for (int i = 0; i < 4; i++) {
@@ -347,7 +389,27 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             variables.setNum(false);
                         }
                     }
-                    
+
+                } else if ("actualizar jungla".equals(llegada.getPeticion())) {
+                    if (!p.getTurnoJugador().equals(nombre)) {
+                        try {
+                            llenarCartasJungla();
+                        } catch (IOException ex) {
+                            Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        for (int i = 0; i < 2; i++) {
+                            if (logicasSelva[i] != null) {
+                                matrizJungla[i].setId("color");
+                                matrizJungla[i].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
+                                agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
+                                matrizJungla[i].getStyleClass().clear();
+                                agregarImagen(3, vbJungla, logicasSelva, matrizJungla, null, null, logicasSelva[i], i, 0);
+                            }
+                        }
+                    }
+
+                } else if ("cerrar".equals(llegada.getPeticion())) {
+
                 }
             }
         });
@@ -670,12 +732,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
     public String getColor() {
         return color;
     }
-   
+
     public Variables getVariables() {
         return variables;
     }
 
     public void setVariables(Variables variables) {
         this.variables = variables;
+    }
+
+    @FXML
+    private void onActionSalir(ActionEvent event) throws IOException {
+        p.setSalir(nombre);
+        enviarPeticion("salir");
+        FlowController.getInstance().goViewInNewStage("InicioView", stage);
     }
 }

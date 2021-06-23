@@ -33,7 +33,7 @@ public class SocketServices extends Observable implements Runnable {
 
     private String HOST;
 
-    private static Socket sc;
+    public static Socket sc;
 
     private ArrayList<Socket> clientes;
 
@@ -42,6 +42,8 @@ public class SocketServices extends Observable implements Runnable {
     public boolean ev = false;
 
     public Boolean permitir = false;
+
+    public static Boolean cerrar = false;
 
     public SocketServices() {
 
@@ -72,18 +74,24 @@ public class SocketServices extends Observable implements Runnable {
             out = new DataOutputStream(sc.getOutputStream());
             Partida mensaje;
             double valor;
-            while (true) {
+            while (!cerrar) {
 
-                String sms = dis.readUTF();
+                if (!cerrar) {
+                    String sms = dis.readUTF();
 
-                Gson gs = new Gson();
-                Partida jg = gs.fromJson(sms, Partida.class);
+                    Gson gs = new Gson();
+                    Partida jg = gs.fromJson(sms, Partida.class);
 
-                ClassController.getInstance().partida.setJugadores(jg.getJugadores());
-
-                this.setChanged();
-                this.notifyObservers(sms);
-                this.clearChanged();
+                    ClassController.getInstance().partida.setJugadores(jg.getJugadores());
+                    
+                    if(jg.getPeticion().equals("salir")){
+                        cerrar = true;
+                        //sc.close();
+                    }
+                    this.setChanged();
+                    this.notifyObservers(sms);
+                    this.clearChanged();
+                }
             }
 
         } catch (IOException ex) {
@@ -95,6 +103,7 @@ public class SocketServices extends Observable implements Runnable {
         DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
         //System.out.print(mensaje);
         dos.writeUTF(enviar);
+        
     }
 
     public Boolean getPermitir() {
@@ -113,4 +122,10 @@ public class SocketServices extends Observable implements Runnable {
         SocketServices.sc = sc;
     }
 
+    public void cerrarConexion() throws IOException {
+        enviarDatos("salir");
+        cerrar = true;
+        //sc.close();
+        
+    }
 }
