@@ -40,9 +40,17 @@ public class Respuesta extends Observable implements Runnable {
     //Constructor de Server
     public Server sv = new Server();
 
+    public boolean ingresar = true;
+
+    public int borrar;
+
+    public int rsp;
+    public boolean cerrarHilo = false;
+
     //Constructor de Respuesta
-    public Respuesta(Socket socket) throws IOException {
+    public Respuesta(Socket socket, int rsp) throws IOException {
         this.sc = socket;
+        this.rsp = rsp;
     }
 
     /*Se utiliza el Runnable para recivir peticiones de los clientes, el Runnable
@@ -51,6 +59,7 @@ public class Respuesta extends Observable implements Runnable {
     @Override
     public void run() {
 
+        System.out.print("Vuelve");
         try {
             //System.out.println("recibir Mensaje");
 
@@ -58,23 +67,43 @@ public class Respuesta extends Observable implements Runnable {
             in = new DataInputStream(sc.getInputStream());
 
             //While para recivir peticiones
-            while (true) {
-
+            while (!cerrarHilo) {
+                System.out.print(rsp);
                 String me = in.readUTF();
                 Gson gs = new Gson();
                 Partida jg = gs.fromJson(me, Partida.class);
-                revisarPeticion(jg);
-                this.setChanged();
-                this.notifyObservers();
-                this.clearChanged();
+
+                if (jg.getPeticion().equals("salir")) {
+                    for (int i = 0; i < 4; i++) {
+                        if (FlowController.getInstance().partida.getJugadores()[i] != null) {
+                            if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(jg.getSalir())) {
+                                FlowController.getInstance().partida.getJugadores()[i] = null;
+                                FlowController.getInstance().partida.setPeticion("salir");
+                                System.out.print(i);
+                                borrar = i;
+                                ingresar = false;
+                                cerrarHilo = true;
+                                Gson g = new Gson();
+                                String r = g.toJson(FlowController.getInstance().partida);
+                                enviarInfo(r);
+                                sc.close();
+                            }
+                        }
+
+                    }
+                } else {
+                    revisarPeticion(jg);
+                }
+
             }
+            
         } catch (IOException ex) {
             Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    private void revisarPeticion(Partida partida) {
+    private void revisarPeticion(Partida partida) throws IOException {
 
         if (partida.getPeticion().equals("registrar jugador")) {
 
@@ -127,25 +156,38 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.setPeticion("colocar carta jungla");
 
         } else if (partida.getPeticion().equals("salir")) {
+            for (int i = 0; i < 4; i++) {
+                if (FlowController.getInstance().partida.getJugadores()[i] != null) {
+                    if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(partida.getSalir())) {
+                        FlowController.getInstance().partida.getJugadores()[i] = null;
+                        FlowController.getInstance().partida.setPeticion("salir");
+                        System.out.print(i);
+                        borrar = i;
+                        //ingresar = false;
+                        cerrarHilo = true;
+                    }
+                }
 
+            }
         } else if (partida.getPeticion().equals("ganador")) {
 
         } else if (partida.getPeticion().equals("actualizar jungla")) {
-            
+
             FlowController.getInstance().partida.setPeticion("actualizar jungla");
-            
+
         } else if (partida.getPeticion().equals("actualizar jugadores")) {
-            
+
             FlowController.getInstance().partida.setPeticion("actualizar jugadores");
         }
 
         Gson g = new Gson();
         String r = g.toJson(FlowController.getInstance().partida);
         enviarInfo(r);
+
     }
 
     /*Este metodo notificara todos los clientes conectados*/
-    public void enviarInfo(String peticion) {
+    public void enviarInfo(String peticion) throws IOException {
 
         //Server sv = new Server();
         for (Socket sock : sv.getClientes()) {
@@ -160,6 +202,9 @@ public class Respuesta extends Observable implements Runnable {
 
         }
 
+        if (!ingresar) {
+            sv.eliminarSocket(borrar);
+        }
     }
 
     private int cantidad() {

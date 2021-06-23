@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package server;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
@@ -18,22 +19,26 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
+import server.Juego.Cartas;
 import server.Juego.Partida;
 import server.util.FlowController;
+
 /**
  *
  * @author Pipo
  */
-public class Server extends Observable implements Runnable, Initializable{
+public class Server extends Observable implements Runnable, Initializable {
 
     private static ObservableList<Socket> clientes;
+    
+    private static ObservableList<Thread> sockets = FXCollections.observableArrayList();;
+
+    private int contador;
 
     private int puerto;
-    
+
     public Partida pr;
-    
-    private Socket sc = null;
-   
+
     public Server(int puerto) throws IOException {
         this.puerto = puerto;
         this.clientes = FXCollections.observableArrayList();
@@ -43,50 +48,60 @@ public class Server extends Observable implements Runnable, Initializable{
 
     }
 
-     @Override
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         FlowController.getInstance().partida.crearCartasJungla();
     }
-    
+
     @Override
     public void run() {
-     ServerSocket servidor = null;
-     
+        ServerSocket servidor = null;
+
         try {
             //Creamos el socket del servidor
             servidor = new ServerSocket(puerto);
             System.out.println("Servidor iniciado");
             FlowController.getInstance().partida.crearCartasJungla();
             //Siempre estara escuchando peticiones
+            int i = 0;
             while (true) {
 
-               //Espero a que un cliente se conecte
+                //Espero a que un cliente se conecte
+                Socket sc = new Socket();
                 sc = servidor.accept();
-                
+
                 clientes.add(sc);
-                
+
                 System.out.println("Cliente conectado");
 
-                Respuesta rp = new Respuesta(sc);
+                Respuesta rp = new Respuesta(clientes.get(clientes.size()-1),i);
+
+                boolean enc = false;
                 Thread t = new Thread(rp);
-                t.start();
-                
+                sockets.add(t);
+                sockets.get(sockets.size()-1).start();
+    
             }
 
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+        }
 
-    } 
-    
-    public ObservableList<Socket> getClientes(){
-   
-        return clientes; 
     }
- 
-    public Partida getPartida()
-    {
-      return pr;   
+
+    public void eliminarSocket(int socket) throws IOException {
+        sockets.remove(socket);
+        clientes.remove(socket);
+        System.out.print("Clientes: " + clientes.size());
     }
-         
+
+    public ObservableList<Socket> getClientes() {
+
+        return clientes;
     }
+
+    public Partida getPartida() {
+        return pr;
+    }
+
+}
