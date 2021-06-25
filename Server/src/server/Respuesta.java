@@ -95,7 +95,7 @@ public class Respuesta extends Observable implements Runnable {
                 }
 
             }
-            
+
         } catch (IOException ex) {
             Logger.getLogger(Respuesta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -109,7 +109,6 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.agregarJugador(partida.getJugadores()[0]);
             FlowController.getInstance().partida.setPeticion("Jugadores");
             FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[0].getNombre());
-            
 
         } else if (partida.getPeticion().equals("pasar turno")) {
             boolean escogido = false;
@@ -178,6 +177,16 @@ public class Respuesta extends Observable implements Runnable {
         } else if (partida.getPeticion().equals("actualizar jugadores")) {
 
             FlowController.getInstance().partida.setPeticion("actualizar jugadores");
+
+        } else if (partida.getPeticion().equals("listo")) {
+            for (int i = 0; i < 4; i++) {
+                if (FlowController.getInstance().partida.getJugadores()[i] != null) {
+                    if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(partida.getListo())) {
+                        FlowController.getInstance().partida.getJugadores()[i].setListo("listo");
+                        FlowController.getInstance().partida.setPeticion("Jugadores");
+                    }
+                }
+            }
         }
 
         Gson g = new Gson();

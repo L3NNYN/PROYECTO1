@@ -36,11 +36,14 @@ public class Jugador {
     private int fichasSol;
 
     private int monedas;
+    
+    private String listo;
 
     public Jugador(String jg, LocalDate e, String color) {
         this.nombre = jg;
         this.edad = e;
         this.color = color;
+        this.listo = "no";
     }
 
     public Jugador() {
@@ -164,4 +167,13 @@ public class Jugador {
     public void setCartasJugador(Cartas[] cartasJugador) {
         this.cartasJugador = cartasJugador;
     }
+    
+    public String getListo() {
+        return listo;
+    }
+
+    public void setListo(String listo) {
+        this.listo = listo;
+    }
+
 }
