@@ -5,6 +5,7 @@
  */
 package server;
 
+import com.google.gson.Gson;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
@@ -30,12 +31,12 @@ import server.util.FlowController;
 public class Server extends Observable implements Runnable, Initializable {
 
     private static ObservableList<Socket> clientes;
-    
+
     private static ObservableList<Thread> sockets = FXCollections.observableArrayList();
-    
+
     private Socket clientesC[] = new Socket[2];
 
-    private int contador;
+    private int contador = 0;
 
     private int puerto;
 
@@ -72,17 +73,28 @@ public class Server extends Observable implements Runnable, Initializable {
                 Socket sc = new Socket();
                 sc = servidor.accept();
 
-                clientes.add(sc);
+                if (contador < 4) {
+                    
+                    clientes.add(sc);
 
-                System.out.println("Cliente conectado");
+                    System.out.println("Cliente conectado");
 
-                Respuesta rp = new Respuesta(clientes.get(clientes.size()-1),i);
+                    Respuesta rp = new Respuesta(clientes.get(clientes.size() - 1), i);
 
-                boolean enc = false;
-                Thread t = new Thread(rp);
-                sockets.add(t);
-                sockets.get(sockets.size()-1).start();
-                i++;
+                    boolean enc = false;
+                    Thread t = new Thread(rp);
+                    sockets.add(t);
+                    sockets.get(sockets.size() - 1).start();
+                    i++;
+                    contador++;
+                } else {
+                  DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+                  FlowController.getInstance().partida.setPeticion("lleno");
+                  Gson g = new Gson();
+                  String r = g.toJson(FlowController.getInstance().partida);
+                  dos.writeUTF(r);  
+                }
+
             }
 
         } catch (IOException ex) {

@@ -48,10 +48,12 @@ public class Partida {
         }
 
         //Plantaciones simples
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             Cartas p1 = new Cartas("Pla", "Jungla", 1, 0);
             anadirCarta(p1);
         }
+        Cartas p1 = new Cartas("Pla", "Jungla", 1, 0);
+        cartasIniciales[0] = p1;
 
         for (int i = 0; i < 2; i++) {
             Cartas p2 = new Cartas("Pla", "Jungla", 2, 0);
@@ -63,9 +65,12 @@ public class Partida {
             Cartas m1 = new Cartas("Mca", "Jungla", 3, 0);
             anadirCarta(m1);
 
-            if (i < 2) {
+            if (i < 1) {
                 Cartas m2 = new Cartas("Mca", "Jungla", 2, 0);
                 anadirCarta(m2);
+                Cartas m3 = new Cartas("Mca", "Jungla", 2, 0);
+                anadirCarta(m2);
+                cartasIniciales[1] = m3;
             }
             if (i < 1) {
                 Cartas c1 = new Cartas("Mca", "Jungla", 4, 0);
@@ -101,11 +106,6 @@ public class Partida {
             cartasJungla[i] = cartasJungla[posAleatoria];
             cartasJungla[posAleatoria] = temp;
         }
-
-        cartasIniciales[0] = cartasJungla[0];
-        cartasJungla[0] = null;
-        cartasIniciales[1] = cartasJungla[1];
-        cartasJungla[1] = null;
     }
 
     public void borrarCarta(int carta) {
@@ -257,7 +257,7 @@ public class Partida {
     public void setSalir(String salir) {
         this.salir = salir;
     }
-    
+
     public String getListo() {
         return listo;
     }
