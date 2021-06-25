@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
@@ -17,8 +16,8 @@
 
 <AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="1700.0" styleClass="Inicio" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacao.controller.MesaJuegoViewController">
    <children>
-      <JFXButton fx:id="btnSalir" cache="true" layoutX="44.0" layoutY="916.0" onAction="#onActionSalir" prefHeight="25.0" prefWidth="66.0" style="-fx-background-color: blue;" text="Salir" />
-      <ScrollPane fx:id="scScroll" hvalue="0.5" layoutX="193.0" layoutY="65.0" pannable="true" prefHeight="891.0" prefWidth="1170.0" vvalue="0.5" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="193.0" AnchorPane.rightAnchor="337.0" AnchorPane.topAnchor="65.0">
+      <JFXButton fx:id="btnSalir" cache="true" layoutX="44.0" layoutY="916.0" onAction="#onActionSalir" prefHeight="25.0" prefWidth="66.0" style="-fx-background-color: blue;" text="Salir" visible="false" />
+      <ScrollPane fx:id="scScroll" hvalue="0.5" layoutX="193.0" layoutY="65.0" pannable="true" prefHeight="891.0" prefWidth="1170.0" visible="false" vvalue="0.5" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="193.0" AnchorPane.rightAnchor="337.0" AnchorPane.topAnchor="65.0">
          <content>
           <AnchorPane fx:id="paneMesaJuego" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="2800.0" prefWidth="3150.0" styleClass="fondoMesa" stylesheets="@style.css">
                <children>
@@ -96,12 +95,11 @@
             </AnchorPane>
          </content>
       </ScrollPane>
-      <JFXButton fx:id="btnCentrar" layoutX="800.0" layoutY="916.0" onAction="#onActionCentrar" style="-fx-background-color: blue;" text="Colocar" />
-      <JFXButton fx:id="btnDerecha" layoutX="935.0" layoutY="916.0" onAction="#onActionDerecha" style="-fx-background-color: blue;" text="Derecha" />
-      <JFXButton fx:id="btnPasarTurno" layoutX="1276.0" layoutY="916.0" onAction="#onActiomPasarTurno" style="-fx-background-color: blue;" text="Pasar Turno" />
-      <JFXButton fx:id="btnIzquierda" layoutX="647.0" layoutY="916.0" onAction="#onActionIzquierda" style="-fx-background-color: Blue;" text="Izquierda" />
-      <JFXTextField fx:id="txtMensaje" layoutX="1044.0" layoutY="916.0" prefHeight="25.0" prefWidth="168.0" />
-      <VBox fx:id="vbImagen" layoutX="1370.0" layoutY="75.0" prefHeight="744.0" prefWidth="312.0">
+      <JFXButton fx:id="btnCentrar" layoutX="800.0" layoutY="916.0" onAction="#onActionCentrar" style="-fx-background-color: blue;" text="Colocar" visible="false" />
+      <JFXButton fx:id="btnDerecha" layoutX="935.0" layoutY="916.0" onAction="#onActionDerecha" style="-fx-background-color: blue;" text="Derecha" visible="false" />
+      <JFXButton fx:id="btnPasarTurno" layoutX="1276.0" layoutY="916.0" onAction="#onActiomPasarTurno" style="-fx-background-color: blue;" text="Pasar Turno" visible="false" />
+      <JFXButton fx:id="btnIzquierda" layoutX="647.0" layoutY="916.0" onAction="#onActionIzquierda" style="-fx-background-color: Blue;" text="Izquierda" visible="false" />
+      <VBox fx:id="vbImagen" layoutX="1370.0" layoutY="75.0" prefHeight="744.0" prefWidth="312.0" visible="false">
          <children>
             <VBox fx:id="vbContenedorJ1" prefHeight="166.0" prefWidth="312.0">
                <VBox.margin>
@@ -567,12 +565,12 @@
             </VBox>
          </children>
       </VBox>
-      <Text fill="WHITE" layoutX="203.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Turno de:" wrappingWidth="106.13671875">
+      <Text fx:id="txtTd" fill="WHITE" layoutX="203.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Turno de:" visible="false" wrappingWidth="106.13671875">
          <font>
             <Font name="Bodoni MT" size="24.0" />
          </font>
       </Text>
-      <Text fx:id="txtTurnoJugador" fill="WHITE" layoutX="309.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="218.13671875">
+      <Text fx:id="txtTurnoJugador" fill="WHITE" layoutX="309.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" visible="false" wrappingWidth="218.13671875">
          <font>
             <Font name="Bodoni MT" size="24.0" />
          </font>
@@ -586,5 +584,63 @@
           <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
+      <AnchorPane id="AnchorPane" fx:id="vbSalaEspera" layoutX="537.0" layoutY="282.0" prefHeight="405.0" prefWidth="692.0" style="-fx-background-color: skyblue;" styleClass="root2" stylesheets="@style.css">
+         <children>
+            <AnchorPane layoutX="50.0" layoutY="50.0" prefHeight="512.0" prefWidth="620.0" styleClass="root" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <HBox alignment="CENTER" layoutX="111.0" layoutY="30.0" prefHeight="31.0" prefWidth="471.0" AnchorPane.leftAnchor="111.0" AnchorPane.rightAnchor="110.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sala de espera" wrappingWidth="139.12060546875">
+                           <font>
+                              <Font size="21.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnListo" layoutX="241.0" layoutY="291.0" onAction="#onActionListo" prefHeight="44.0" prefWidth="172.0" styleClass="JFXButton1" text="LISTO" />
+                  <HBox alignment="CENTER" layoutX="41.0" layoutY="133.0" prefHeight="100.0" prefWidth="571.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Text fx:id="txtJ1" strokeType="OUTSIDE" strokeWidth="0.0">
+                                 <font>
+                                    <Font name="Ebrima" size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Text fx:id="txtJ2" strokeType="OUTSIDE" strokeWidth="0.0">
+                                 <font>
+                                    <Font name="Ebrima" size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Text fx:id="txtJ3" strokeType="OUTSIDE" strokeWidth="0.0">
+                                 <font>
+                                    <Font name="Ebrima" size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Text fx:id="txtJ4" strokeType="OUTSIDE" strokeWidth="0.0">
+                                 <font>
+                                    <Font name="Ebrima" size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

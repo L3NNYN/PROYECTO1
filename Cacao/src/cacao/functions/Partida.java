@@ -18,7 +18,7 @@ public class Partida {
     private Cartas matrizLogica[][] = new Cartas[32][32];
 
     private Cartas cartasJungla[] = new Cartas[28];
-    
+
     private Cartas cartasIniciales[] = new Cartas[2];
 
     private Cartas cartaJugada;
@@ -26,13 +26,15 @@ public class Partida {
     private String turnoJugador;
 
     private String peticion;
-    
+
     private String salir;
+
+    private String listo;
 
     private int x;
 
     private int y;
-    
+
     private int mazo;
 
     public Partida() {
@@ -91,7 +93,6 @@ public class Partida {
             }
         }
 
-        
         Random r = new Random();
 
         for (int i = 0; i < cartasJungla.length; i++) {
@@ -108,7 +109,7 @@ public class Partida {
     }
 
     public void borrarCarta(int carta) {
-       this.cartasJungla[carta] = null;
+        this.cartasJungla[carta] = null;
     }
 
     private void anadirCarta(Cartas carta) {
@@ -124,8 +125,28 @@ public class Partida {
 
     public void agregarJugador(Jugador jugador) {
         for (int i = 0; i < 4; i++) {
+            //Inserta al final
             if (jugadores[i] == null) {
                 jugadores[i] = jugador;
+                break;
+            } else if (jugador.getEdad().compareTo(jugadores[i].getEdad()) < 0) {
+                Jugador aux = null;
+                Jugador aux2 = null;
+                aux = jugadores[i];
+                jugadores[i] = jugador;
+                //Mover todos los demás un campo
+                int pos = i + 1;
+                while (pos < 4) {
+                    if (jugadores[pos] == null) {
+                        jugadores[pos] = aux;
+                        pos = 4;
+                    } else {
+                        aux2 = jugadores[pos];
+                        jugadores[pos] = aux;
+                        aux = aux2;
+                        pos++;
+                    }
+                }
                 break;
             }
         }
@@ -212,7 +233,7 @@ public class Partida {
     public void setY(int y) {
         this.y = y;
     }
-    
+
     public int getMazo() {
         return mazo;
     }
@@ -221,19 +242,27 @@ public class Partida {
         this.mazo = mazo;
     }
 
-     public Cartas[] getCartasIniciales() {
+    public Cartas[] getCartasIniciales() {
         return cartasIniciales;
     }
 
     public void setCartasIniciales(Cartas[] cartasIniciales) {
         this.cartasIniciales = cartasIniciales;
     }
-    
+
     public String getSalir() {
         return salir;
     }
 
     public void setSalir(String salir) {
         this.salir = salir;
+    }
+    
+    public String getListo() {
+        return listo;
+    }
+
+    public void setListo(String listo) {
+        this.listo = listo;
     }
 }

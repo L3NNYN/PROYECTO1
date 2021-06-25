@@ -49,9 +49,6 @@ import javafx.scene.text.Text;
  */
 public class MesaJuegoViewController extends Controller implements Initializable, Observer {
 
-    //Componentes interfaz principal
-    @FXML
-    private JFXTextField txtMensaje;
     @FXML
     private VBox vbImagen;
 
@@ -188,6 +185,22 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Text txtSolJ4;
     @FXML
     private Text txtOroJ4;
+    @FXML
+
+    //Sala de espera
+    private Text txtTd;
+    @FXML
+    private Text txtJ1;
+    @FXML
+    private Text txtJ2;
+    @FXML
+    private Text txtJ3;
+    @FXML
+    private Text txtJ4;
+    @FXML
+    private JFXButton btnListo;
+    @FXML
+    private AnchorPane vbSalaEspera;
 
     //Componentes losetas disponibles
     /**
@@ -237,6 +250,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         } catch (IOException ex) {
             Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        visibilidad(false);
     }
 
     @Override
@@ -244,16 +259,18 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
-    private int cantidad() {
+    private void visibilidad(boolean visibilidad) {
+        btnSalir.setVisible(visibilidad);
+        scScroll.setVisible(visibilidad);
+        btnCentrar.setVisible(visibilidad);
+        btnDerecha.setVisible(visibilidad);
+        btnPasarTurno.setVisible(visibilidad);
+        btnIzquierda.setVisible(visibilidad);
+        vbImagen.setVisible(visibilidad);
+        txtTd.setVisible(visibilidad);
+        txtTurnoJugador.setVisible(visibilidad);
+        vbJungla.setVisible(visibilidad);
 
-        int num = 0;
-
-        for (int i = 0; i < p.getJugadores().length; i++) {
-            if (p.getJugadores()[i] != null) {
-                num++;
-            }
-        }
-        return num;
     }
 
     private void onActionEnviar(ActionEvent event) throws IOException {
@@ -288,7 +305,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 }
 
                 if ("Jugadores".equals(llegada.getPeticion())) {
-
+                    System.out.print("Actualizado");
                     borrarImagen(14, 15, gpMatrizJuego);
                     p.agregarCarta(14, 15, llegada.getCartasIniciales()[0]);
                     agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 14, 15);
@@ -311,6 +328,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         } catch (IOException ex) {
                             Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
                         }
+
                     }
 
                     int contador = 1;
@@ -321,28 +339,66 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                 vbContenedorJ1.setId(p.getJugadores()[i].getColor());
                                 vbContenedorJ1.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                 txtNombreJ1.setText(p.getJugadores()[i].getNombre());
+                                txtJ1.setText(p.getJugadores()[i].getNombre());
+                                if (p.getJugadores()[i].getListo().equals("listo")) {
+                                    txtJ1.setStyle("-fx-fill: Blue");
+                                } else {
+
+                                }
                             } else {
                                 if (contador == 1) {
                                     vbContenedorJ2.setVisible(true);
                                     vbContenedorJ2.setId(p.getJugadores()[i].getColor());
                                     vbContenedorJ2.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                     txtNombreJ2.setText(p.getJugadores()[i].getNombre());
+                                    txtJ2.setText(p.getJugadores()[i].getNombre());
+                                    if (p.getJugadores()[i].getListo().equals("listo")) {
+                                        txtJ2.setStyle("-fx-fill: Blue");
+                                    } else {
+
+                                    }
                                 } else if (contador == 2) {
                                     vbContenedorJ3.setVisible(true);
                                     vbContenedorJ3.setId(p.getJugadores()[i].getColor());
                                     vbContenedorJ3.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                     txtNombreJ3.setText(p.getJugadores()[i].getNombre());
+                                    txtJ3.setText(p.getJugadores()[i].getNombre());
+                                    if (p.getJugadores()[i].getListo().equals("listo")) {
+                                        txtJ3.setStyle("-fx-fill: Blue");
+                                    } else {
+
+                                    }
                                 } else if (contador == 3) {
                                     vbContenedorJ4.setVisible(true);
-                                    vbContenedorJ4.setId(p.getJugadores()[i].getNombre());
+                                    vbContenedorJ4.setId(p.getJugadores()[i].getColor());
                                     vbContenedorJ4.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                                     txtNombreJ4.setText(p.getJugadores()[i].getNombre());
+                                    txtJ4.setText(p.getJugadores()[i].getNombre());
+                                    if (p.getJugadores()[i].getListo().equals("listo")) {
+                                        txtJ4.setStyle("-fx-fill: Blue");
+                                    } else {
+
+                                    }
                                 }
                                 contador++;
                             }
                         }
                     }
 
+                    boolean iniciar = true;
+                    for (int i = 0; i < 4; i++) {
+                        if (p.getJugadores()[i] != null) {
+                            if (p.getJugadores()[i].getListo().equals("listo")) {
+
+                            } else {
+                                iniciar = false;
+                            }
+                        }
+                    }
+                    if (iniciar) {
+                        vbSalaEspera.setVisible(false);
+                        visibilidad(true);
+                    }
                 } else if ("actualizar cartas jugadores".equals(llegada.getPeticion())) {
                     for (int i = 0; i < 4; i++) {
                         if (p.getJugadores()[i] != null) {
@@ -413,6 +469,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 }
             }
         });
+
     }
 
     private void agregarVbox() {
@@ -437,18 +494,20 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                             //If else para difereciar si es carta de trabajor o jungla
                             if (variables.getNum()) {
+                                if (vl.validarCartaJugador(p.getMatrizLogica(), "Jng", fl, cl)) {
+                                    borrarImagen(fl, cl, gpMatrizJuego);
+                                    btnIzquierda.setDisable(true);
+                                    btnDerecha.setDisable(true);
+                                    btnCentrar.setDisable(true);
+                                    agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicasSelva[jSeleccionada], fl, cl);
+                                    p.agregarCarta(fl, cl, logicasSelva[jSeleccionada]);
+                                    p.setCartaJugada(logicasSelva[jSeleccionada], fl, cl, jSeleccionada);
+                                    logicasSelva[jSeleccionada] = null;
+                                    variables.setNum(false);
+                                    borrarImagen(jSeleccionada, 0, vbJungla);
+                                    enviarPeticion("colocar carta jungla");
+                                }
 
-                                borrarImagen(fl, cl, gpMatrizJuego);
-                                btnIzquierda.setDisable(true);
-                                btnDerecha.setDisable(true);
-                                btnCentrar.setDisable(true);
-                                agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), logicasSelva[jSeleccionada], fl, cl);
-                                p.agregarCarta(fl, cl, logicasSelva[jSeleccionada]);
-                                p.setCartaJugada(logicasSelva[jSeleccionada], fl, cl, jSeleccionada);
-                                logicasSelva[jSeleccionada] = null;
-                                variables.setNum(false);
-                                borrarImagen(jSeleccionada, 0, vbJungla);
-                                enviarPeticion("colocar carta jungla");
                             } else {
                                 if (vl.validarCartaJugador(p.getMatrizLogica(), "Tbr", fl, cl)) {
                                     variables.setCartaTrabajador(false);
@@ -746,5 +805,11 @@ public class MesaJuegoViewController extends Controller implements Initializable
         p.setSalir(nombre);
         enviarPeticion("salir");
         FlowController.getInstance().goViewInNewStage("InicioView", stage);
+    }
+
+    @FXML
+    private void onActionListo(ActionEvent event) {
+        p.setListo(nombre);
+        enviarPeticion("listo");
     }
 }

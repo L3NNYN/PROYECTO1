@@ -36,11 +36,14 @@ public class Jugador {
     private int fichasSol;
 
     private int monedas;
+    
+    private String listo;
 
     public Jugador(String jg, LocalDate e, String color) {
         this.nombre = jg;
         this.edad = e;
         this.color = color;
+        this.listo = "no";
     }
 
     public Jugador() {
@@ -48,7 +51,8 @@ public class Jugador {
     }
 
     public void crearCartas(String nombre, String Color) {
-
+ 
+        //Tbr = trabajador
         for (int i = 0; i < 5; i++) {
             Cartas c1 = new Cartas("Tbr", nombre, 2, 1, 0, 1, color, 0);
             anadirCarta(c1);
@@ -163,4 +167,13 @@ public class Jugador {
     public void setCartasJugador(Cartas[] cartasJugador) {
         this.cartasJugador = cartasJugador;
     }
+    
+    public String getListo() {
+        return listo;
+    }
+
+    public void setListo(String listo) {
+        this.listo = listo;
+    }
+
 }

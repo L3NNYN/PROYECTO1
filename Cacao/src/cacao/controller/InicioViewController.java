@@ -36,6 +36,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
@@ -71,6 +72,20 @@ public class InicioViewController extends Controller implements Initializable, O
     private AnchorPane apColorSeleccionado;
     @FXML
     private JFXDatePicker dtEdadJugador;
+    @FXML
+    private Text txtJ1;
+    @FXML
+    private Text txtJ2;
+    @FXML
+    private Text txtJ3;
+    @FXML
+    private Text txtJ4;
+    @FXML
+    private AnchorPane apBienvenido;
+    @FXML
+    private AnchorPane apSalaEspera;
+    @FXML
+    private JFXButton btnlISTO;
 
     /**
      * Initializes the controller class.
@@ -131,10 +146,10 @@ public class InicioViewController extends Controller implements Initializable, O
             t.start();
 
             mj.enviarPeticion("actualizar jugadores");
-
+            spSpinner.setVisible(true);
             TranslateTransition carta1 = new TranslateTransition();
             carta1.setNode((Node) apColorSeleccionado);
-            carta1.setDelay(Duration.seconds(1));
+            carta1.setDelay(Duration.seconds(0.5));
             carta1.play();
             carta1.setOnFinished((ActionEvent e) -> {
 
@@ -151,12 +166,13 @@ public class InicioViewController extends Controller implements Initializable, O
 
                 if (pasar) {
                     mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
-                    spSpinner.setVisible(true);
+                    
                     FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
                 } else {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
+                            spSpinner.setVisible(false);
                             new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "Usuario o color ya seleccionados");
                         }
                         
@@ -282,6 +298,10 @@ public class InicioViewController extends Controller implements Initializable, O
 
     @FXML
     private void onActionEdadJugador(ActionEvent event) {
-
     }
+
+    @FXML
+    private void onActionListo(ActionEvent event) {
+    }
+
 }
