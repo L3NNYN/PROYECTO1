@@ -163,7 +163,6 @@ public class Partida {
     }
 
     public void agregarCarta(int x, int y, Cartas carta) {
-        carta.setGrados(0);
         matrizLogica[x][y] = carta;
     }
 

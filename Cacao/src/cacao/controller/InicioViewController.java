@@ -153,33 +153,43 @@ public class InicioViewController extends Controller implements Initializable, O
             carta1.play();
             carta1.setOnFinished((ActionEvent e) -> {
 
-                int mn = 0;
-                boolean pasar = true;
-                for (int i = 0; i < ClassController.getInstance().partida.getJugadores().length; i++) {
-                    if (ClassController.getInstance().partida.getJugadores()[i] != null) {
-                        if (ClassController.getInstance().partida.getJugadores()[i].getNombre().equals(txtNickName.getText())
-                                || ClassController.getInstance().partida.getJugadores()[i].getColor().equals(cbColores.getSelectionModel().getSelectedItem())) {
-                            pasar = false;
+                if (!"lleno".equals(ClassController.getInstance().partida.getPeticion())) {
+                    int mn = 0;
+                    boolean pasar = true;
+                    for (int i = 0; i < ClassController.getInstance().partida.getJugadores().length; i++) {
+                        if (ClassController.getInstance().partida.getJugadores()[i] != null) {
+                            if (ClassController.getInstance().partida.getJugadores()[i].getNombre().equals(txtNickName.getText())
+                                    || ClassController.getInstance().partida.getJugadores()[i].getColor().equals(cbColores.getSelectionModel().getSelectedItem())) {
+                                pasar = false;
+                            }
                         }
                     }
-                }
 
-                if (pasar) {
-                    mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
-                    
-                    FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
-                } else {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            spSpinner.setVisible(false);
-                            new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "Usuario o color ya seleccionados");
-                        }
-                        
-                    });
-                    
-                }
+                    if (pasar) {
+                        mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
 
+                        FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
+                    } else {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                spSpinner.setVisible(false);
+                                new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "Usuario o color ya seleccionados");
+                            }
+
+                        });
+
+                    }
+                }else{
+                  Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                spSpinner.setVisible(false);
+                                new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "La partida esta llena");
+                            }
+
+                        });  
+                }
             });
         }
 

@@ -283,8 +283,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 }
             }
         }
-
-        System.out.print(num);
     }
 
     @Override
@@ -305,7 +303,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 }
 
                 if ("Jugadores".equals(llegada.getPeticion())) {
-                    System.out.print("Actualizado");
                     borrarImagen(14, 15, gpMatrizJuego);
                     p.agregarCarta(14, 15, llegada.getCartasIniciales()[0]);
                     agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 14, 15);
@@ -751,11 +748,6 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private void llenarCartasJungla() throws IOException {
         Validaciones vl = new Validaciones();
         vl.llenarCartasJungla(p.getCartasJungla(), logicasSelva, p);
-
-        if (init) {
-            //enviarPeticion("actualizar cartas jugadores");
-        }
-
     }
 
     private int jugadorActual() {
@@ -810,6 +802,47 @@ public class MesaJuegoViewController extends Controller implements Initializable
     @FXML
     private void onActionListo(ActionEvent event) {
         p.setListo(nombre);
+        int cantJ = 0;
+        for (int i = 0; i < 4; i++) {
+            if (p.getJugadores()[i] != null) {
+                cantJ++;
+            }
+        }
+        System.out.print("Jugadores: "+cantJ);
+        if (cantJ < 3) {
+
+        } else if (cantJ >= 3) {
+            boolean term1 = false;
+            boolean term2 = false;
+            for (int i = 0; i < 4; i++) {
+                term1 = false;
+                term2 = false;
+                if (p.getJugadores()[i] != null) {
+                    for (int j = 0; j < 11; j++) {
+                        if (!term1) {
+                            if (p.getJugadores()[i].getCartasJugador()[j] != null) {
+                                Cartas nc = p.getJugadores()[i].getCartasJugador()[j];
+                                if (nc.getTipo().equals("Tbr") && nc.getDerecha() == 1 && nc.getAbajo() == 1 && nc.getIzquierda() == 1 && nc.getArriba() == 1) {
+                                   System.out.print("Ingresado"); 
+                                    p.getJugadores()[i].getCartasJugador()[j] = null;
+                                    term1 = true;
+                                }
+                            }
+                        }
+                        if (!term2 && cantJ == 4) {
+                            Cartas nc = p.getJugadores()[i].getCartasJugador()[j];
+                            if (p.getJugadores()[i].getCartasJugador()[j] != null) {
+                                if (nc.getTipo().equals("Tbr") && nc.getDerecha() == 1 && nc.getAbajo() == 1 && nc.getIzquierda() == 1 && nc.getArriba() == 1) {
+                                    System.out.print("Carta eliminada 2");
+                                    p.getJugadores()[i].getCartasJugador()[i] = null;
+                                    term2 = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         enviarPeticion("listo");
     }
 }

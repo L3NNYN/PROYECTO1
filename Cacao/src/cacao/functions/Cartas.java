@@ -71,6 +71,10 @@ public class Cartas{
      this.grados = grados;
    }
    
+   public Cartas(){
+       
+   }
+   
     public String getTipo() {
         return tipo;
     }

@@ -28,100 +28,104 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SocketServices extends Observable implements Runnable {
-
+    
     private int puerto;
-
+    
     private String HOST;
-
+    
     public static Socket sc;
-
+    
     private ArrayList<Socket> clientes;
-
+    
     private Partida j = new Partida();
-
+    
     public boolean ev = false;
-
+    
     public Boolean permitir = false;
-
+    
     public static Boolean cerrar = false;
-
+    
     public SocketServices() {
-
+        
     }
-
+    
     public SocketServices(int puerto, String ip) throws IOException {
         this.puerto = puerto;
         this.HOST = ip;
     }
-
+    
     public void registrar(String host, int puerto) throws IOException {
         //Creo el socket para conectarme con el cliente
         sc = new Socket(host, 5000);
     }
-
+    
     public Partida getRespuesta() {
         return j;
     }
-
+    
     @Override
     public void run() {
 //Juego obj2 = null;
         DataInputStream dis;
         DataOutputStream out;
         try {
-
+            
             dis = new DataInputStream(sc.getInputStream());
             out = new DataOutputStream(sc.getOutputStream());
             Partida mensaje;
             double valor;
             while (!cerrar) {
-
+                
                 if (!cerrar) {
                     String sms = dis.readUTF();
-
+                    
                     Gson gs = new Gson();
                     Partida jg = gs.fromJson(sms, Partida.class);
-
+                    
                     ClassController.getInstance().partida.setJugadores(jg.getJugadores());
                     
-                    if(jg.getPeticion().equals("salir")){
+                    if (jg.getPeticion().equals("salir")) {
                         cerrar = true;
                         //sc.close();
+                    }
+                    
+                    if (jg.getPeticion().equals("lleno")) {
+                        ClassController.getInstance().partida.setPeticion("lleno");
                     }
                     this.setChanged();
                     this.notifyObservers(sms);
                     this.clearChanged();
                 }
             }
-
+            
         } catch (IOException ex) {
             Logger.getLogger(SocketServices.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void enviarDatos(String enviar) throws IOException {
         DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
         //System.out.print(mensaje);
         dos.writeUTF(enviar);
         
     }
-
+    
     public Boolean getPermitir() {
         return permitir;
     }
-
+    
     public void setPermitir(Boolean permitir) {
         this.permitir = permitir;
     }
-
+    
     public Socket getSc() {
         return sc;
     }
-
+    
     public void setSc(Socket sc) {
         SocketServices.sc = sc;
     }
-
+    
     public void cerrarConexion() throws IOException {
         enviarDatos("salir");
         cerrar = true;
