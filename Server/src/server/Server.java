@@ -20,7 +20,9 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
+import jdk.net.Sockets;
 import server.Juego.Cartas;
+import server.Juego.Jugador;
 import server.Juego.Partida;
 import server.util.FlowController;
 
@@ -31,6 +33,7 @@ import server.util.FlowController;
 public class Server extends Observable implements Runnable, Initializable {
 
     private static ObservableList<Socket> clientes;
+    private static Socket[] clientes2 = new Socket[4];
 
     private static ObservableList<Thread> sockets = FXCollections.observableArrayList();
 
@@ -81,7 +84,6 @@ public class Server extends Observable implements Runnable, Initializable {
 
                     Respuesta rp = new Respuesta(clientes.get(clientes.size() - 1), i);
 
-                    boolean enc = false;
                     Thread t = new Thread(rp);
                     sockets.add(t);
                     sockets.get(sockets.size() - 1).start();

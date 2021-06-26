@@ -67,7 +67,6 @@ public class Respuesta extends Observable implements Runnable {
 
             //While para recivir peticiones
             while (!cerrarHilo) {
-                System.out.print(rsp);
                 String me = in.readUTF();
                 Gson gs = new Gson();
                 Partida jg = gs.fromJson(me, Partida.class);
@@ -150,6 +149,7 @@ public class Respuesta extends Observable implements Runnable {
 
         } else if (partida.getPeticion().equals("colocar carta jungla")) {
 
+            FlowController.getInstance().partida.setMatrizLogica(partida.getMatrizLogica());
             FlowController.getInstance().partida.setCartasJungla(partida.getCartasJungla());
             FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(), partida.getX(), partida.getY(), partida.getMazo());
             FlowController.getInstance().partida.setPeticion("colocar carta jungla");
