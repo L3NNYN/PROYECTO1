@@ -424,7 +424,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     if (!p.getTurnoJugador().equals(nombre)) {
                         p.setCartasJungla(llegada.getCartasJungla());
                         p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), llegada.getMazo());
-                        p.agregarCarta(p.getX(), p.getY(), p.getCartaJugada());
+                        p.setMatrizLogica(llegada.getMatrizLogica());
                         logicasSelva[llegada.getMazo()] = null;
                         borrarImagen(p.getX(), p.getY(), gpMatrizJuego);
                         agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
@@ -481,6 +481,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 gpMatrizJuego.add(matrizVbox[i][j], j, i);
                 final int fl = i;
                 final int cl = j;
+                variables.setComprobacion(true);
                 matrizVbox[i][j].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -491,7 +492,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                             //If else para difereciar si es carta de trabajor o jungla
                             if (variables.getNum()) {
-                                if (vl.validarCartaJugador(p.getMatrizLogica(), "Jng", fl, cl)) {
+                                if (vl.validarCartaJugador(p.getMatrizLogica(), "Jungla", fl, cl)) {
                                     borrarImagen(fl, cl, gpMatrizJuego);
                                     btnIzquierda.setDisable(true);
                                     btnDerecha.setDisable(true);
@@ -526,6 +527,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             }
 
                         }
+
                     }
                 });
             }
@@ -794,9 +796,20 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     @FXML
     private void onActionSalir(ActionEvent event) throws IOException {
+
+        for (int i = 0; i < 28; i++) {
+            for (int j = 0; j < 28; j++) {
+                if (p.getMatrizLogica()[i][j] != null) {
+                    System.out.print(p.getMatrizLogica()[i][j].getTipo() + "- F:" + i + "- C:" + j + "\n");
+                }
+            }
+        }
+        System.out.print(sk);
+        /*
         p.setSalir(nombre);
         enviarPeticion("salir");
         FlowController.getInstance().goViewInNewStage("InicioView", stage);
+         */
     }
 
     @FXML
@@ -808,7 +821,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 cantJ++;
             }
         }
-        System.out.print("Jugadores: "+cantJ);
+        System.out.print("Jugadores: " + cantJ);
         if (cantJ < 3) {
 
         } else if (cantJ >= 3) {
@@ -823,7 +836,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             if (p.getJugadores()[i].getCartasJugador()[j] != null) {
                                 Cartas nc = p.getJugadores()[i].getCartasJugador()[j];
                                 if (nc.getTipo().equals("Tbr") && nc.getDerecha() == 1 && nc.getAbajo() == 1 && nc.getIzquierda() == 1 && nc.getArriba() == 1) {
-                                   System.out.print("Ingresado"); 
+                                    System.out.print("Ingresado");
                                     p.getJugadores()[i].getCartasJugador()[j] = null;
                                     term1 = true;
                                 }

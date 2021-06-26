@@ -20,8 +20,9 @@ public class Variables {
     public static boolean num;
     
     public static boolean llenarJungla = false;
-
     
+    public static boolean comprobacion = false;
+  
     public Variables() {
 
     }
@@ -64,6 +65,14 @@ public class Variables {
 
     public void setLlenarJungla(boolean llenarJungla) {
         Variables.llenarJungla = llenarJungla;
+    }
+    
+    public boolean getComprobacion() {
+        return comprobacion;
+    }
+
+    public void setComprobacion(boolean comprobacion) {
+        Variables.comprobacion = comprobacion;
     }
 
 }

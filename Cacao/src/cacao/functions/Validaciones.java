@@ -90,21 +90,21 @@ public class Validaciones {
             if(i == 0 || i == 2 || i == 6 || i == 8){ //Si la carta es diagonal
                 if(ady.get(i) != null){
                     s = true;
-                    if(tipo == "Tbr"){
-                        if(ady.get(i).getTipo() != tipo){ //Si existe, valida que no sea diferente del tipo
+                    if(tipo.equals("Tbr")){
+                        if(!ady.get(i).getTipo().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
                             permitir = false;
                         }
-                    } if(!ady.get(i).getNombre().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
+                    } else if(!ady.get(i).getNombre().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
                         permitir = false;
                     }
                 }
             } else if(ady.get(i) != null){ //Carta en vertical/horizontal
                     s = true;
-                    if(tipo == "Tbr"){
-                        if(ady.get(i).getTipo() == tipo){ //Si existe, valida que no sea diferente del tipo
+                    if(tipo.equals("Tbr")){
+                        if(ady.get(i).getTipo().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
                             permitir = false;
                         }
-                    }if( ady.get(i).getNombre().equals(tipo) ){ //Si existe, valida que no sea igual del tipo 
+                    }else if( ady.get(i).getNombre().equals(tipo) ){ //Si existe, valida que no sea igual del tipo 
                     permitir = false;
                 }
             }

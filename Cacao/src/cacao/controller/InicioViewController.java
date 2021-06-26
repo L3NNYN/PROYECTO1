@@ -141,7 +141,7 @@ public class InicioViewController extends Controller implements Initializable, O
 
             //txtNickName.getText(),edad, cbColores.getSelectionModel().getSelectedItem()
             mj.getSocket().registrar(txtIppartida.getText(), 0);
-
+            
             Thread t = new Thread(mj.getSocket());
             t.start();
 
