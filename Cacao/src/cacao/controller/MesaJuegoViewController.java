@@ -48,10 +48,10 @@ import javafx.scene.text.Text;
  * @author Pipo
  */
 public class MesaJuegoViewController extends Controller implements Initializable, Observer {
-
+    
     @FXML
     private VBox vbImagen;
-
+    
     public static String nombreJ;
     @FXML
     private ScrollPane scScroll;
@@ -63,39 +63,39 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Text txtTurnoJugador;
     @FXML
     private GridPane vbJungla;
-
+    
     private VBox matrizJungla[] = new VBox[2];
-
+    
     private Cartas logicasSelva[] = new Cartas[2];
 
     //Componentes Socket Service
     private SocketServices sk = new SocketServices();
-
+    
     private static SocketServices c = new SocketServices();
 
     //Componentes de matriz juego
     @FXML
     private GridPane gpMatrizJuego;
-
+    
     private VBox matrizVbox[][] = new VBox[32][32];
-
+    
     @FXML
     private JFXButton btnCentrar;
     @FXML
     private JFXButton btnDerecha;
     @FXML
     private JFXButton btnIzquierda;
-
+    
     private static int fla = 0;
-
+    
     private static int clm = 0;
-
+    
     private int rot = 0;
-
+    
     private int cSeleccionada = 0;
-
+    
     private int jSeleccionada = 0;
-
+    
     private boolean init = false;
 
     //Jugador pricipal
@@ -108,17 +108,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Text txtNombreJ1;
     @FXML
     private GridPane vbJugador1;
-
+    
     private VBox botonesJ[] = new VBox[3];
-
+    
     private Cartas logicas[] = new Cartas[3];
-
+    
     public static String nombre;
-
+    
     public static LocalDate edad;
-
+    
     public static String color;
-
+    
     @FXML
     private Text txtNuecesJ1;
     @FXML
@@ -166,17 +166,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
     private Text txtNombreJ4;
     @FXML
     private GridPane vbJugador4;
-
+    
     private static Jugador array[] = new Jugador[4];
-
+    
     public Variables variables = new Variables();
-
+    
     private Validaciones vl = new Validaciones();
-
+    
     public boolean recivido = false;
     @FXML
     private JFXButton btnSalir;
-
+    
     @FXML
     private Text txtNuecesJ4;
     @FXML
@@ -207,12 +207,12 @@ public class MesaJuegoViewController extends Controller implements Initializable
      * Initializes the controller class.
      */
     public MesaJuegoViewController() {
-
+        
     }
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         c.addObserver(this);
         agregarVbox();
         cartasJugador();
@@ -230,7 +230,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         vbContenedorJ2.setVisible(false);
         vbContenedorJ3.setVisible(false);
         vbContenedorJ4.setVisible(false);
-
+        
         try {
             Jugador g = new Jugador(nombre, edad, color);
             g.crearCartas(nombre, color);
@@ -238,7 +238,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             p.agregarJugador(g);
             cartasUsables();
             enviarPeticion("registrar jugador");
-
+            
             init = true;
             //llenarCartasJungla();
             for (int i = 0; i < 3; i++) {
@@ -246,19 +246,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[i], 0, i);
                 }
             }
-
+            
         } catch (IOException ex) {
             Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         visibilidad(false);
     }
-
+    
     @Override
     public void initialize() {
-
+        
     }
-
+    
     private void visibilidad(boolean visibilidad) {
         btnSalir.setVisible(visibilidad);
         scScroll.setVisible(visibilidad);
@@ -270,9 +270,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
         txtTd.setVisible(visibilidad);
         txtTurnoJugador.setVisible(visibilidad);
         vbJungla.setVisible(visibilidad);
-
+        
     }
-
+    
     private void onActionEnviar(ActionEvent event) throws IOException {
         Validaciones vl = new Validaciones();
         int num = 0;
@@ -284,14 +284,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
             }
         }
     }
-
+    
     @Override
     public void update(Observable o, Object arg) {
-
+        
         String cadena = (String) arg;
         Gson gs = new Gson();
         Partida llegada = gs.fromJson(cadena, Partida.class);
-
+        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -301,16 +301,16 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         tm++;
                     }
                 }
-
+                
                 if ("Jugadores".equals(llegada.getPeticion())) {
                     borrarImagen(14, 15, gpMatrizJuego);
                     p.agregarCarta(14, 15, llegada.getCartasIniciales()[0]);
                     agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 14, 15);
-
+                    
                     borrarImagen(15, 16, gpMatrizJuego);
                     p.agregarCarta(15, 16, llegada.getCartasIniciales()[1]);
                     agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[1], 15, 16);
-
+                    
                     p.setJugadores(llegada.getJugadores());
                     p.setTurnoJugador(llegada.getTurnoJugador());
                     txtTurnoJugador.setText(p.getTurnoJugador());
@@ -325,9 +325,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         } catch (IOException ex) {
                             Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
+                        
                     }
-
+                    
                     int contador = 1;
                     for (int i = 0; i < p.getJugadores().length; i++) {
                         if (p.getJugadores()[i] != null) {
@@ -340,7 +340,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                 if (p.getJugadores()[i].getListo().equals("listo")) {
                                     txtJ1.setStyle("-fx-fill: Blue");
                                 } else {
-
+                                    
                                 }
                             } else {
                                 if (contador == 1) {
@@ -352,7 +352,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                     if (p.getJugadores()[i].getListo().equals("listo")) {
                                         txtJ2.setStyle("-fx-fill: Blue");
                                     } else {
-
+                                        
                                     }
                                 } else if (contador == 2) {
                                     vbContenedorJ3.setVisible(true);
@@ -363,7 +363,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                     if (p.getJugadores()[i].getListo().equals("listo")) {
                                         txtJ3.setStyle("-fx-fill: Blue");
                                     } else {
-
+                                        
                                     }
                                 } else if (contador == 3) {
                                     vbContenedorJ4.setVisible(true);
@@ -374,19 +374,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                     if (p.getJugadores()[i].getListo().equals("listo")) {
                                         txtJ4.setStyle("-fx-fill: Blue");
                                     } else {
-
+                                        
                                     }
                                 }
                                 contador++;
                             }
                         }
                     }
-
+                    
                     boolean iniciar = true;
                     for (int i = 0; i < 4; i++) {
                         if (p.getJugadores()[i] != null) {
                             if (p.getJugadores()[i].getListo().equals("listo")) {
-
+                                
                             } else {
                                 iniciar = false;
                             }
@@ -409,7 +409,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     if (p.getTurnoJugador().equals(nombre)) {
                         variables.setCartaTrabajador(true);
                     }
-
+                    
                 } else if ("colocar carta jugador".equals(llegada.getPeticion())) {
                     p.setMatrizLogica(llegada.getMatrizLogica());
                     p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), 0);
@@ -429,10 +429,10 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         borrarImagen(p.getX(), p.getY(), gpMatrizJuego);
                         agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
                         borrarImagen(p.getMazo(), 0, vbJungla);
-
+                        
                     }
                 } else if ("actualizar jugadores".equals(llegada.getPeticion())) {
-
+                    
                     p.setJugadores(llegada.getJugadores());
                     int ct = 0;
                     variables.setNum(true);
@@ -442,7 +442,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             variables.setNum(false);
                         }
                     }
-
+                    
                 } else if ("actualizar jungla".equals(llegada.getPeticion())) {
                     if (!p.getTurnoJugador().equals(nombre)) {
                         try {
@@ -460,20 +460,20 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             }
                         }
                     }
-
+                    
                 } else if ("cerrar".equals(llegada.getPeticion())) {
-
+                    
                 }
             }
         });
-
+        
     }
-
+    
     private void agregarVbox() {
-
+        
         for (int i = 0; i <= 31; i++) {
             for (int j = 0; j <= 31; j++) {
-
+                
                 matrizVbox[i][j] = new VBox();
                 matrizVbox[i][j].setAlignment(Pos.CENTER);
                 matrizVbox[i][j].setPrefHeight(89);
@@ -485,7 +485,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 matrizVbox[i][j].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-
+                        
                         if (variables.getCartaTablero()) {
                             fla = fl;
                             clm = cl;
@@ -505,7 +505,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                     borrarImagen(jSeleccionada, 0, vbJungla);
                                     enviarPeticion("colocar carta jungla");
                                 }
-
+                                
                             } else {
                                 if (vl.validarCartaJugador(p.getMatrizLogica(), "Tbr", fl, cl)) {
                                     variables.setCartaTrabajador(false);
@@ -523,17 +523,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                     borrarImagen(0, cSeleccionada, vbJugador1);
                                     enviarPeticion("colocar carta jugador");
                                 }
-
+                                
                             }
-
+                            
                         }
-
+                        
                     }
                 });
             }
         }
     }
-
+    
     public void enviarPeticion(String peticion) {
         p.setPeticion(peticion);
         Gson gson = new Gson();
@@ -544,11 +544,11 @@ public class MesaJuegoViewController extends Controller implements Initializable
             Logger.getLogger(MesaJuegoViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void cartasJugador() {
-
+        
         for (int i = 0; i < 3; i++) {
-
+            
             botonesJ[i] = new VBox();
             botonesJ[i].setAlignment(Pos.CENTER);
             botonesJ[i].setId(color);
@@ -570,15 +570,15 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[cs], 0, cs);
                     }
                 }
-
+                
             });
         }
     }
-
+    
     private void cartasJungla() {
-
+        
         for (int i = 0; i < 2; i++) {
-
+            
             matrizJungla[i] = new VBox();
             matrizJungla[i].setAlignment(Pos.CENTER);
             matrizJungla[i].setPrefHeight(98);
@@ -600,11 +600,11 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 }
             });
         }
-
+        
     }
-
+    
     public void borrarImagen(final int row, final int column, GridPane gridPane) {
-
+        
         ObservableList<Node> childrens = gridPane.getChildren();
         for (Node node : childrens) {
             if (node instanceof VBox && gridPane.getRowIndex(node) == row && gridPane.getColumnIndex(node) == column) {
@@ -613,24 +613,24 @@ public class MesaJuegoViewController extends Controller implements Initializable
             }
         }
     }
-
+    
     public void agregarImagen(int tipo, GridPane gridpane, Cartas[] cartas, VBox[] vbox, VBox[][] mVBox, Cartas[][] cartasM, Cartas carta, int f, int c) {
         AgregarImagen add = new AgregarImagen();
         add.agregarImagen(tipo, gridpane, cartas, vbox, mVBox, cartasM, carta, f, c);
     }
-
+    
     public SocketServices getSocket() {
         return c;
     }
-
+    
     public void setDatos(String nombre, LocalDate edad, String color) {
-
+        
         MesaJuegoViewController.nombre = nombre;
         MesaJuegoViewController.edad = edad;
         MesaJuegoViewController.color = color;
-
+        
     }
-
+    
     @FXML
     private void onActiomPasarTurno(ActionEvent event) throws IOException {
         //Cartas trabajador
@@ -640,7 +640,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         enviarPeticion("actualizar jungla");
         enviarPeticion("pasar turno");
     }
-
+    
     private void pasarTurno() {
         for (int i = 0; i < 3; i++) {
             if (logicas[i] != null) {
@@ -657,29 +657,29 @@ public class MesaJuegoViewController extends Controller implements Initializable
             }
         }
     }
-
+    
     @FXML
     private void onActionCentrar(ActionEvent event) throws IOException {
-
+        
         botonesJ[cSeleccionada].setId(color);
         botonesJ[cSeleccionada].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
-
+        
         borrarImagen(fla, clm, gpMatrizJuego);
         matrizVbox[fla][clm].setId(color);
         matrizVbox[fla][clm].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
-
+        
         btnIzquierda.setDisable(true);
         btnDerecha.setDisable(true);
         btnCentrar.setDisable(true);
         btnPasarTurno.setDisable(false);
     }
-
+    
     @FXML
     private void onActionDerecha(ActionEvent event) {
-
+        
         borrarImagen(fla, clm, gpMatrizJuego);
-
+        
         if (p.getMatrizLogica()[fla][clm].getGrados() == 0) {
             rot = 90;
             p.getMatrizLogica()[fla][clm].setGrados(90);
@@ -693,21 +693,28 @@ public class MesaJuegoViewController extends Controller implements Initializable
             rot = 0;
             p.getMatrizLogica()[fla][clm].setGrados(0);
         }
-
+        
+        Cartas c = new Cartas();
+        c = p.getMatrizLogica()[fla][clm];
+        p.getMatrizLogica()[fla][clm].setDerechaG(c.getArribaG());
+        p.getMatrizLogica()[fla][clm].setAbajoG(c.getDerechaG());
+        p.getMatrizLogica()[fla][clm].setIzquierdaG(c.getAbajoG());
+        p.getMatrizLogica()[fla][clm].setArribaG(c.getIzquierdaG());
+        
         matrizVbox[fla][clm].getChildren().get(0).setRotate(rot);
-
+        
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
-
+        
         p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm, 0);
-
+        
         enviarPeticion("colocar carta jugador");
     }
-
+    
     @FXML
     private void onActionIzquierda(ActionEvent event) {
-
+        
         borrarImagen(fla, clm, gpMatrizJuego);
-
+        
         if (p.getMatrizLogica()[fla][clm].getGrados() == 0) {
             rot = 270;
             p.getMatrizLogica()[fla][clm].setGrados(270);
@@ -721,20 +728,20 @@ public class MesaJuegoViewController extends Controller implements Initializable
             rot = 180;
             p.getMatrizLogica()[fla][clm].setGrados(180);
         }
-
+        
         matrizVbox[fla][clm].getChildren().get(0).setRotate(rot);
-
+        
         gpMatrizJuego.add(matrizVbox[fla][clm], clm, fla);
-
+        
         p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm, 0);
-
+        
         enviarPeticion("colocar carta jugador");
     }
-
+    
     private void cartasUsables() throws IOException {
         Validaciones vl = new Validaciones();
         vl.cartasUsables(p.getCartasJungla(), logicas, p, jugadorActual());
-
+        
         int sm = 0;
         for (int i = 0; i < 11; i++) {
             if (p.getJugadores()[jugadorActual()].getCartasJugador()[i] != null) {
@@ -744,14 +751,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
         if (init) {
             enviarPeticion("actualizar cartas jugadores");
         }
-
+        
     }
-
+    
     private void llenarCartasJungla() throws IOException {
         Validaciones vl = new Validaciones();
         vl.llenarCartasJungla(p.getCartasJungla(), logicasSelva, p);
     }
-
+    
     private int jugadorActual() {
         int jugador = 0;
         boolean escogido = false;
@@ -765,38 +772,38 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
         return jugador;
     }
-
+    
     public Partida getP() {
         return p;
     }
-
+    
     public void setP(Partida p) {
         this.p = p;
     }
-
+    
     public String getNombre() {
         return nombre;
     }
-
+    
     public LocalDate getEdad() {
         return edad;
     }
-
+    
     public String getColor() {
         return color;
     }
-
+    
     public Variables getVariables() {
         return variables;
     }
-
+    
     public void setVariables(Variables variables) {
         this.variables = variables;
     }
-
+    
     @FXML
     private void onActionSalir(ActionEvent event) throws IOException {
-
+        
         for (int i = 0; i < 28; i++) {
             for (int j = 0; j < 28; j++) {
                 if (p.getMatrizLogica()[i][j] != null) {
@@ -811,7 +818,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         FlowController.getInstance().goViewInNewStage("InicioView", stage);
          */
     }
-
+    
     @FXML
     private void onActionListo(ActionEvent event) {
         p.setListo(nombre);
@@ -823,7 +830,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
         System.out.print("Jugadores: " + cantJ);
         if (cantJ < 3) {
-
+            
         } else if (cantJ >= 3) {
             boolean term1 = false;
             boolean term2 = false;

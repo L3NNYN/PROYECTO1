@@ -26,6 +26,14 @@ public class Cartas{
    private int izquierda;
    
    private int arriba;
+
+   private int derechaG;
+   
+   private int abajoG;
+   
+   private int izquierdaG;
+   
+   private int arribaG;
    
    private int valor;
    
@@ -45,6 +53,10 @@ public class Cartas{
       this.izquierda = izquierda;
       this.arriba = arriba;
       this.grados = grados;
+      this.derechaG = derecha;
+      this.abajoG = abajo;
+      this.izquierdaG = izquierda;
+      this.arribaG = abajo;
    }
    
    //Plantaciones, mercado, minas
@@ -162,7 +174,37 @@ public class Cartas{
     public void setGrados(int grados) {
         this.grados = grados;
     }
-   
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    
+    public int getDerechaG() {
+        return derechaG;
+    }
+
+    public void setDerechaG(int derechaG) {
+        this.derechaG = derechaG;
+    }
+
+    public int getAbajoG() {
+        return abajoG;
+    }
+
+    public void setAbajoG(int abajoG) {
+        this.abajoG = abajoG;
+    }
+
+    public int getIzquierdaG() {
+        return izquierdaG;
+    }
+
+    public void setIzquierdaG(int izquierdaG) {
+        this.izquierdaG = izquierdaG;
+    }
+
+    public int getArribaG() {
+        return arribaG;
+    }
+
+    public void setArribaG(int arribaG) {
+        this.arribaG = arribaG;
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 }
 

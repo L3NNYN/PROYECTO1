@@ -47,7 +47,7 @@ import javafx.util.Duration;
 public class InicioViewController extends Controller implements Initializable, Observer {
 
     MesaJuegoViewController mj = new MesaJuegoViewController();
-
+    
     @FXML
     private JFXTextField txtIppartida;
     @FXML
@@ -62,6 +62,8 @@ public class InicioViewController extends Controller implements Initializable, O
     public static String nombre;
 
     private Mensajes sms;
+
+    private boolean iniciado = false;
 
     private static SocketServices conexion;
 
@@ -137,14 +139,17 @@ public class InicioViewController extends Controller implements Initializable, O
             datos = "";
         } else {
 
+            if (!iniciado) {
+                //txtNickName.getText(),edad, cbColores.getSelectionModel().getSelectedItem()
+                mj.getSocket().registrar(txtIppartida.getText(), 0);
+
+                Thread t = new Thread(mj.getSocket());
+                t.start();
+                iniciado = true;
+            }
+
             LocalDate edad = dtEdadJugador.getValue();
-
-            //txtNickName.getText(),edad, cbColores.getSelectionModel().getSelectedItem()
-            mj.getSocket().registrar(txtIppartida.getText(), 0);
-            
-            Thread t = new Thread(mj.getSocket());
-            t.start();
-
+   
             mj.enviarPeticion("actualizar jugadores");
             spSpinner.setVisible(true);
             TranslateTransition carta1 = new TranslateTransition();
@@ -170,6 +175,7 @@ public class InicioViewController extends Controller implements Initializable, O
 
                         FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
                     } else {
+
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -180,15 +186,15 @@ public class InicioViewController extends Controller implements Initializable, O
                         });
 
                     }
-                }else{
-                  Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                spSpinner.setVisible(false);
-                                new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "La partida esta llena");
-                            }
+                } else {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            spSpinner.setVisible(false);
+                            new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "La partida esta llena");
+                        }
 
-                        });  
+                    });
                 }
             });
         }
