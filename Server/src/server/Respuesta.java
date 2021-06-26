@@ -77,7 +77,7 @@ public class Respuesta extends Observable implements Runnable {
                             if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(jg.getSalir())) {
                                 FlowController.getInstance().partida.getJugadores()[i] = null;
                                 FlowController.getInstance().partida.setPeticion("salir");
-                                System.out.print(i);
+                                System.out.print(jg.getSalir() + " a avandonado la partida");
                                 borrar = i;
                                 ingresar = false;
                                 cerrarHilo = true;
@@ -108,6 +108,7 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.agregarJugador(partida.getJugadores()[0]);
             FlowController.getInstance().partida.setPeticion("Jugadores");
             FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[0].getNombre());
+            System.out.print(partida.getJugadores()[0].getNombre() + " se ha conectado a la partida\n");
 
         } else if (partida.getPeticion().equals("pasar turno")) {
             boolean escogido = false;
@@ -199,20 +200,18 @@ public class Respuesta extends Observable implements Runnable {
     public void enviarInfo(String peticion) throws IOException {
 
         //Server sv = new Server();
-        for (Socket sock : sv.getClientes()) {
+        for (int i = 0; i < 4; i++) {
 
             try {
-                DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
-                dos.writeUTF(peticion);
+                if (sv.getClientes()[i] != null) {
+                    DataOutputStream dos = new DataOutputStream(sv.getClientes()[i].getOutputStream());
+                    dos.writeUTF(peticion);
+                }
                 //recivido = null;
             } catch (IOException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }
-
-        if (!ingresar) {
-            sv.eliminarSocket(borrar);
         }
     }
 

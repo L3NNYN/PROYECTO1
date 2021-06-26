@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import jdk.net.Sockets;
 import server.Juego.Cartas;
 import server.Juego.Jugador;
 import server.Juego.Partida;
@@ -32,10 +31,9 @@ import server.util.FlowController;
  */
 public class Server extends Observable implements Runnable, Initializable {
 
-    private static ObservableList<Socket> clientes;
-    private static Socket[] clientes2 = new Socket[4];
+    private static Socket[] clientes = new Socket[4];
 
-    private static ObservableList<Thread> sockets = FXCollections.observableArrayList();
+    private static Thread[] sockets = new Thread[4];
 
     private Socket clientesC[] = new Socket[2];
 
@@ -47,7 +45,9 @@ public class Server extends Observable implements Runnable, Initializable {
 
     public Server(int puerto) throws IOException {
         this.puerto = puerto;
-        this.clientes = FXCollections.observableArrayList();
+        for (int i = 0; i < 4; i++) {
+            clientes[i] = null;
+        }
     }
 
     public Server() {
@@ -77,24 +77,22 @@ public class Server extends Observable implements Runnable, Initializable {
                 sc = servidor.accept();
 
                 if (contador < 4) {
-                    
-                    clientes.add(sc);
 
-                    System.out.println("Cliente conectado");
+                    agregarCliente(sc);
 
-                    Respuesta rp = new Respuesta(clientes.get(clientes.size() - 1), i);
+                    Respuesta rp = new Respuesta(clientes[getNumCliente()], getNumCliente());
 
                     Thread t = new Thread(rp);
-                    sockets.add(t);
-                    sockets.get(sockets.size() - 1).start();
+                    agregarThread(t);
+                    sockets[getNumThread()].start();
                     i++;
                     contador++;
                 } else {
-                  DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
-                  FlowController.getInstance().partida.setPeticion("lleno");
-                  Gson g = new Gson();
-                  String r = g.toJson(FlowController.getInstance().partida);
-                  dos.writeUTF(r);  
+                    DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+                    FlowController.getInstance().partida.setPeticion("lleno");
+                    Gson g = new Gson();
+                    String r = g.toJson(FlowController.getInstance().partida);
+                    dos.writeUTF(r);
                 }
 
             }
@@ -106,12 +104,61 @@ public class Server extends Observable implements Runnable, Initializable {
     }
 
     public void eliminarSocket(int socket) throws IOException {
-        sockets.remove(socket);
-        clientes.remove(socket);
-        System.out.print("Clientes: " + clientes.size());
+        sockets[socket] = null;
+        clientes[socket] = null;
     }
 
-    public ObservableList<Socket> getClientes() {
+    public void agregarCliente(Socket sk) {
+
+        for (int i = 0; i < 4; i++) {
+            if (clientes[i] == null) {
+                clientes[i] = sk;
+                break;
+            }
+        }
+    }
+
+    public void agregarThread(Thread t) {
+
+        for (int i = 0; i < 4; i++) {
+            if (sockets[i] == null) {
+                sockets[i] = t;
+                break;
+            }
+        }
+    }
+
+    public int getNumCliente() {
+        int salida = 0;
+        boolean enc = false;
+        for (int i = 0; i < 4; i++) {
+            if (!enc) {
+                if (clientes[i] != null) {
+                    salida = i;
+                } else {
+                    enc = true;
+                }
+            }
+        }
+        return salida;
+    }
+    
+    public int getNumThread() {
+        int salida = 0;
+        boolean enc = false;
+        for (int i = 0; i < 4; i++) {
+            if (!enc) {
+                if (sockets[i] != null) {
+                    salida = i;
+                } else {
+                    enc = true;
+                }
+            }
+        }
+        return salida;
+    }
+
+    public Socket[] getClientes() {
 
         return clientes;
     }
