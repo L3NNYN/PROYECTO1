@@ -31,12 +31,14 @@ public class Jugador {
 
     private Cartas cartasJugador[] = new Cartas[11];
 
-    private int frutos;
+    private int nueces;
 
     private int fichasSol;
 
     private int monedas;
-    
+
+    private int agua;
+
     private String listo;
 
     public Jugador(String jg, LocalDate e, String color) {
@@ -44,6 +46,10 @@ public class Jugador {
         this.edad = e;
         this.color = color;
         this.listo = "no";
+        this.nueces = 0;
+        this.fichasSol = 0;
+        this.monedas = 0;
+        this.agua = -10;
     }
 
     public Jugador() {
@@ -51,7 +57,7 @@ public class Jugador {
     }
 
     public void crearCartas(String nombre, String Color) {
- 
+
         //Tbr = trabajador
         for (int i = 0; i < 5; i++) {
             Cartas c1 = new Cartas("Tbr", nombre, 2, 1, 0, 1, color, 0);
@@ -95,10 +101,10 @@ public class Jugador {
         }
     }
 
-    public void borrarCarta(int pos){
+    public void borrarCarta(int pos) {
         this.cartasJugador[pos] = null;
     }
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -126,22 +132,14 @@ public class Jugador {
     public String getColor() {
         return color;
     }
-    
+
     public String getColorCss() {
-        String css = "#"+color;
+        String css = "#" + color;
         return css;
     }
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public int getFrutos() {
-        return frutos;
-    }
-
-    public void setFrutos(int frutos) {
-        this.frutos = frutos;
     }
 
     public int getFichasSol() {
@@ -167,13 +165,29 @@ public class Jugador {
     public void setCartasJugador(Cartas[] cartasJugador) {
         this.cartasJugador = cartasJugador;
     }
-    
+
     public String getListo() {
         return listo;
     }
 
     public void setListo(String listo) {
         this.listo = listo;
+    }
+
+    public int getNueces() {
+        return nueces;
+    }
+
+    public void setNueces(int nueces) {
+        this.nueces = nueces;
+    }
+
+    public int getAgua() {
+        return agua;
+    }
+
+    public void setAgua(int agua) {
+        this.agua = agua;
     }
 
 }

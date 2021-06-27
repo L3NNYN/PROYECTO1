@@ -45,6 +45,7 @@ public class Respuesta extends Observable implements Runnable {
     public int borrar;
 
     public int rsp;
+
     public boolean cerrarHilo = false;
 
     //Constructor de Respuesta
@@ -179,6 +180,20 @@ public class Respuesta extends Observable implements Runnable {
 
             FlowController.getInstance().partida.setPeticion("actualizar jugadores");
 
+        } else if (partida.getPeticion().equals("actualizar puntajes")) {
+            for (int i = 0; i < 4; i++) {
+                if (FlowController.getInstance().partida.getJugadores()[i] != null) { 
+                    if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(partida.getTurnoJugador())) {
+                        System.out.print("Nueces"+partida.getJugadores()[i].getNueces());
+                        FlowController.getInstance().partida.getJugadores()[i].setFichasSol(partida.getJugadores()[i].getFichasSol());
+                        FlowController.getInstance().partida.getJugadores()[i].setAgua(partida.getJugadores()[i].getAgua());
+                        FlowController.getInstance().partida.getJugadores()[i].setNueces(partida.getJugadores()[i].getNueces());
+                        FlowController.getInstance().partida.getJugadores()[i].setMonedas(partida.getJugadores()[i].getMonedas());
+                    }
+                }
+            }
+            FlowController.getInstance().partida.setPeticion("actualizar puntaje");
+            
         } else if (partida.getPeticion().equals("listo")) {
             for (int i = 0; i < 4; i++) {
                 if (FlowController.getInstance().partida.getJugadores()[i] != null) {

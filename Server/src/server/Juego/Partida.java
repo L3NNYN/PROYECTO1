@@ -40,7 +40,7 @@ public class Partida {
     public Partida() {
 
     }
-
+    
     public void crearCartasJungla() {
 
         for (int i = 0; i < 28; i++) {
@@ -51,9 +51,11 @@ public class Partida {
         for (int i = 0; i < 5; i++) {
             Cartas p1 = new Cartas("Pla", "Jungla", 1, 0);
             anadirCarta(p1);
+            if (i < 1) {
+                Cartas p2 = new Cartas("Pla", "Jungla", 1, 0);
+                cartasIniciales[0] = p2;
+            }
         }
-        Cartas p1 = new Cartas("Pla", "Jungla", 1, 0);
-        cartasIniciales[0] = p1;
 
         for (int i = 0; i < 2; i++) {
             Cartas p2 = new Cartas("Pla", "Jungla", 2, 0);
@@ -69,7 +71,6 @@ public class Partida {
                 Cartas m2 = new Cartas("Mca", "Jungla", 2, 0);
                 anadirCarta(m2);
                 Cartas m3 = new Cartas("Mca", "Jungla", 2, 0);
-                anadirCarta(m2);
                 cartasIniciales[1] = m3;
             }
             if (i < 1) {
@@ -160,10 +161,15 @@ public class Partida {
         for (int i = 0; i < 4; i++) {
             jugadores[i] = null;
         }
+
+        for (int i = 0; i < 32; i++) {
+            for (int j = 0; j < 32; j++) {
+                matrizLogica[i][j] = null;
+            }
+        }
     }
 
     public void agregarCarta(int x, int y, Cartas carta) {
-        carta.setGrados(0);
         matrizLogica[x][y] = carta;
     }
 
