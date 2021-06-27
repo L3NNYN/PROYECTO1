@@ -172,6 +172,22 @@ public class Respuesta extends Observable implements Runnable {
             }
         } else if (partida.getPeticion().equals("ganador")) {
 
+            String ganador = FlowController.getInstance().partida.getJugadores()[0].getNombre();
+            
+            for (int i = 0; i < 4; i++) {
+                
+                if (FlowController.getInstance().partida.getJugadores()[i] != null && i < 4 && FlowController.getInstance().partida.getJugadores()[i+1] != null) { 
+                    if (FlowController.getInstance().partida.getJugadores()[i].getMonedas() < FlowController.getInstance().partida.getJugadores()[i+1].getMonedas()) { 
+                       ganador = FlowController.getInstance().partida.getJugadores()[i+1].getNombre();
+                       FlowController.getInstance().partida.setGanador(ganador); 
+                    }else{  
+                       FlowController.getInstance().partida.setGanador(ganador);
+                    }
+                }
+            }
+            
+            FlowController.getInstance().partida.setPeticion("ganador");
+            
         } else if (partida.getPeticion().equals("actualizar jungla")) {
 
             FlowController.getInstance().partida.setPeticion("actualizar jungla");
