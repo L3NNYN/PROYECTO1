@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -96,10 +97,9 @@
          </content>
       </ScrollPane>
       <JFXButton fx:id="btnCentrar" layoutX="800.0" layoutY="916.0" onAction="#onActionCentrar" style="-fx-background-color: blue;" text="Colocar" visible="false" />
-      <JFXButton fx:id="btnDerecha" layoutX="935.0" layoutY="916.0" onAction="#onActionDerecha" style="-fx-background-color: blue;" text="Derecha" visible="false" />
+      <JFXButton fx:id="btnDerecha" layoutX="935.0" layoutY="916.0" onAction="#onActionDerecha" style="-fx-background-color: blue;" text="Girar" visible="false" />
       <JFXButton fx:id="btnPasarTurno" layoutX="1276.0" layoutY="916.0" onAction="#onActiomPasarTurno" style="-fx-background-color: blue;" text="Pasar Turno" visible="false" />
-      <JFXButton fx:id="btnIzquierda" layoutX="647.0" layoutY="916.0" onAction="#onActionIzquierda" style="-fx-background-color: Blue;" text="Izquierda" visible="false" />
-      <VBox fx:id="vbImagen" layoutX="1370.0" layoutY="75.0" prefHeight="744.0" prefWidth="312.0" visible="false">
+      <VBox fx:id="vbImagen" layoutX="1370.0" layoutY="75.0" prefHeight="744.0" prefWidth="312.0">
          <children>
             <VBox fx:id="vbContenedorJ1" prefHeight="166.0" prefWidth="312.0">
                <VBox.margin>
@@ -188,7 +188,7 @@
                                           <Insets bottom="2.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <Text fx:id="txtOroJ1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="20.5625">
+                                    <Text fx:id="txtOroJ1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="25.5625">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -304,7 +304,7 @@
                                           <Insets bottom="2.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <Text fx:id="txtOroJ2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="20.5625">
+                                    <Text fx:id="txtOroJ2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="26.5625">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -424,7 +424,7 @@
                                           <Insets bottom="2.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <Text fx:id="txtOroJ3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="20.5625">
+                                    <Text fx:id="txtOroJ3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="25.5625">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -544,7 +544,7 @@
                                           <Insets bottom="2.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <Text fx:id="txtOroJ4" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="20.5625">
+                                    <Text fx:id="txtOroJ4" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="27.5625">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -642,5 +642,22 @@
             </AnchorPane>
          </children>
       </AnchorPane>
+      <VBox fx:id="vbCuadroSeleccion" layoutX="24.0" layoutY="687.0" prefHeight="136.0" prefWidth="147.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="136.0" prefWidth="152.0">
+               <children>
+                  <Button fx:id="btnArriba" mnemonicParsing="false" onAction="#onActionArriba" text="87" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="btnNIzquierda" mnemonicParsing="false" onAction="#onActionNIzquierda" text="76" />
+                        <VBox fx:id="vbDinero" alignment="CENTER" prefHeight="86.0" prefWidth="86.0" />
+                        <Button fx:id="btnNDerecha" mnemonicParsing="false" onAction="#onActionNDerecha" text="76" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="btnAbajo" layoutX="65.0" layoutY="16.0" mnemonicParsing="false" onAction="#onActionAbajo" text="87" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

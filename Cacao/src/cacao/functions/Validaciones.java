@@ -7,6 +7,8 @@ package cacao.functions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -78,58 +80,169 @@ public class Validaciones {
 
     }
 
-  public Boolean validarCartaJugador(Cartas[][] m, String tipo, int x, int y){
+    public Boolean validarCartaJugador(Cartas[][] m, String tipo, int x, int y) {
         boolean permitir = true;
-        
+
         ArrayList<Cartas> ady = new ArrayList<Cartas>();
         ady = getAdyacentes(m, x, y);
-        
+
         int i = 0;
         boolean s = false;
-        while(permitir && i < 9){
-            if(i == 0 || i == 2 || i == 6 || i == 8){ //Si la carta es diagonal
-                if(ady.get(i) != null){
+        while (permitir && i < 9) {
+            if (i == 0 || i == 2 || i == 6 || i == 8) { //Si la carta es diagonal
+                if (ady.get(i) != null) {
                     s = true;
-                    if(tipo.equals("Tbr")){
-                        if(!ady.get(i).getTipo().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
+                    if (tipo.equals("Tbr")) {
+                        if (!ady.get(i).getTipo().equals(tipo)) { //Si existe, valida que no sea diferente del tipo
                             permitir = false;
                         }
-                    } else if(!ady.get(i).getNombre().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
+                    } else if (!ady.get(i).getNombre().equals(tipo)) { //Si existe, valida que no sea diferente del tipo
                         permitir = false;
                     }
                 }
-            } else if(ady.get(i) != null){ //Carta en vertical/horizontal
-                    s = true;
-                    if(tipo.equals("Tbr")){
-                        if(ady.get(i).getTipo().equals(tipo)){ //Si existe, valida que no sea diferente del tipo
-                            permitir = false;
-                        }
-                    }else if( ady.get(i).getNombre().equals(tipo) ){ //Si existe, valida que no sea igual del tipo 
+            } else if (ady.get(i) != null) { //Carta en vertical/horizontal
+                s = true;
+                if (tipo.equals("Tbr")) {
+                    if (ady.get(i).getTipo().equals(tipo)) { //Si existe, valida que no sea diferente del tipo
+                        permitir = false;
+                    }
+                } else if (ady.get(i).getNombre().equals(tipo)) { //Si existe, valida que no sea igual del tipo 
                     permitir = false;
                 }
             }
             i++;
         }
-        if(s && permitir ){
+        if (s && permitir) {
             return true;
         }
         return false;
     }
-    
-    public ArrayList<Cartas> getAdyacentes(Cartas[][] m, int x, int y){
+
+    public ArrayList<Cartas> getAdyacentes(Cartas[][] m, int x, int y) {
         //Se obtienen las cartas adyacentes
         ArrayList<Cartas> ady = new ArrayList<Cartas>();
-        ady.add(m[x-1][y-1]);
-        ady.add(m[x-1][y]);
-        ady.add(m[x-1][y+1]);
-        ady.add(m[x][y-1]);
+        ady.add(m[x - 1][y - 1]);
+        ady.add(m[x - 1][y]);
+        ady.add(m[x - 1][y + 1]);
+        ady.add(m[x][y - 1]);
         ady.add(null); //Posicion del centro
-        ady.add(m[x][y+1]);
-        ady.add(m[x+1][y-1]);
-        ady.add(m[x+1][y]);
-        ady.add(m[x+1][y+1]);
-        
+        ady.add(m[x][y + 1]);
+        ady.add(m[x + 1][y - 1]);
+        ady.add(m[x + 1][y]);
+        ady.add(m[x + 1][y + 1]);
+
         return ady;
+    }
+
+    public void validarValores(Cartas[][] matriz, Cartas carta, Button derecha, Button abajo, Button izquierda, Button arriba, Text nueces, Text agua, Text soles, Text dinero, int x, int y, String lado) {
+
+        //Izquierda
+        if (matriz[x][y] != null) {
+            if (matriz[x][y].getTipo().equals("Pla")) {
+
+                int suma = Integer.parseInt(nueces.getText());
+                suma += getValorJungla(matriz[x][y]) * getLadoCarta(carta, lado);
+                System.out.print("Suma: " + suma);
+                if (suma > 5) {
+                    while (suma > 5) {
+                        suma--;
+                    }
+                    nueces.setText(String.valueOf(suma));
+                } else {
+                    nueces.setText(String.valueOf(suma));
+                }
+
+            } else if (matriz[x][y].getTipo().equals("Mca")) {
+
+                int ns = Integer.parseInt(nueces.getText());
+                int dnr = Integer.parseInt(dinero.getText());
+                int ctd = getLadoCarta(carta, lado);
+                if (ns < getLadoCarta(carta, lado)) {
+                    int aux = ns;
+                    ns -= aux;
+                    dnr += aux * getValorJungla(matriz[x][y]);
+                    nueces.setText(String.valueOf(ns));
+                    dinero.setText(String.valueOf(dnr));
+                } else {
+                    ns -= ctd;
+                    dnr += ctd * getValorJungla(matriz[x][y]);
+                    nueces.setText(String.valueOf(ns));
+                    dinero.setText(String.valueOf(dnr));
+                }
+            } else if (matriz[x][y].getTipo().equals("Ag")) {
+
+                String ag = agua.getText();
+
+                ArrayList<String> analisis = new ArrayList<String>();
+                analisis.add("-10");
+                analisis.add("-4");
+                analisis.add("-1");
+                analisis.add("0");
+                analisis.add("2");
+                analisis.add("4");
+                analisis.add("7");
+                analisis.add("11");
+                analisis.add("16");
+
+                int num = 0;
+
+                for (int i = 0; i < analisis.size(); i++) {
+                    if (agua.getText().equals(analisis.get(i))) {
+                        num = i;
+                    }
+                }
+
+                int aux = 0;
+                while (aux < getLadoCarta(carta, lado)) {
+                    num++;
+                    if (Integer.parseInt(ag) < 16) {
+                        ag = analisis.get(num);
+                    }
+                    aux++;
+                }
+                agua.setText(ag);
+
+            } else if (matriz[x][y].getTipo().equals("Mns")) {
+                int dinr = Integer.parseInt(dinero.getText());
+                dinr += getLadoCarta(carta, lado) * getValorJungla(matriz[x][y]);
+                dinero.setText(String.valueOf(dinr));
+
+            } else if (matriz[x][y].getTipo().equals("Ads")) {
+                int cantSol = Integer.parseInt(soles.getText());
+                if (cantSol < 3) {
+                    cantSol += getLadoCarta(carta, lado);
+                    soles.setText(String.valueOf(cantSol));
+                    if (cantSol > 3) {
+                        while (cantSol > 3) {
+                            cantSol--;
+                        }
+                        soles.setText(String.valueOf(cantSol));
+                    }
+                } else {
+
+                }
+            }
+        }
+
+    }
+
+    private int getValorJungla(Cartas carta) {
+        int valor = carta.getValor();
+        return valor;
+    }
+
+    private int getLadoCarta(Cartas carta, String lado) {
+        int valor = 0;
+        if (lado.equals("derecha")) {
+            valor = carta.getDerecha();
+        } else if (lado.equals("abajo")) {
+            valor = carta.getAbajo();
+        } else if (lado.equals("izquierda")) {
+            valor = carta.getIzquierda();
+        } else if (lado.equals("arriba")) {
+            valor = carta.getArriba();
+        }
+        return valor;
     }
 
 }

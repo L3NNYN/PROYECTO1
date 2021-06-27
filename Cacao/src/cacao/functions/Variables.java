@@ -22,6 +22,10 @@ public class Variables {
     public static boolean llenarJungla = false;
     
     public static boolean comprobacion = false;
+
+    public static int cX = 0;
+    
+    public static int cY = 0;
   
     public Variables() {
 
@@ -74,5 +78,22 @@ public class Variables {
     public void setComprobacion(boolean comprobacion) {
         Variables.comprobacion = comprobacion;
     }
+    
+    public int getcX() {
+        return cX;
+    }
+
+    public void setcX(int cX) {
+        Variables.cX = cX;
+    }
+
+    public int getcY() {
+        return cY;
+    }
+
+    public void setcY(int cY) {
+        Variables.cY = cY;
+    }
+    
 
 }
