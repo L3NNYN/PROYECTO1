@@ -659,5 +659,32 @@
             </VBox>
          </children>
       </VBox>
+      <AnchorPane id="AnchorPane" fx:id="vbGanador" layoutX="547.0" layoutY="292.0" prefHeight="405.0" prefWidth="692.0" style="-fx-background-color: skyblue;" styleClass="root2" stylesheets="@style.css" visible="false">
+         <children>
+            <AnchorPane layoutX="50.0" layoutY="50.0" prefHeight="512.0" prefWidth="620.0" styleClass="root" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <HBox alignment="CENTER" layoutX="122.0" layoutY="31.0" prefHeight="31.0" prefWidth="471.0" AnchorPane.leftAnchor="122.0" AnchorPane.rightAnchor="119.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="GANADOR" wrappingWidth="102.12060546875">
+                           <font>
+                              <Font size="21.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnSalirGn" layoutX="241.0" layoutY="291.0" onAction="#onActionSalirGn" prefHeight="44.0" prefWidth="172.0" styleClass="JFXButton1" text="SALIR" />
+                  <VBox alignment="CENTER" layoutX="168.0" layoutY="125.0" prefHeight="73.0" prefWidth="320.0">
+                     <children>
+                        <Text fx:id="txtGanador" strokeType="OUTSIDE" strokeWidth="0.0" text="HOLA" textAlignment="CENTER" wrappingWidth="267.7060546875">
+                           <font>
+                              <Font size="34.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

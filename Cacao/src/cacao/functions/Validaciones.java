@@ -234,13 +234,13 @@ public class Validaciones {
     private int getLadoCarta(Cartas carta, String lado) {
         int valor = 0;
         if (lado.equals("derecha")) {
-            valor = carta.getDerecha();
+            valor = carta.getDerechaG();
         } else if (lado.equals("abajo")) {
-            valor = carta.getAbajo();
+            valor = carta.getAbajoG();
         } else if (lado.equals("izquierda")) {
-            valor = carta.getIzquierda();
+            valor = carta.getIzquierdaG();
         } else if (lado.equals("arriba")) {
-            valor = carta.getArriba();
+            valor = carta.getArribaG();
         }
         return valor;
     }

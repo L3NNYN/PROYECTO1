@@ -56,7 +56,7 @@ public class Cartas{
       this.derechaG = derecha;
       this.abajoG = abajo;
       this.izquierdaG = izquierda;
-      this.arribaG = abajo;
+      this.arribaG = arriba;
    }
    
    //Plantaciones, mercado, minas

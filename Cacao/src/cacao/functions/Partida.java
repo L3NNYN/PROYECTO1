@@ -30,6 +30,8 @@ public class Partida {
     private String salir;
 
     private String listo;
+    
+    private String ganador;
 
     private int x;
 
@@ -40,7 +42,7 @@ public class Partida {
     public Partida() {
 
     }
-
+    
     public void crearCartasJungla() {
 
         for (int i = 0; i < 28; i++) {
@@ -270,5 +272,13 @@ public class Partida {
 
     public void setListo(String listo) {
         this.listo = listo;
+    }
+    
+    public String getGanador() {
+        return ganador;
+    }
+
+    public void setGanador(String ganador) {
+        this.ganador = ganador;
     }
 }
