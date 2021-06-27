@@ -45,9 +45,11 @@ import javafx.util.Duration;
  * @author Pipo
  */
 public class InicioViewController extends Controller implements Initializable, Observer {
-
+    
+    //Instancia de mesa juego
     MesaJuegoViewController mj = new MesaJuegoViewController();
     
+    //Compoonentes de InicioView
     @FXML
     private JFXTextField txtIppartida;
     @FXML
@@ -58,18 +60,8 @@ public class InicioViewController extends Controller implements Initializable, O
     private JFXTextField txtPuerto;
     @FXML
     private JFXTextField txtNickName;
-
-    public static String nombre;
-
-    private Mensajes sms;
-
-    private boolean iniciado = false;
-
-    private static SocketServices conexion;
-
     @FXML
     private JFXComboBox<String> cbColores;
-
     @FXML
     private AnchorPane apColorSeleccionado;
     @FXML
@@ -88,6 +80,15 @@ public class InicioViewController extends Controller implements Initializable, O
     private AnchorPane apSalaEspera;
     @FXML
     private JFXButton btnlISTO;
+    
+    //Componentes para pasar a la ventana de 
+    public static String nombre;
+
+    private Mensajes sms;
+
+    private boolean iniciado = false;
+
+    private static SocketServices conexion;
 
     /**
      * Initializes the controller class.

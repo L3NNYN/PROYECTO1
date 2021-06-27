@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+//Clase que nos va a proporcionar los datos necesarios para correr cada ventana
 public abstract class Controller {
 
     Stage stage;
