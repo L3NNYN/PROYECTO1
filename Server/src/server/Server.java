@@ -31,10 +31,13 @@ import server.util.FlowController;
  */
 public class Server extends Observable implements Runnable, Initializable {
 
+    //Lista de sockets
     private static Socket[] clientes = new Socket[4];
 
+    //Lista de threads
     private static Thread[] sockets = new Thread[4];
 
+    //Lista de clientes
     private Socket clientesC[] = new Socket[2];
 
     private int contador = 0;
@@ -43,6 +46,7 @@ public class Server extends Observable implements Runnable, Initializable {
 
     public Partida pr;
 
+    //Constructor de server
     public Server(int puerto) throws IOException {
         this.puerto = puerto;
         for (int i = 0; i < 4; i++) {
@@ -76,6 +80,7 @@ public class Server extends Observable implements Runnable, Initializable {
                 Socket sc = new Socket();
                 sc = servidor.accept();
 
+                //Si en la partida hay mas de 4 jugadores no permite entrar mas a ninguno
                 if (contador < 4) {
 
                     agregarCliente(sc);
@@ -103,11 +108,13 @@ public class Server extends Observable implements Runnable, Initializable {
 
     }
 
+    //Metodo para eliminar el socket
     public void eliminarSocket(int socket) throws IOException {
         sockets[socket] = null;
         clientes[socket] = null;
     }
 
+    //Metodo para agregar clientes
     public void agregarCliente(Socket sk) {
 
         for (int i = 0; i < 4; i++) {
@@ -118,6 +125,7 @@ public class Server extends Observable implements Runnable, Initializable {
         }
     }
 
+   //Metodo parar agregar un thread en la lista de threads
     public void agregarThread(Thread t) {
 
         for (int i = 0; i < 4; i++) {
@@ -128,6 +136,7 @@ public class Server extends Observable implements Runnable, Initializable {
         }
     }
 
+    //Metodo para obteer el numero de clientes
     public int getNumCliente() {
         int salida = 0;
         boolean enc = false;
@@ -143,6 +152,7 @@ public class Server extends Observable implements Runnable, Initializable {
         return salida;
     }
     
+    //Metodo para obtener el numero de Thread
     public int getNumThread() {
         int salida = 0;
         boolean enc = false;
@@ -158,11 +168,13 @@ public class Server extends Observable implements Runnable, Initializable {
         return salida;
     }
 
+    //Metodo para retornar una lista de clientes
     public Socket[] getClientes() {
 
         return clientes;
     }
 
+    //Metodo para retornar un objeto de partida
     public Partida getPartida() {
         return pr;
     }

@@ -1,27 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
 
-import server.Server;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Observable;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
-import javafx.fxml.Initializable;
 import server.Juego.Partida;
 import server.util.FlowController;
 
@@ -104,6 +90,8 @@ public class Respuesta extends Observable implements Runnable {
 
     private void revisarPeticion(Partida partida) throws IOException {
 
+        //Se recive una peticin para registrar un jugador, este se agrega en una lista de jugadores y se retorna a todos los clientes conectados
+        //para que estos lo tengan
         if (partida.getPeticion().equals("registrar jugador")) {
 
             FlowController.getInstance().partida.agregarJugador(partida.getJugadores()[0]);
@@ -111,6 +99,7 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.setTurnoJugador(FlowController.getInstance().partida.getJugadores()[0].getNombre());
             System.out.print(partida.getJugadores()[0].getNombre() + " se ha conectado a la partida\n");
 
+        //Se recive una peticion de pasar el turno del jugador, entonces aqui se analiza quien es el jugador actual y se pasa al siguiente
         } else if (partida.getPeticion().equals("pasar turno")) {
             boolean escogido = false;
             for (int i = 0; i < cantidad(); i++) {
@@ -128,6 +117,7 @@ public class Respuesta extends Observable implements Runnable {
             }
             FlowController.getInstance().partida.setPeticion("pasar turno");
 
+            //Se envia la partida cargada con todos los objetos de los jugadores a todos los clientes, esto para corroborar que no haya 
         } else if (partida.getPeticion().equals("actualizar cartas jugadores")) {
 
             for (int i = 0; i < 4; i++) {
@@ -143,12 +133,16 @@ public class Respuesta extends Observable implements Runnable {
             }
             FlowController.getInstance().partida.setPeticion("actualizar cartas jugadores");
 
+            //Se recive la peticion de colocar la carta de un jugador, por lo tanto esta carta es recivida por el servidor
+            //y este actualiza a los demas clientes con esta carta
         } else if (partida.getPeticion().equals("colocar carta jugador")) {
 
             FlowController.getInstance().partida.setMatrizLogica(partida.getMatrizLogica());
             FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(), partida.getX(), partida.getY(), partida.getMazo());
             FlowController.getInstance().partida.setPeticion("colocar carta jugador");
 
+          //Se recive la peticion de colocar la carta de jungla, por lo tanto esta carta es recivida por el servidor
+          //y este actualiza a los demas clientes con esta carta
         } else if (partida.getPeticion().equals("colocar carta jungla")) {
 
             FlowController.getInstance().partida.setMatrizLogica(partida.getMatrizLogica());
@@ -156,6 +150,7 @@ public class Respuesta extends Observable implements Runnable {
             FlowController.getInstance().partida.setCartaJugada(partida.getCartaJugada(), partida.getX(), partida.getY(), partida.getMazo());
             FlowController.getInstance().partida.setPeticion("colocar carta jungla");
 
+            //Recive la peticion de salir, por lo tanto se cierra su respectivo socket
         } else if (partida.getPeticion().equals("salir")) {
             for (int i = 0; i < 4; i++) {
                 if (FlowController.getInstance().partida.getJugadores()[i] != null) {
@@ -170,37 +165,44 @@ public class Respuesta extends Observable implements Runnable {
                 }
 
             }
+            
+            //Se recive la peticion de verificar un ganador, por lo tanto se determina cual jugado tiene mas oro
+            //y se envia a todos los clientes
         } else if (partida.getPeticion().equals("ganador")) {
 
             String ganador = FlowController.getInstance().partida.getJugadores()[0].getNombre();
-            
+
             for (int i = 0; i < 4; i++) {
-                
-                if (FlowController.getInstance().partida.getJugadores()[i] != null && i < 4 && FlowController.getInstance().partida.getJugadores()[i+1] != null) { 
-                    if (FlowController.getInstance().partida.getJugadores()[i].getMonedas() < FlowController.getInstance().partida.getJugadores()[i+1].getMonedas()) { 
-                       ganador = FlowController.getInstance().partida.getJugadores()[i+1].getNombre();
-                       FlowController.getInstance().partida.setGanador(ganador); 
-                    }else{  
-                       FlowController.getInstance().partida.setGanador(ganador);
+
+                if (FlowController.getInstance().partida.getJugadores()[i] != null && i < 4 && FlowController.getInstance().partida.getJugadores()[i + 1] != null) {
+                    if (FlowController.getInstance().partida.getJugadores()[i].getMonedas() < FlowController.getInstance().partida.getJugadores()[i + 1].getMonedas()) {
+                        ganador = FlowController.getInstance().partida.getJugadores()[i + 1].getNombre();
+                        FlowController.getInstance().partida.setGanador(ganador);
+                    } else {
+                        FlowController.getInstance().partida.setGanador(ganador);
                     }
                 }
             }
-            
+
             FlowController.getInstance().partida.setPeticion("ganador");
-            
+
+            //Se recive la peticion de actualizar las cartas de jungla, por lo que se actualizan los clientes con estas mismas
         } else if (partida.getPeticion().equals("actualizar jungla")) {
 
             FlowController.getInstance().partida.setPeticion("actualizar jungla");
 
+            //Se recive la peticion de actualizar las cartas de jungla, por lo que se actualizan los clientes con estos mismos
         } else if (partida.getPeticion().equals("actualizar jugadores")) {
 
             FlowController.getInstance().partida.setPeticion("actualizar jugadores");
 
+            //Se recive la peticion de actualizar los puntajes de los jugadores, por lo que se actualizan los clientes con estos mismos
+            //y se envian a los clientes
         } else if (partida.getPeticion().equals("actualizar puntajes")) {
             for (int i = 0; i < 4; i++) {
-                if (FlowController.getInstance().partida.getJugadores()[i] != null) { 
+                if (FlowController.getInstance().partida.getJugadores()[i] != null) {
                     if (FlowController.getInstance().partida.getJugadores()[i].getNombre().equals(partida.getTurnoJugador())) {
-                        System.out.print("Nueces"+partida.getJugadores()[i].getNueces());
+                        System.out.print("Nueces" + partida.getJugadores()[i].getNueces());
                         FlowController.getInstance().partida.getJugadores()[i].setFichasSol(partida.getJugadores()[i].getFichasSol());
                         FlowController.getInstance().partida.getJugadores()[i].setAgua(partida.getJugadores()[i].getAgua());
                         FlowController.getInstance().partida.getJugadores()[i].setNueces(partida.getJugadores()[i].getNueces());
@@ -209,7 +211,8 @@ public class Respuesta extends Observable implements Runnable {
                 }
             }
             FlowController.getInstance().partida.setPeticion("actualizar puntaje");
-            
+
+            //Se recive la peticion de estar "listo" en la sala de juego
         } else if (partida.getPeticion().equals("listo")) {
             for (int i = 0; i < 4; i++) {
                 if (FlowController.getInstance().partida.getJugadores()[i] != null) {
@@ -246,6 +249,7 @@ public class Respuesta extends Observable implements Runnable {
         }
     }
 
+    //Metodo para retornar la cantidad de jugadores
     private int cantidad() {
 
         int num = 0;

@@ -9,10 +9,12 @@ import java.io.Serializable;
 
 /**
  *
- * @author Pipo
+ * @author Lennyn
  */
 public class Cartas{
 
+   //Atributos de tipo carta
+    
    private String tipo;
    
    private String nombre;
@@ -87,6 +89,7 @@ public class Cartas{
        
    }
    
+   //Settres y getters de los artibutos de tipo carta anteriores
     public String getTipo() {
         return tipo;
     }
