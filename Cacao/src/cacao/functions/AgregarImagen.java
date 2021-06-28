@@ -19,8 +19,10 @@ import javafx.scene.layout.VBox;
 public class AgregarImagen {
     
     
-    
+    //Metodo para agregar una imagen a cualquier componente de la mesa de juego
     public void agregarImagen(int tipo, GridPane gridpane, Cartas[] cartas, VBox[] vbox, VBox[][] mVBox, Cartas[][] cartasM, Cartas carta, int f, int c){
+        
+        //Aqui se agregan imagenes a la mesa de juego
         if (tipo == 1) {
 
             if (vbox[c].getChildren().size() > 0) {
@@ -33,6 +35,7 @@ public class AgregarImagen {
             gridpane.add(vbox[c], c, f);
         }
 
+        //Aqui se agregan imagenes a la mesa de juego con tamano mas reducido
         if (tipo == 2) {
             if (mVBox[f][c].getChildren().size() > 0) {
                 mVBox[f][c].getChildren().remove(0);
@@ -45,6 +48,7 @@ public class AgregarImagen {
             gridpane.add(mVBox[f][c], c, f);
         }
 
+        //Agregar imagenes de tipo templo a la mesa
         if (tipo == 3) {
 
             if (vbox[f].getChildren().size() > 0) {
@@ -63,6 +67,7 @@ public class AgregarImagen {
             gridpane.add(vbox[f], c, f);
         }
 
+        //Agregar imagen de tipo templo
         if (tipo == 4) {
             if (mVBox[f][c].getChildren().size() > 0) {
                 mVBox[f][c].getChildren().remove(0);
@@ -84,6 +89,7 @@ public class AgregarImagen {
         }
     }
     
+    //Metodo para borrar una imagen
     public void borrarImagen(final int row, final int column, GridPane gridPane) {
 
         ObservableList<Node> childrens = gridPane.getChildren();

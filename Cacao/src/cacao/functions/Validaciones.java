@@ -12,10 +12,12 @@ import javafx.scene.text.Text;
 
 /**
  *
- * @author Pipo
+ * @author Lennyn
  */
 public class Validaciones {
 
+    //Metodo para analizar las cartas del jugador hubicadas al lado izquierdo en la mesa de juego y si detecta que hay una en blanco
+    //agrega su respectiva carta y la grafica
     public void cartasUsables(Cartas[] cartasJungla, Cartas[] logicas, Partida partida, int jugadorActual) throws IOException {
         int j = 0;
         boolean b = false;
@@ -47,6 +49,8 @@ public class Validaciones {
 
     }
 
+    //Metodo para analizar las cartas de jungla hubicadas al lado derecho en la mesa de juego y si detecta que hayn una en blanco
+    //agrega su respectiva carta y la grafica
     public void llenarCartasJungla(Cartas[] cartasJungla, Cartas[] logicasSelva, Partida partida) throws IOException {
         int j = 0;
         boolean b = false;
@@ -80,6 +84,7 @@ public class Validaciones {
 
     }
 
+    //Metodo que analiza si una carta se puede colocar en un respectivo lugar y retorna un boolano (true si se puede y false si no)
     public Boolean validarCartaJugador(Cartas[][] m, String tipo, int x, int y) {
         boolean permitir = true;
 
@@ -134,6 +139,7 @@ public class Validaciones {
         return ady;
     }
 
+    //Metodo para validar las cartas hubicadas a la derecha, izquierda, arriba o abajo de la carta actual, esto para poder sacar los valores de estas y ganar recursos
     public void validarValores(Cartas[][] matriz, Cartas carta, Button derecha, Button abajo, Button izquierda, Button arriba, Text nueces, Text agua, Text soles, Text dinero, int x, int y, String lado) {
 
         //Izquierda
@@ -226,11 +232,13 @@ public class Validaciones {
 
     }
 
+    //Metodo para ver el valor de una loseta de jungla
     private int getValorJungla(Cartas carta) {
         int valor = carta.getValor();
         return valor;
     }
 
+    //Metodo para saber el valor del lado de una carta
     private int getLadoCarta(Cartas carta, String lado) {
         int valor = 0;
         if (lado.equals("derecha")) {

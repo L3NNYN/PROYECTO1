@@ -17,10 +17,12 @@ import javafx.scene.control.DatePicker;
 
 /**
  *
- * @author Pipo
+ * @author Josue
  */
 public class Jugador {
 
+    //Atributos de Jugador
+    
     private String nombre;
 
     private LocalDate edad;
@@ -41,6 +43,7 @@ public class Jugador {
 
     private String listo;
 
+    //Constructor de jugador
     public Jugador(String jg, LocalDate e, String color) {
         this.nombre = jg;
         this.edad = e;
@@ -52,10 +55,12 @@ public class Jugador {
         agua = -10;
     }
 
+    //Constructor vacio de jugador
     public Jugador() {
 
     }
 
+    //Metodo para crear cartas
     public void crearCartas(String nombre, String Color) {
 
         //Tbr = trabajador
@@ -75,6 +80,7 @@ public class Jugador {
 
         Random r = new Random();
 
+        //Se ponen las cartas del jugador aleatorias
         for (int i = 0; i < cartasJugador.length; i++) {
             int posAleatoria = r.nextInt(cartasJugador.length);
             Cartas temp = cartasJugador[i];
@@ -84,6 +90,7 @@ public class Jugador {
 
     }
 
+    //Metodo para anadir una carta
     private void anadirCarta(Cartas carta) {
 
         for (int i = 0; i < 11; i++) {
@@ -95,16 +102,19 @@ public class Jugador {
 
     }
 
+    //Metodo para in8iciar las cartas del jugadoe en null
     public void iniciarArrays() {
         for (int i = 0; i < 11; i++) {
             cartasJugador[i] = null;
         }
     }
 
+    //Metodo para borrar una carta
     public void borrarCarta(int pos) {
         this.cartasJugador[pos] = null;
     }
 
+    //Setters y gettes de los atributos anteriores
     public String getNombre() {
         return nombre;
     }

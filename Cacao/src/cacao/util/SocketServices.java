@@ -7,7 +7,7 @@ package cacao.util;
 
 /**
  *
- * @author Pipo
+ * @author Josue
  */
 import cacao.functions.Jugador;
 import cacao.functions.Partida;
@@ -29,6 +29,8 @@ import java.util.logging.Logger;
 
 public class SocketServices extends Observable implements Runnable {
     
+    //Atributos para la clase Socket
+    
     private int puerto;
     
     private String HOST;
@@ -49,11 +51,13 @@ public class SocketServices extends Observable implements Runnable {
         
     }
     
+    //Constructor de SocketService
     public SocketServices(int puerto, String ip) throws IOException {
         this.puerto = puerto;
         this.HOST = ip;
     }
     
+    //Metodo para registrar un jugador
     public void registrar(String host, int puerto) throws IOException {
         //Creo el socket para conectarme con el cliente
         sc = new Socket(host, 5000);
@@ -62,10 +66,10 @@ public class SocketServices extends Observable implements Runnable {
     public Partida getRespuesta() {
         return j;
     }
-    
+   
+    //Este metodo es un hilo que se estara ejecutando continuamente recivendo peticiones del servidor
     @Override
     public void run() {
-//Juego obj2 = null;
         DataInputStream dis;
         DataOutputStream out;
         try {
@@ -103,6 +107,7 @@ public class SocketServices extends Observable implements Runnable {
         }
     }
     
+    //Metodo para recivir datos
     public void enviarDatos(String enviar) throws IOException {
         DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
         //System.out.print(mensaje);

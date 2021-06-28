@@ -10,7 +10,9 @@ package cacao.functions;
  * @author Pipo
  */
 public class Variables {
-
+    
+    ///Variables necesarias para la mesa de juego
+    
     public static boolean cartaTrabajador;
 
     public static boolean cartaTablero;
@@ -31,6 +33,8 @@ public class Variables {
 
     }
 
+    //Setters y getter de los atributos anteriores
+    
     public boolean getCartaTrabajador() {
         return cartaTrabajador;
     }

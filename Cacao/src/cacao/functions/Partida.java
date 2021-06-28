@@ -9,40 +9,54 @@ import java.util.Random;
 
 /**
  *
- * @author Pipo
+ * @author Josue
  */
 public class Partida {
 
+    //Array de jugadores
     private Jugador jugadores[] = new Jugador[4];
 
+    //Array de matriz logica
     private Cartas matrizLogica[][] = new Cartas[32][32];
 
+    //Array de cartas de jungla
     private Cartas cartasJungla[] = new Cartas[28];
 
+    //Array de cartas iniciales
     private Cartas cartasIniciales[] = new Cartas[2];
 
+    //Objeto de carta 
     private Cartas cartaJugada;
 
+    //turno del jugador
     private String turnoJugador;
 
+    //Peticion del jugador
     private String peticion;
 
+    //peticion de salir
     private String salir;
 
+    //Peticion de estar listo
     private String listo;
     
+    //Jugador ganador
     private String ganador;
 
+    //Posicion en x de carta
     private int x;
 
+    //Posicion en y de carta
     private int y;
 
     private int mazo;
 
+    //Constructor vacio de partida
     public Partida() {
 
     }
     
+    //Metodo para crear cartas
     public void crearCartasJungla() {
 
         for (int i = 0; i < 28; i++) {
@@ -103,6 +117,7 @@ public class Partida {
 
         Random r = new Random();
 
+        //Se mezclan las cartas al azar
         for (int i = 0; i < cartasJungla.length; i++) {
             int posAleatoria = r.nextInt(cartasJungla.length);
             Cartas temp = cartasJungla[i];
@@ -111,10 +126,12 @@ public class Partida {
         }
     }
 
+    //Metodo para borrar carta de Array
     public void borrarCarta(int carta) {
         this.cartasJungla[carta] = null;
     }
 
+    //metodo para anadir carta al array
     private void anadirCarta(Cartas carta) {
 
         for (int i = 0; i < 28; i++) {
@@ -126,6 +143,7 @@ public class Partida {
 
     }
 
+    //Metodo para agregar jugadores al array
     public void agregarJugador(Jugador jugador) {
         for (int i = 0; i < 4; i++) {
             //Inserta al final
@@ -155,6 +173,7 @@ public class Partida {
         }
     }
 
+    //Metodo para poner arrays en nulo
     public void iniciarArrays() {
         for (int i = 0; i < 28; i++) {
             cartasJungla[i] = null;
@@ -171,10 +190,14 @@ public class Partida {
         }
     }
 
+    //Metodo para agregar carta
     public void agregarCarta(int x, int y, Cartas carta) {
         matrizLogica[x][y] = carta;
     }
 
+
+    //Setters y getters de los atributos anteriores
+    
     public Cartas[] getCartasJungla() {
         return cartasJungla;
     }
