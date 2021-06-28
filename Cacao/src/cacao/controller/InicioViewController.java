@@ -106,6 +106,8 @@ public class InicioViewController extends Controller implements Initializable, O
 
     }
 
+    //En le metodo del boton comenzar se analiza que cuando se comeince una partida no haya ninguna opcion sin seleccionar, por ejemplo
+    //un nombre vacio, la ip vascia o no se haya seleccionado un color o fecha de naciemiento
     @FXML
     private void onActionComenzar(ActionEvent event) throws IOException, ClassNotFoundException, InterruptedException {
         String datos = "";
@@ -140,6 +142,7 @@ public class InicioViewController extends Controller implements Initializable, O
             datos = "";
         } else {
 
+            //Se crea un hilo que escuchara las peticiones del servidor
             if (!iniciado) {
                 //txtNickName.getText(),edad, cbColores.getSelectionModel().getSelectedItem()
                 mj.getSocket().registrar(txtIppartida.getText(), 0);
@@ -151,8 +154,10 @@ public class InicioViewController extends Controller implements Initializable, O
 
             LocalDate edad = dtEdadJugador.getValue();
    
+            //Se envia la peticion al servidor de actualizar las lista de jugadores, erto para comprobar que no haya algun color o nombre repetido
             mj.enviarPeticion("actualizar jugadores");
             spSpinner.setVisible(true);
+            //Se crea una animacion para simular que el cliente esta esperando
             TranslateTransition carta1 = new TranslateTransition();
             carta1.setNode((Node) apColorSeleccionado);
             carta1.setDelay(Duration.seconds(0.5));
@@ -172,6 +177,7 @@ public class InicioViewController extends Controller implements Initializable, O
                     }
 
                     if (pasar) {
+                        //Si no hay colorres o nombres repetidos se apasa a la mesa de juego
                         mj.setDatos(txtNickName.getText(), edad, cbColores.getSelectionModel().getSelectedItem());
 
                         FlowController.getInstance().goViewInNewStage("MesaJuegoView", stage);
@@ -180,6 +186,7 @@ public class InicioViewController extends Controller implements Initializable, O
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+                                //De lo contrario se muestra un mensaje de error 
                                 spSpinner.setVisible(false);
                                 new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "Usuario o color ya seleccionados");
                             }
@@ -191,6 +198,7 @@ public class InicioViewController extends Controller implements Initializable, O
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
+                            //Si la partida esta llena se manda un mensaje de error
                             spSpinner.setVisible(false);
                             new Mensajes().showModal(Alert.AlertType.ERROR, "Error", getStage(), "La partida esta llena");
                         }
@@ -202,6 +210,7 @@ public class InicioViewController extends Controller implements Initializable, O
 
     }
 
+    //Metodo que detectara cual color se selecciono, y lo mostrara en un cuadro, esto mediante css, este color es el que usara el jugador
     @FXML
     private void onActionColores(ActionEvent event) {
 
@@ -276,6 +285,7 @@ public class InicioViewController extends Controller implements Initializable, O
 
     }
 
+    //Metodo para aniadir colores al Combo Box
     private void anadirColores() {
         cbColores.getItems().add("Rojo");
         cbColores.getItems().add("Azul");
@@ -299,15 +309,17 @@ public class InicioViewController extends Controller implements Initializable, O
         cbColores.getItems().add("Lima");
     }
 
+    //Metodo observer, sirve para notificar datos a este mismo desde el socket principal
     @Override
     public void update(Observable o, Object arg) {
-        System.out.print("Dentro en Inicio");
+
     }
 
+    //Metodo para retornar el nombre
     public String getNombre() {
         return nombre;
     }
-
+    //Metodo para retornar el socket
     public SocketServices getSocket() {
 
         return conexion;

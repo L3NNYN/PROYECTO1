@@ -50,6 +50,7 @@ import javafx.scene.text.Text;
  */
 public class MesaJuegoViewController extends Controller implements Initializable, Observer {
 
+    //Componentes principales
     @FXML
     private VBox vbImagen;
 
@@ -230,21 +231,28 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Cuando se inicia la partida se ponen los componentes y botones que no se necesitan invisibles, se inician los arrays, se crean objetos,
+    //se envia una peticion al servidor para realizar y se agregan VBox al gridPane(Mesa de juego) paara controlar las losetas y demas funciones.
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        //Se agrega un observer
         c.addObserver(this);
+        //Se inician las matrices de VBox
         agregarVbox();
         cartasJugador();
         cartasJungla();
+        //Se ponen visibles los botones
         btnDerecha.setDisable(true);
         btnCentrar.setDisable(true);
         btnPasarTurno.setDisable(true);
+        //Se inicializan algunos booleanos que se necesitaran mas adelante en true o falce
         variables.setCartaTrabajador(true);
         variables.setCartaTablero(false);
         variables.setCartaJungla(false);
         variables.setNum(false);
         variables.setLlenarJungla(false);
+        //Los componentes de los jugadores se ponen invisibles para no mostrarlos en blanco
+        //Se pondran visibles cuando ingrese un jugador
         vbContenedorJ1.setVisible(false);
         vbContenedorJ2.setVisible(false);
         vbContenedorJ3.setVisible(false);
@@ -252,15 +260,19 @@ public class MesaJuegoViewController extends Controller implements Initializable
         vbCuadroSeleccion.setVisible(false);
 
         try {
+            //Se crea un objeto de tipo jugador, el cual sera el que vamos a utilizar,
+            //este se envia al servidor y sera registrado
             Jugador g = new Jugador(nombre, edad, color);
             g.crearCartas(nombre, color);
             p.iniciarArrays();
             p.agregarJugador(g);
             cartasUsables();
+            //Se enviara una peticion de registrar un jugador, el cual es el que acabamos de creat
             enviarPeticion("registrar jugador");
 
             init = true;
             //llenarCartasJungla();
+            //Se grafican las cartas del jugador
             for (int i = 0; i < 3; i++) {
                 if (logicas[i] != null) {
                     agregarImagen(1, vbJugador1, logicas, botonesJ, null, null, logicas[i], 0, i);
@@ -279,6 +291,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Metodo para poner visible algunos componentes en la pantalla, se envia por parametro true para ponerlos visibles o false para esconderlos
     private void visibilidad(boolean visibilidad) {
         btnSalir.setVisible(visibilidad);
         scScroll.setVisible(visibilidad);
@@ -292,25 +305,30 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Metodo para actualizar los botones correspondientes a la carta que acabamos de poner, y con esto poder recolectar recursos que esten alrededor de nuestra carta
     private void actualizar() {
 
         vbCuadroSeleccion.setVisible(true);
 
+        //Si hay alguna imagen en la parte de recoleccion de recursos se borra para colo car la mas reciente.
         if (vbDinero.getChildren().size() > 0) {
             vbDinero.getChildren().remove(0);
         }
 
+        //Se agrega lam loseta de trabajador recien puesta para recolectar sus reecursos
         Image im = new Image("/cacao/resources/Cartas/" + slc.getTipo() + slc.getDerecha() + slc.getAbajo() + slc.getIzquierda() + slc.getArriba() + ".png", 86, 86, false, true);
         ImageView nw = new ImageView(im);
         nw.setRotate(slc.getGrados());
         vbDinero.getChildren().add(nw);
 
+        //Se agrega el estilo correspondiente a esta
         vbDinero.setId(color);
         vbDinero.getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
 
         int x = p1;
         int y = p2;
         //Derecha
+        //Si la loseta a la derecha es diferente de null, se agrega en el boton la cantidad de recursos que se pueden recolectar de ese lado
         if (p.getMatrizLogica()[x][y + 1] != null) {
             btnNDerecha.setText(String.valueOf(p.getMatrizLogica()[x][y].getDerechaG()));
             btnNDerecha.setDisable(false);
@@ -319,6 +337,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             btnNDerecha.setDisable(true);
         }
         //Abajo
+        //Si la loseta de abajo es diferente de null, se agrega en el boton la cantidad de recursos que se pueden recolectar de ese lado
         if (p.getMatrizLogica()[x + 1][y] != null) {
             btnAbajo.setText(String.valueOf(p.getMatrizLogica()[x][y].getAbajoG()));
             btnAbajo.setDisable(false);
@@ -328,6 +347,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
 
         //Izquierda
+        //Si la loseta a la izquierda es diferente de null, se agrega en el boton la cantidad de recursos que se pueden recolectar de ese lado
         if (p.getMatrizLogica()[x][y - 1] != null) {
             btnNIzquierda.setText(String.valueOf(p.getMatrizLogica()[x][y].getIzquierdaG()));
             btnNIzquierda.setDisable(false);
@@ -337,6 +357,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
 
         //Arriba
+        //Si la loseta arriba es diferente de null, se agrega en el boton la cantidad de recursos que se pueden recolectar de ese lado
         if (p.getMatrizLogica()[x - 1][y] != null) {
             btnArriba.setText(String.valueOf(p.getMatrizLogica()[x][y].getArribaG()));
             btnArriba.setDisable(false);
@@ -346,13 +367,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Metodo que extiende de observer, sirve para que el metodo que nos recive la informacion del servidor nos mande por parametro la clase
+    //cargada con los datos a realizar en la vista
     @Override
     public void update(Observable o, Object arg) {
 
+        //Se obtiene el String de la clase recivida y se convierte a clase para poder realizar los cambioos respectivos
         String cadena = (String) arg;
         Gson gs = new Gson();
         Partida llegada = gs.fromJson(cadena, Partida.class);
-
+        
+        //Metodo para poder realizar cambios graficos desde un hilo
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -363,7 +388,10 @@ public class MesaJuegoViewController extends Controller implements Initializable
                     }
                 }
 
+                //Si la peticion es jugadores este se encarga de agrega los jugadores que se acaban de unir a la parte grafica y logica del jugador 
                 if ("Jugadores".equals(llegada.getPeticion())) {
+                    
+                    //Se agregan todas las partes logicas enviadas por el servidor al jugador actual
                     borrarImagen(14, 15, gpMatrizJuego);
                     p.agregarCarta(14, 15, llegada.getCartasIniciales()[0]);
                     agregarImagen(4, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), llegada.getCartasIniciales()[0], 14, 15);
@@ -389,6 +417,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                     }
 
+                    //Aqui se agrega el nombre, color, nueces y demas cosas de los demas jugadores en la parte grafica hubicada a la izquierda
                     int contador = 1;
                     for (int i = 0; i < p.getJugadores().length; i++) {
                         if (p.getJugadores()[i] != null) {
@@ -443,6 +472,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         }
                     }
 
+                    //Si la partida no se ha iniciado se pone la sala de espera visible y se espera a que todos los jugadores le den listo
                     boolean iniciar = true;
                     for (int i = 0; i < 4; i++) {
                         if (p.getJugadores()[i] != null) {
@@ -457,12 +487,17 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         vbSalaEspera.setVisible(false);
                         visibilidad(true);
                     }
+                    //Se actualizan las cartas de los jugadores, esto por el motovo de que algun hizo un cambio
                 } else if ("actualizar cartas jugadores".equals(llegada.getPeticion())) {
                     for (int i = 0; i < 4; i++) {
                         if (p.getJugadores()[i] != null) {
                             p.getJugadores()[i].setCartasJugador(llegada.getJugadores()[i].getCartasJugador());
                         }
                     }
+                //En este metodo se actualizaran los puntajes de algun jugador que tuvo algun cambio en estos,
+                //por ejemplo si algun jugador gano oro el servidor envia una actualizacion a todos los jugadores de 
+                //actualizar el oro ganado por ese mismo en las mesas de juego, de esta manera podermos ver el puntaje
+                //obtenido por todos los jugadores
                 } else if ("actualizar puntaje".equals(llegada.getPeticion())) {
 
                     p.setJugadores(llegada.getJugadores());
@@ -494,6 +529,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         }
                     }
 
+                    //Este metodo sirve para recivir el turno del siguiente jugador
                 } else if ("pasar turno".equals(llegada.getPeticion())) {
                     p.setTurnoJugador(llegada.getTurnoJugador());
                     String turno = llegada.getTurnoJugador();
@@ -502,6 +538,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         variables.setCartaTrabajador(true);
                     }
 
+                 //Si alguna loseta fue puesta en la mesa de jugego este metodo recive la peticion del servidor de colocar esa
+                 //loceta en la mesa de juego de todos los jugadores
                 } else if ("colocar carta jugador".equals(llegada.getPeticion())) {
                     p.setMatrizLogica(llegada.getMatrizLogica());
                     p.setCartaJugada(llegada.getCartaJugada(), llegada.getX(), llegada.getY(), 0);
@@ -511,7 +549,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         matrizVbox[p.getX()][p.getY()].getStylesheets().add(getClass().getResource("/cacao/view/style.css").toExternalForm());
                         agregarImagen(2, gpMatrizJuego, null, null, matrizVbox, p.getMatrizLogica(), p.getCartaJugada(), p.getX(), p.getY());
                     }
-                    //nueces
+                 ////Si alguna carta de junglafue puesta en la mesa de jugego este metodo recive la peticion del servidor de colocar esa
+                 //loceta en la mesa de juego de todos los jugadores
                 } else if ("colocar carta jungla".equals(llegada.getPeticion())) {
                     if (!p.getTurnoJugador().equals(nombre)) {
                         p.setCartasJungla(llegada.getCartasJungla());
@@ -523,6 +562,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         borrarImagen(p.getMazo(), 0, vbJungla);
 
                     }
+                 //Metodo para recivir una actualizacion de todos los jugadores que estan en el servidor
                 } else if ("actualizar jugadores".equals(llegada.getPeticion())) {
 
                     p.setJugadores(llegada.getJugadores());
@@ -534,7 +574,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
                             variables.setNum(false);
                         }
                     }
-
+                  //Si alguna carta de jungla fue retirada de la parte izquierda, este metodo vuelve a llenar esa parte con mas cartas
+                  //y agrega la parte grafica de estas mismas
                 } else if ("actualizar jungla".equals(llegada.getPeticion())) {
                     if (!p.getTurnoJugador().equals(nombre)) {
                         try {
@@ -553,8 +594,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                         }
                     }
 
-                } else if ("cerrar".equals(llegada.getPeticion())) {
-
+                  //Metodo pare recivir un ganador determinado por el servidor
                 }else if("ganador".equals(llegada.getPeticion())){
                     txtGanador.setText(llegada.getGanador());
                     vbGanador.setVisible(true);
@@ -564,6 +604,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Metodo que agregara y creara los VBox en un arreglo de VBox, despues este agregara a cada uno de sus componentes
+    //el evento de click, el cual ayudara a determinar en cual fila y columna del VBox se quiere realizar una acicion.
     private void agregarVbox() {
 
         for (int i = 0; i <= 31; i++) {
@@ -580,7 +622,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
                 matrizVbox[i][j].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-
+                        //Si no es erl turno del jugador no se puede entrar a relizar algun cambio en la matriz
                         if (p.getTurnoJugador().equals(nombre)) {
                             if (variables.getCartaTablero()) {
                                 fla = fl;
@@ -588,6 +630,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
                                 //If else para difereciar si es carta de trabajor o jungla
                                 if (variables.getNum()) {
+                                    //Se reliza la validacion respectiva, si no se puede agregar la carta no dentra al if
                                     if (vl.validarCartaJugador(p.getMatrizLogica(), "Jungla", fl, cl)) {
                                         borrarImagen(fl, cl, gpMatrizJuego);
                                         btnDerecha.setDisable(true);
@@ -605,6 +648,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
                                     }
 
                                 } else {
+                                    //Si dentra aqui significa que es una carta de trabajador
+                                    //Se reliza la validacion respectiva, si no se puede agregar la carta no dentra al if
                                     if (vl.validarCartaJugador(p.getMatrizLogica(), "Tbr", fl, cl)) {
                                         System.out.print("Validaciones F: " + fl + " C: " + cl + "\n");
                                         variables.setCartaTrabajador(false);
@@ -635,8 +680,10 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Metodo par enviar una peticion al servidor 
     public void enviarPeticion(String peticion) {
 
+        //Se convierte la clase Partida con toda la informacion en String, esto mediante la libreria GSon y se envia al servidor.
         p.setPeticion(peticion);
         Gson gson = new Gson();
         String json = gson.toJson(p);
@@ -647,6 +694,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Metodo que agregara y creara los VBox en un arreglo de VBox, correspondiente a las cartas del jugador, despues este agregara a cada uno de sus componentes
+    //el evento de click, el cual ayudara a determinar en cual fila y columna del VBox se quiere realizar una acicion.
     private void cartasJugador() {
 
         for (int i = 0; i < 3; i++) {
@@ -661,6 +710,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             botonesJ[i].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    //Si no es erl turno del jugador no se puede entrar a relizar algun cambio en la matriz
                     if (p.getTurnoJugador().equals(nombre)) {
                         if (variables.getCartaTrabajador()) {
                             variables.setCartaTablero(true);
@@ -678,6 +728,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Metodo que agregara y creara los VBox en un arreglo de VBox, correspondiente a las cartas de jungla, despues este agregara a cada uno de sus componentes
+    //el evento de click, el cual ayudara a determinar en cual fila y columna del VBox se quiere realizar una acicion.
     private void cartasJungla() {
 
         for (int i = 0; i < 2; i++) {
@@ -691,6 +743,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
             matrizJungla[i].addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    //Si no es erl turno del jugador no se puede entrar a relizar algun cambio en la matriz
                     if (p.getTurnoJugador().equals(nombre)) {
                         if (variables.getCartaJungla()) {
                             variables.setCartaTablero(true);
@@ -708,6 +761,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Metrodo para borrar una imagen, recive como parametro el GridPsne, la fila y columna deseada de borrar
     public void borrarImagen(final int row, final int column, GridPane gridPane) {
 
         ObservableList<Node> childrens = gridPane.getChildren();
@@ -719,15 +773,18 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Metodo para gregar una imagen, recive datos como el tipo, gridPane, carasta, la matriz de vbox, un arreglo de VBox, la fila y la columna.
     public void agregarImagen(int tipo, GridPane gridpane, Cartas[] cartas, VBox[] vbox, VBox[][] mVBox, Cartas[][] cartasM, Cartas carta, int f, int c) {
         AgregarImagen add = new AgregarImagen();
         add.agregarImagen(tipo, gridpane, cartas, vbox, mVBox, cartasM, carta, f, c);
     }
 
+    //Metodo para retornar el socket usado en la partida
     public SocketServices getSocket() {
         return c;
     }
 
+    //metodo para traer los datos del jugador desde el InicioViewController
     public void setDatos(String nombre, LocalDate edad, String color) {
         MesaJuegoViewController.nombre = nombre;
         MesaJuegoViewController.edad = edad;
@@ -735,6 +792,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Metodo para pasar de turno, se envian datos al servidor como de actualizar las cartas de jungla hubicadas en la izquierda
+    //y pasar de turno al jugador como tal
     @FXML
     private void onActiomPasarTurno(ActionEvent event) throws IOException {
         //Cartas trabajador
@@ -750,6 +809,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Tambien si se pasa de turno se analizaran si ya no hay cartas de jungla disponibles, entonces se terminara
+    //si la partida ya termino
     private void pasarTurno() {
         for (int i = 0; i < 3; i++) {
             if (logicas[i] != null) {
@@ -767,6 +828,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         }
     }
 
+    //Metodo para confirmar la colocacion de una carta en la mesa de juego
     @FXML
     private void onActionCentrar(ActionEvent event) throws IOException {
 
@@ -782,6 +844,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
         btnCentrar.setDisable(true);
     }
 
+    //Metodo para girar una carta, cuando se oprime este boton se analizara cuantos grados tiene la carta, y dependiendo de estos 
+    //la carta se girara 90 grados, tambien esto se hace en unos atributos de las cartas para saber la cantidad de recolectores que se
+    //tiene por lado
     @FXML
     private void onActionDerecha(ActionEvent event) {
 
@@ -821,9 +886,12 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
         p.setCartaJugada(p.getMatrizLogica()[fla][clm], fla, clm, 0);
 
+        //Se envia la peticion de colocar la carta de un jugador
         enviarPeticion("colocar carta jugador");
     }
 
+    //Se analiza si hay espacios en blanco en las 3 cartas hubicadas al lado derecho de cada jugador, si es asi
+    //estas se llenaran con mas cartas, si el jugador ya no posee cartas no se llenara con nada,
     private void cartasUsables() throws IOException {
         Validaciones vl = new Validaciones();
         vl.cartasUsables(p.getCartasJungla(), logicas, p, jugadorActual());
@@ -840,11 +908,14 @@ public class MesaJuegoViewController extends Controller implements Initializable
 
     }
 
+    //Metodo para detectar si hay espacios en blanco en la parte izquierda de la pantalla, correspondiente a las cartas de la jungla,
+    //si hay espacios en blanco se llenaran con mas losetas de jungla, si no hay mas losetas se deja en blanco.
     private void llenarCartasJungla() throws IOException {
         Validaciones vl = new Validaciones();
         vl.llenarCartasJungla(p.getCartasJungla(), logicasSelva, p);
     }
 
+    //Metodo para detectar el jugador actual de la partida
     private int jugadorActual() {
         int jugador = 0;
         boolean escogido = false;
@@ -859,6 +930,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         return jugador;
     }
 
+    //Metodos para retornar datos como partida, noombre, color y demas.
+    
     public Partida getP() {
         return p;
     }
@@ -887,6 +960,8 @@ public class MesaJuegoViewController extends Controller implements Initializable
         this.variables = variables;
     }
 
+    //Metodo para salir de la partida, se envia un mensaje al servidor para borrar al jugador y tambien se 
+    //cierra el hilo que estaba escuchando las petciones de los jugadores
     @FXML
     private void onActionSalir(ActionEvent event) throws IOException {
         
@@ -896,6 +971,9 @@ public class MesaJuegoViewController extends Controller implements Initializable
         
     }
 
+    //Metodo para determinar si un jugador esta listo en la sala de espera, si todos estan listos la partida comienza,
+    //tambien se verifica la cantidad de jugadores que hay, y dependiendo de esta se borraran cierta cantidad de cartas de 
+    //jugador o jungla.
     @FXML
     private void onActionListo(ActionEvent event) {
         p.setListo(nombre);
@@ -984,6 +1062,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         enviarPeticion("listo");
     }
 
+    //Si se da al boton de arriba, se analizan se analiza la carta que hay arriba y se obtienen los recursos
     @FXML
     private void onActionArriba(ActionEvent event) {
         btnArriba.setDisable(true);
@@ -991,6 +1070,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         actualizarPuntajes();
     }
 
+    //Si se da al boton de abajo, se analizan se analiza la carta que hay arriba y se obtienen los recursos
     @FXML
     private void onActionAbajo(ActionEvent event) {
         btnAbajo.setDisable(true);
@@ -998,6 +1078,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         actualizarPuntajes();
     }
 
+    //Si se da al boton de arriba, se analizan se analiza la carta que hay izquierda y se obtienen los recursos
     @FXML
     private void onActionNIzquierda(ActionEvent event) {
         btnNIzquierda.setDisable(true);
@@ -1005,6 +1086,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         actualizarPuntajes();
     }
 
+    //Si se da al boton de dderecha, se analizan se analiza la carta que hay arriba y se obtienen los recursos
     @FXML
     private void onActionNDerecha(ActionEvent event) {
         btnNDerecha.setDisable(true);
@@ -1012,6 +1094,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         actualizarPuntajes();
     }
 
+    //Metodo para actualizar el puntaje del jugador
     private void actualizarPuntajes() {
         for (int i = 0; i < 4; i++) {
             if (p.getJugadores()[i] != null) {
@@ -1028,6 +1111,7 @@ public class MesaJuegoViewController extends Controller implements Initializable
         enviarPeticion("actualizar puntajes");
     }
 
+    //metodo para salirse de la partida cuando esta haya terminado
     @FXML
     private void onActionSalirGn(ActionEvent event) {
         p.setSalir(nombre);
